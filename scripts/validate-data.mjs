@@ -12,7 +12,9 @@ const warnings = []
 const fail = (message) => errors.push(message)
 const isObject = (value) => typeof value === 'object' && value !== null && !Array.isArray(value)
 const isText = (value) => typeof value === 'string' && value.trim().length > 0
-const isInt = (value, min = 0) => Number.isInteger(value) && value >= min
+const isInt = (value) => Number.isInteger(value)
+
+const STEPS = new Set(['1,0', '-1,0', '0,1', '0,-1', '1,-1', '-1,1'])
 
 let raw
 try {
@@ -30,14 +32,9 @@ if (!isObject(raw)) {
 
 if (!isText(raw.title)) fail('title must be a non-empty string.')
 if (!isText(raw.subtitle)) fail('subtitle must be a non-empty string.')
-
-const stages = Array.isArray(raw.stages) ? raw.stages : []
-if (stages.length === 0) fail('stages must be a non-empty array.')
-stages.forEach((stage, index) => {
-  if (!isObject(stage)) return fail(`stages[${index}] must be an object.`)
-  if (!isText(stage.label)) fail(`stages[${index}].label must be a non-empty string.`)
-  if (!isText(stage.note)) fail(`stages[${index}].note must be a non-empty string.`)
-})
+for (const legacy of ['stages', 'tiers']) {
+  if (raw[legacy] !== undefined) warnings.push(`"${legacy}" is no longer used; stage grouping has been removed.`)
+}
 
 const subjects = Array.isArray(raw.subjects) ? raw.subjects : []
 if (subjects.length === 0) fail('subjects must be a non-empty array.')
@@ -75,6 +72,8 @@ subjects.forEach((subject, subjectIndex) => {
   totalNodes += nodes.length
 
   const nodeIds = new Set()
+  const cells = new Map()
+
   nodes.forEach((node, nodeIndex) => {
     if (!isObject(node)) return fail(`${where}.nodes[${nodeIndex}] must be an object.`)
     const label = `${where}.${node.id ?? `nodes[${nodeIndex}]`}`
@@ -92,55 +91,83 @@ subjects.forEach((subject, subjectIndex) => {
     if (!isText(node.branch) || !branchIds.has(node.branch)) {
       fail(`${label}.branch must reference a declared branch (got ${JSON.stringify(node.branch)}).`)
     }
-    if (node.role !== 'start' && node.role !== 'main' && node.role !== 'sub') {
-      fail(`${label}.role must be "start", "main", or "sub".`)
+    if (!isInt(node.q)) fail(`${label}.q must be a whole number.`)
+    if (!isInt(node.r)) fail(`${label}.r must be a whole number.`)
+    if (node.start !== undefined && typeof node.start !== 'boolean') {
+      fail(`${label}.start must be true when present.`)
+    }
+    if (!Array.isArray(node.requires) || node.requires.some((id) => !isText(id))) {
+      fail(`${label}.requires must be an array of node ids.`)
       return
     }
-    if (node.role === 'start' && node.stage !== undefined) {
-      fail(`${label}: start nodes do not use a stage.`)
+    for (const legacy of ['role', 'stage', 'tier', 'lane']) {
+      if (node[legacy] !== undefined) warnings.push(`${where}.${node.id}: "${legacy}" is no longer used.`)
     }
-    if (node.role !== 'start' && (!isInt(node.stage) || node.stage >= stages.length)) {
-      fail(`${label}.stage must be an integer from 0 to ${stages.length - 1}.`)
+
+    if (isInt(node.q) && isInt(node.r)) {
+      const cell = `${node.q}:${node.r}`
+      if (cells.has(cell)) fail(`${label} shares hex cell ${cell} with "${cells.get(cell)}".`)
+      cells.set(cell, node.id)
     }
-    for (const legacy of ['tier', 'lane', 'requires']) {
-      if (node[legacy] !== undefined) {
-        warnings.push(`${where}.${node.id}: "${legacy}" is no longer used by the hex layout.`)
+  })
+
+  const byId = new Map(nodes.filter(isObject).map((node) => [node.id, node]))
+  const starts = nodes.filter((node) => node.start === true)
+  if (starts.length !== 1) {
+    fail(`${where}: exactly one node must have "start": true (found ${starts.length}).`)
+    return
+  }
+  const start = starts[0]
+  if (Array.isArray(start.requires) && start.requires.length > 0) {
+    fail(`${where}.${start.id}: the start node must not require anything.`)
+  }
+
+  nodes.forEach((node) => {
+    if (!isObject(node) || !Array.isArray(node.requires)) return
+    if (!node.start && node.requires.length === 0) {
+      fail(`${where}.${node.id}: every non-start node needs at least one prerequisite.`)
+    }
+    for (const requirementId of node.requires) {
+      if (requirementId === node.id) fail(`${where}.${node.id} requires itself.`)
+      const requirement = byId.get(requirementId)
+      if (!requirement) {
+        fail(`${where}.${node.id}: unknown prerequisite "${requirementId}".`)
+        continue
+      }
+      const dq = node.q - requirement.q
+      const dr = node.r - requirement.r
+      if (!STEPS.has(`${dq},${dr}`)) {
+        fail(
+          `${where}.${node.id} requires "${requirementId}" but their cells do not share an edge ` +
+            `(${node.q}:${node.r} vs ${requirement.q}:${requirement.r}).`,
+        )
       }
     }
   })
 
-  const startNodes = nodes.filter((node) => node.role === 'start')
-  if (startNodes.length !== 1) {
-    fail(`${where}: exactly one start node is required (found ${startNodes.length}).`)
-  } else if (nodes[0]?.id !== startNodes[0].id) {
-    warnings.push(`${where}: put the start node first in the nodes array for readability.`)
+  const reachable = new Set([start.id])
+  let changed = true
+  while (changed) {
+    changed = false
+    for (const node of nodes) {
+      if (!isObject(node) || reachable.has(node.id)) continue
+      const requires = Array.isArray(node.requires) ? node.requires : []
+      if (requires.every((id) => reachable.has(id))) {
+        reachable.add(node.id)
+        changed = true
+      }
+    }
+  }
+  for (const id of byId.keys()) {
+    if (!reachable.has(id)) fail(`${where}.${id} can never unlock (cycle or orphaned requirement chain).`)
   }
 
-  const usedStages = [...new Set(nodes.filter((node) => isInt(node.stage)).map((node) => node.stage))].sort(
-    (a, b) => a - b,
-  )
-  if (usedStages.length === 0) fail(`${where}: no milestone stages found.`)
-  usedStages.forEach((stage, index) => {
-    if (stage !== index) fail(`${where}: stages must be numbered contiguously from 0 (missing ${index}).`)
-  })
-
-  const stageSummary = []
-  for (const stage of usedStages) {
-    const mains = nodes.filter((node) => node.role === 'main' && node.stage === stage)
-    const subs = nodes.filter((node) => node.role === 'sub' && node.stage === stage)
-    if (mains.length !== 1) {
-      fail(`${where}: stage ${stage} must have exactly one main node (found ${mains.length}).`)
-    }
-    if (subs.length === 0) fail(`${where}: stage ${stage} needs at least one subskill around its milestone.`)
-    if (subs.length > 5) {
-      fail(`${where}: stage ${stage} has ${subs.length} subskills; the hex ring supports at most 5.`)
-    }
-    stageSummary.push(`${subs.length} sub${subs.length === 1 ? '' : 's'}`)
-  }
-
+  const qs = nodes.filter(isObject).map((node) => node.q)
+  const rs = nodes.filter(isObject).map((node) => node.r)
+  const links = nodes.reduce((sum, node) => sum + (Array.isArray(node.requires) ? node.requires.length : 0), 0)
   console.log(
-    `  ${subject.name.padEnd(22)} ${String(nodes.length).padStart(2)} nodes · ` +
-      `${usedStages.length} stages (${stageSummary.join(' / ')}) · ${branches.length} branches`,
+    `  ${subject.name.padEnd(22)} ${String(nodes.length).padStart(2)} hexes · ` +
+      `${Math.min(...qs)}..${Math.max(...qs)} columns · ${Math.min(...rs)}..${Math.max(...rs)} rows · ${links} shared-edge links`,
   )
 })
 
@@ -157,4 +184,4 @@ if (errors.length) {
   process.exit(1)
 }
 
-console.log(`✓ Hex skill tree valid — ${subjects.length} subjects, ${totalNodes} nodes, ${stages.length} stages.`)
+console.log(`✓ Hex map valid — ${subjects.length} subjects, ${totalNodes} nodes on one honeycomb.`)

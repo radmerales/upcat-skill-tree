@@ -10,18 +10,20 @@ import {
 } from 'react'
 import {
   branchMap,
+  cellPolygon,
   clamp,
+  HEX_R,
+  HEX_W,
   hexPoints,
   nodeState,
+  sharedEdge,
   stateLabel,
 } from '../lib/tree'
-import type { SkillNode, Stage, Subject, SubjectLayout, SubjectStructure } from '../types'
+import type { SkillNode, Subject, SubjectLayout } from '../types'
 import { Fit, Minus, Plus } from './Icons'
 
 interface SkillCanvasProps {
   subject: Subject
-  stages: Stage[]
-  structure: SubjectStructure
   layout: SubjectLayout
   mastered: Set<string>
   selectedId: string | null
@@ -45,10 +47,13 @@ interface DragState {
   moved: boolean
 }
 
+const CELL_H = HEX_R * 2
+const FACE = cellPolygon(0.06)
+const RING = cellPolygon(0.012)
+const INNER = cellPolygon(0.11)
+
 export default function SkillCanvas({
   subject,
-  stages,
-  structure,
   layout,
   mastered,
   selectedId,
@@ -69,6 +74,7 @@ export default function SkillCanvas({
   viewRef.current = view
 
   const branches = useMemo(() => branchMap(subject), [subject])
+  const nodeById = useMemo(() => new Map(subject.nodes.map((node) => [node.id, node])), [subject])
 
   /* Resize observer ------------------------------------------------------- */
   useEffect(() => {
@@ -84,15 +90,15 @@ export default function SkillCanvas({
   /* Fit to view ----------------------------------------------------------- */
   const frameAll = useCallback(() => {
     if (!size.width || !size.height) return
-    const paddingX = size.width < 720 ? 22 : 34
-    const paddingY = size.height < 560 ? 22 : 32
+    const paddingX = size.width < 720 ? 18 : 34
+    const paddingY = size.height < 560 ? 18 : 32
     const k = clamp(
       Math.min(
         (size.width - paddingX * 2) / layout.width,
         (size.height - paddingY * 2) / layout.height,
       ),
-      0.25,
-      1.05,
+      0.22,
+      1.2,
     )
     setView({
       k,
@@ -102,17 +108,16 @@ export default function SkillCanvas({
     setFitted(true)
   }, [layout.height, layout.width, size.height, size.width])
 
-  /* Opening view: focused on phones, whole map on desktop. */
   const frameStart = useCallback(() => {
     if (!size.width || !size.height) return
 
     if (size.width < 720) {
       const k = 0.68
-      const start = layout.positions[structure.start.id]
+      const start = layout.positions[subject.nodes.find((node) => node.start)?.id ?? subject.nodes[0].id]
       setView({
         k,
-        x: 48 - start.x * k,
-        y: Math.max(14, size.height * 0.42 - start.y * k),
+        x: 78 - start.x * k,
+        y: Math.max(30, size.height * 0.42 - start.y * k),
       })
       setFitted(true)
       return
@@ -124,14 +129,14 @@ export default function SkillCanvas({
       (size.width - paddingX * 2) / layout.width,
       (size.height - paddingY * 2) / layout.height,
     )
-    const k = clamp(fit * 1.05, 0.5, 1.0)
+    const k = clamp(fit * 1.04, 0.66, 1.05)
     setView({
       k,
-      x: (size.width - layout.width * k) / 2,
+      x: Math.max(24, (size.width - layout.width * k) / 2),
       y: Math.max(8, (size.height - layout.height * k) / 2),
     })
     setFitted(true)
-  }, [layout, size.height, size.width, structure.start.id])
+  }, [layout, size.height, size.width, subject.nodes])
 
   useEffect(() => {
     setFitted(false)
@@ -153,7 +158,7 @@ export default function SkillCanvas({
       const pointerY = event.clientY - rect.top
       const current = viewRef.current
       const factor = Math.exp(-event.deltaY * 0.0016)
-      const k = clamp(current.k * factor, 0.28, 1.9)
+      const k = clamp(current.k * factor, 0.22, 2.1)
       const ratio = k / current.k
       setView({
         k,
@@ -169,7 +174,7 @@ export default function SkillCanvas({
   /* Pan ------------------------------------------------------------------- */
   const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (event.button !== 0) return
-    if ((event.target as HTMLElement).closest('.node')) return
+    if ((event.target as HTMLElement).closest('.hexnode')) return
     dragRef.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
@@ -202,7 +207,7 @@ export default function SkillCanvas({
 
   const zoomBy = (factor: number) => {
     const current = viewRef.current
-    const k = clamp(current.k * factor, 0.28, 1.9)
+    const k = clamp(current.k * factor, 0.22, 2.1)
     const ratio = k / current.k
     const centerX = size.width / 2
     const centerY = size.height / 2
@@ -220,18 +225,23 @@ export default function SkillCanvas({
 
   const handleContextMenu = (event: ReactMouseEvent, node: SkillNode) => {
     event.preventDefault()
-    if (nodeState(node, structure, mastered) === 'mastered') onToggle(node)
+    if (nodeState(node, mastered) === 'mastered') onToggle(node)
   }
 
-  const edges = useMemo(() => {
-    const list: Array<{ key: string; from: SkillNode; to: SkillNode }> = []
-    structure.groups.forEach((group, index) => {
-      const gate = index === 0 ? structure.start : structure.groups[index - 1].main
-      list.push({ key: `spine-${group.stage}`, from: gate, to: group.main })
-      for (const sub of group.subs) list.push({ key: `ring-${sub.id}`, from: group.main, to: sub })
-    })
-    return list
-  }, [structure])
+  const edges = useMemo(
+    () =>
+      subject.nodes.flatMap((node) =>
+        node.requires.map((requirementId) => {
+          const fromNode = nodeById.get(requirementId)
+          if (!fromNode) return null
+          const from = layout.positions[fromNode.id]
+          const to = layout.positions[node.id]
+          if (!from || !to) return null
+          return { key: `${requirementId}->${node.id}`, fromNode, toNode: node, from, to, ...sharedEdge(from, to) }
+        }),
+      ),
+    [layout.positions, nodeById, subject.nodes],
+  )
 
   return (
     <div
@@ -270,25 +280,6 @@ export default function SkillCanvas({
           ))}
         </svg>
 
-        {structure.groups.map((group) => {
-          const header = layout.stageHeaders.find((entry) => entry.stage === group.stage)
-          const meta = stages[group.stage]
-          if (!header || !meta) return null
-          return (
-            <div
-              key={`stage-${group.stage}`}
-              className="stage-head"
-              style={{ left: header.x, top: header.y }}
-            >
-              <span className="stage-head__index">
-                STAGE {String(group.stage + 1).padStart(2, '0')}
-              </span>
-              <span className="stage-head__label">{meta.label}</span>
-              <span className="stage-head__note">{meta.note}</span>
-            </div>
-          )
-        })}
-
         <svg
           className="edges"
           width={layout.width}
@@ -297,19 +288,16 @@ export default function SkillCanvas({
           aria-hidden="true"
         >
           {edges.map((edge) => {
-            const from = layout.positions[edge.from.id]
-            const to = layout.positions[edge.to.id]
-            if (!from || !to) return null
-
-            const state = nodeState(edge.to, structure, mastered)
+            if (!edge) return null
+            const state = nodeState(edge.toNode, mastered)
             const edgeState = state === 'mastered' ? 'mastered' : state === 'locked' ? 'locked' : 'available'
-            const color = branches[edge.to.branch]?.color ?? subject.accent
-            const isSelected = selectedId === edge.from.id || selectedId === edge.to.id
-            const isDim = branchFilter !== null && edge.to.branch !== branchFilter
+            const color = branches[edge.toNode.branch]?.color ?? subject.accent
+            const isSelected = selectedId === edge.fromNode.id || selectedId === edge.toNode.id
+            const isDim = branchFilter !== null && edge.toNode.branch !== branchFilter
             const classes = [
               'edge',
+              'edge--shared',
               `edge--${edgeState}`,
-              `edge--${edge.from.role}-to-${edge.to.role}`,
               isSelected ? 'is-selected' : '',
               isDim ? 'is-dim' : '',
             ]
@@ -319,10 +307,10 @@ export default function SkillCanvas({
             return (
               <line
                 key={edge.key}
-                x1={from.x}
-                y1={from.y}
-                x2={to.x}
-                y2={to.y}
+                x1={edge.x1}
+                y1={edge.y1}
+                x2={edge.x2}
+                y2={edge.y2}
                 className={classes}
                 style={{ stroke: color, '--edge-color': color } as CSSProperties}
               />
@@ -334,24 +322,18 @@ export default function SkillCanvas({
           const position = layout.positions[node.id]
           if (!position) return null
           const branch = branches[node.branch] ?? subject.branches[0]
-          const state = nodeState(node, structure, mastered)
-          const group = structure.groupByNode.get(node.id)
+          const state = nodeState(node, mastered)
           const isSelected = selectedId === node.id
           const isDim = branchFilter !== null && node.branch !== branchFilter
           const classes = [
-            'node',
-            `node--${state}`,
-            `node--role-${node.role}`,
+            'hexnode',
+            `hexnode--${state}`,
+            node.start ? 'hexnode--start' : '',
             isSelected ? 'is-selected' : '',
             isDim ? 'is-dim' : '',
           ]
             .filter(Boolean)
             .join(' ')
-
-          const label =
-            node.role === 'main' && group
-              ? `${node.title} — ${stateLabel(state)}, ${group.subs.filter((sub) => mastered.has(sub.id)).length} of ${group.subs.length} subskills`
-              : `${node.title} — ${stateLabel(state)}`
 
           return (
             <button
@@ -362,39 +344,41 @@ export default function SkillCanvas({
                 {
                   left: position.x,
                   top: position.y,
-                  '--branch': node.role === 'start' ? subject.accent : branch.color,
+                  width: HEX_W,
+                  height: CELL_H,
+                  '--branch': node.start ? subject.accent : branch.color,
                 } as CSSProperties
               }
-              aria-label={label}
+              aria-label={`${node.title} — ${stateLabel(state)}`}
               aria-pressed={state === 'mastered'}
               onClick={() => handleNodeClick(node)}
               onDoubleClick={() => onToggle(node)}
               onContextMenu={(event) => handleContextMenu(event, node)}
             >
-              <span className="node__selection" aria-hidden="true" />
-              {node.role === 'start' && <span className="node__tag">START</span>}
-              <span className="node__diamond">
-                <span className="node__inner" aria-hidden="true" />
-                <span className={`node__code${node.code.length > 3 ? ' is-long' : ''}`}>{node.code}</span>
+              <svg
+                className="hexnode__shape"
+                viewBox={`0 0 ${HEX_W} ${CELL_H}`}
+                aria-hidden="true"
+              >
+                <polygon points={FACE} className="hexnode__face" />
+                <polygon points={INNER} className="hexnode__inner" />
+                <polygon points={RING} className={`hexnode__ring${isSelected ? ' is-selected' : ''}`} />
+              </svg>
+              <span className="hexnode__body">
+                {node.start && <span className="hexnode__tag">START</span>}
+                <span className={`hexnode__code${node.code.length > 3 ? ' is-long' : ''}`}>{node.code}</span>
+                <span className="hexnode__title">{node.title}</span>
               </span>
               {state === 'mastered' && (
-                <span className="node__badge node__badge--check" aria-hidden="true">
+                <span className="hexnode__badge" aria-hidden="true">
                   <CheckMark />
                 </span>
               )}
               {state === 'locked' && (
-                <span className="node__badge node__badge--lock" aria-hidden="true">
+                <span className="hexnode__lock" aria-hidden="true">
                   <LockMark />
                 </span>
               )}
-              {node.role === 'main' && group && (
-                <span className={`node__pips${state === 'mastered' ? ' is-complete' : ''}`} aria-hidden="true">
-                  {group.subs.map((sub) => (
-                    <span key={sub.id} className={mastered.has(sub.id) ? 'is-filled' : ''} />
-                  ))}
-                </span>
-              )}
-              <span className="node__label">{node.title}</span>
             </button>
           )
         })}
@@ -420,7 +404,7 @@ export default function SkillCanvas({
 
 function CheckMark() {
   return (
-    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M4 12.5l5.5 5.5L20 6.5" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )

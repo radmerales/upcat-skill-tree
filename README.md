@@ -1,8 +1,8 @@
 # UPCAT Skill Tree
 
-An interactive, left-to-right study skill tree for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown, pan around the hex grid, and work from the start node through milestones that are surrounded by subskills.
+An interactive, left-to-right study map for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown and work from the start node through a connected honeycomb of skills.
 
-The design is inspired by the [ARC Raiders Skill Builder](https://metaforge.app/arc-raiders/skill-builder): a pan-and-zoom canvas, glowing nodes, milestone gates, a mastery counter, click-to-learn, and right-click-to-remove. Every node sits on a true pointy-top hex lattice, with the connecting edges running along hex directions. Dark and light themes are both supported.
+The design is inspired by the [ARC Raiders Skill Builder](https://metaforge.app/arc-raiders/skill-builder): a pan-and-zoom canvas, glowing nodes, a mastery counter, click-to-learn, and right-click-to-remove. Every node is a full hex tile on a pointy-top honeycomb, and prerequisites are connected along the shared edge of the two cells. Dark and light themes are both supported.
 
 ## Stack
 
@@ -27,13 +27,9 @@ Everything is in [`public/data/upcat-skill-tree.json`](public/data/upcat-skill-t
 
 ```jsonc
 {
-  "version": 2,
+  "version": 3,
   "title": "UPCAT Skill Tree",
   "subtitle": "…",
-  "stages": [
-    { "label": "FOUNDATION", "note": "Rebuild the basics" }
-    // one entry per milestone stage, left to right
-  ],
   "subjects": [
     {
       "id": "math",
@@ -50,79 +46,66 @@ Everything is in [`public/data/upcat-skill-tree.json`](public/data/upcat-skill-t
           "title": "Start Here",
           "code": "GO",
           "branch": "arithmetic",
-          "role": "start",              // exactly one per subject, no stage
+          "q": 0,
+          "r": 0,
+          "start": true,              // exactly one node per subject
           "description": "…",
-          "tip": "…"
+          "tip": "…",
+          "requires": []
         },
         {
-          "id": "math-ops",
-          "title": "Operations & Number Sense",
-          "code": "OPS",
-          "branch": "arithmetic",
-          "role": "main",               // exactly one main per stage
-          "stage": 0,
+          "id": "math-expressions",
+          "title": "Algebraic Expressions",
+          "code": "ALG",
+          "branch": "algebra",
+          "q": 1,
+          "r": -1,
           "description": "…",
-          "tip": "…"
-        },
-        {
-          "id": "math-fractions",
-          "title": "Fractions, Decimals & Percents",
-          "code": "FRC",
-          "branch": "arithmetic",
-          "role": "sub",                // 1–5 subskills per stage
-          "stage": 0,
-          "description": "…",
-          "tip": "…"
+          "tip": "…",
+          "requires": ["math-start"]  // must share a hex edge with this node
         }
-        // …stage 1 main and subskills, stage 2, etc.
       ]
     }
   ]
 }
 ```
 
-### How the hex tree works
+### Hex cells and prerequisites
 
-1. The **start node** is always available and opens the first stage.
-2. A stage's **subskills** become available when the previous stage's milestone is claimed (or when the start node is cleared, for stage 1).
-3. Master every subskill in a stage's ring, then claim the **milestone** at its centre.
-4. Claiming that milestone opens the next stage. The final milestone completes the subject.
+Each node occupies one cell of a pointy-top axial hex grid. `q` grows to the right; `r` moves down and to the right. Nodes are drawn at the cell centre and fill the cell, so their corners line up with the background honeycomb.
 
-Subskills are placed automatically on the six cells surrounding their milestone. **Array order decides the slot**, so keep a stage's main node followed by its subskills in the order you want them around the ring:
+A node can require any number of nodes, but **every prerequisite must be an adjacent cell** — the connector is rendered on the shared edge of the background hexagons. Validation rejects any link that does not share a hex edge.
 
-| Subskills | Slots used |
-| --- | --- |
-| 1 | NE |
-| 2 | NW, SE |
-| 3 | NW, NE, SE |
-| 4 | NW, NE, SE, SW |
-| 5 | NW, NE, SE, SW, E (best saved for the final stage) |
+The current maps use three arms that radiate from the start and converge on a final capstone:
 
-### Add a subskill
+- Start at `0,0`.
+- Each subsequent node in an arm sits one cell to the east of the previous node (`q + 1`, same `r`).
+- The final capstone sits one column to the right of the arm ends and requires the last node of each arm.
 
-1. Give it a unique `id` and pick one of the subject's `branch` ids.
-2. Set `"role": "sub"` and the `stage` it belongs to.
-3. Put it directly after the other subskills of that stage (up to 5) and run `npm run validate`.
+### Add a skill
 
-### Add a stage
+1. Find a free cell next to an existing node. Check the neighbours in the `q/r` grid.
+2. Give the node a unique `id`, a `branch`, and its `q`/`r`.
+3. Add `requires` with the ids of adjacent nodes that must be mastered first.
+4. Run `npm run validate` — it checks adjacency, collisions, and reachability.
 
-1. Add `{ "role": "main", "stage": N, ... }` plus at least one `{ "role": "sub", "stage": N, ... }` under the subject.
-2. Stage numbers must be contiguous from `0`, and there can be only one main per stage.
-3. Each stage uses `stages[N]` for its header label.
+### Add a branch
+
+Add `{ "id": "...", "name": "...", "color": "#rrggbb" }` to the subject's `branches`. The colour drives the node border, mastered fill, shared-edge connector, and legend chip.
 
 ### Add a subject
 
-Copy a subject object, give it a unique `id`, and fill in its branches, start node, and 4-stage path. The header dropdown, legend, progress, and ring layout are all derived automatically.
+Copy a subject object, give it a unique `id`, and fill in branches and a connected node map with exactly one `"start": true` node. The header dropdown, legend, and progress counter build themselves from this array.
 
 ### Rules enforced by `npm run validate`
 
 - Unique subject, branch, and node ids.
-- Exactly one `start` node per subject, with no `stage`.
-- Exactly one `main` node per stage, and at least one (at most five) `sub` nodes.
-- Stage numbers are contiguous from `0`.
-- Every node's branch and stage exist.
-- Hex ring capacity is respected.
-- Legacy `tier`, `lane`, and `requires` fields are reported so old data can be cleaned up.
+- Exactly one start node, with no prerequisites.
+- Every non-start node has at least one prerequisite.
+- Every prerequisite exists, is not the node itself, and **shares a hex edge** with the node.
+- No two nodes share the same `q` + `r` cell.
+- Every node can eventually be unlocked from the start.
+- Legacy `role`, `stage`, `tier`, and `lane` fields are reported so old data can be cleaned up.
 
 The app runs the same checks on load and shows a readable error screen if the JSON is invalid.
 
@@ -133,17 +116,15 @@ The app runs the same checks on load and shows a readable error screen if the JS
 | Drag | Pan the tree |
 | Scroll / pinch | Zoom toward the cursor |
 | Theme toggle (sun / moon) | Switch between dark and light mode |
-| Click a diamond | Open the detail panel |
-| Double-click a diamond | Master / unmaster a node |
-| Master a subskill | Adds one segment to its milestone's progress pips |
-| Right-click a mastered diamond | Remove it and its downstream stages |
-| Claim milestone | Available once every subskill in the ring is mastered |
-| Unlearn milestone | Clears its ring and every later stage |
+| Click a hex | Open the detail panel |
+| Double-click a hex | Master / unmaster a node |
+| Right-click a mastered hex | Remove it and every node that depends on it |
+| Start node | Master it to open the three connected arms |
 | Branch chip | Dim everything outside that branch |
 | Subject dropdown | Switch subjects (progress is kept per subject) |
 | Reset | Clear mastered skills for the current subject |
 
-Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. The theme is saved under `upcat-skill-tree:theme:v1`; on a first visit it follows your system color-scheme preference. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
+Hexes are connected by the shared border between adjacent cells. Master a node to open every hex that requires it. Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. The theme is saved under `upcat-skill-tree:theme:v1`; on a first visit it follows your system color-scheme preference. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
 
 ## Deployment
 

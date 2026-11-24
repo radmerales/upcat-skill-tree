@@ -2945,3 +2945,368 @@ html[data-theme='light'] .state-pill--inprogress {
 html[data-theme='light'] .hex-cell {
   stroke: var(--hex-line);
 }
+
+/* ========================================================================== */
+/*  Continuous hex map                                                         */
+/* ========================================================================== */
+
+:root {
+  --hexnode-face: #0b1116;
+  --hexnode-code: #c8d4dc;
+  --hexnode-title: #8997a1;
+  --hexnode-lock-face: #0a0e12;
+  --hexnode-lock-border: #2a353e;
+  --hexnode-lock-text: #64727c;
+}
+
+html[data-theme='light'] {
+  --hexnode-face: #ffffff;
+  --hexnode-code: #2c3d47;
+  --hexnode-title: #52646f;
+  --hexnode-lock-face: #f4f7f8;
+  --hexnode-lock-border: #c3ced5;
+  --hexnode-lock-text: #5f707a;
+}
+
+.hexnode {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  transition: transform 0.18s ease, opacity 0.2s ease, filter 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hexnode:hover {
+  transform: translate(-50%, -50%) scale(1.025);
+  z-index: 4;
+}
+
+.hexnode:focus-visible {
+  outline: none;
+}
+
+.hexnode__shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hexnode__face {
+  fill: var(--hexnode-face);
+  stroke: color-mix(in srgb, var(--branch) 55%, #2c3841);
+  stroke-width: 1.4;
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+.hexnode__inner {
+  fill: none;
+  stroke: color-mix(in srgb, var(--branch) 18%, transparent);
+  stroke-width: 1;
+  transition: stroke 0.2s ease;
+}
+
+.hexnode__ring {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 2;
+  transition: stroke 0.18s ease;
+}
+
+.hexnode:focus-visible .hexnode__ring,
+.hexnode__ring.is-selected {
+  stroke: color-mix(in srgb, var(--branch) 85%, #ffffff 10%);
+  stroke-width: 1.4;
+  stroke-dasharray: 4 5;
+}
+
+.hexnode__body {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 34px 26px 30px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.hexnode__tag {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  letter-spacing: 0.22em;
+  color: var(--branch);
+  margin-bottom: -2px;
+}
+
+.hexnode__code {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--hexnode-code);
+  transition: color 0.2s ease;
+}
+
+.hexnode__code.is-long {
+  font-size: 11px;
+  letter-spacing: 0;
+}
+
+.hexnode__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  max-width: 120px;
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 500;
+  line-height: 1.24;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--hexnode-title);
+  text-wrap: balance;
+  transition: color 0.2s ease;
+}
+
+.hexnode__badge,
+.hexnode__lock {
+  position: absolute;
+  top: 28px;
+  right: 30px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(8, 13, 18, 0.55);
+  pointer-events: none;
+}
+
+.hexnode__badge {
+  background: var(--branch);
+  color: #071014;
+}
+
+.hexnode__lock {
+  width: 16px;
+  height: 16px;
+  top: 29px;
+  right: 31px;
+  background: #151e25;
+  color: #7f8d97;
+}
+
+/* connected (available) */
+.hexnode--available .hexnode__face {
+  fill: color-mix(in srgb, var(--branch) 12%, var(--hexnode-face));
+  stroke: color-mix(in srgb, var(--branch) 80%, #ffffff 8%);
+  stroke-width: 1.6;
+}
+
+.hexnode--available .hexnode__code {
+  color: color-mix(in srgb, var(--branch) 60%, #ffffff);
+}
+
+.hexnode--available .hexnode__title {
+  color: #c9d5dd;
+}
+
+.hexnode--available:hover .hexnode__face {
+  stroke-width: 2;
+  fill: color-mix(in srgb, var(--branch) 18%, var(--hexnode-face));
+}
+
+/* mastered */
+.hexnode--mastered .hexnode__face {
+  fill: color-mix(in srgb, var(--branch) 26%, var(--hexnode-face));
+  stroke: color-mix(in srgb, var(--branch) 85%, #ffffff 10%);
+  stroke-width: 1.8;
+}
+
+.hexnode--mastered .hexnode__inner {
+  stroke: color-mix(in srgb, var(--branch) 35%, transparent);
+}
+
+.hexnode--mastered .hexnode__code {
+  color: color-mix(in srgb, var(--branch) 65%, #ffffff);
+}
+
+.hexnode--mastered .hexnode__title {
+  color: #edf4f8;
+}
+
+/* locked */
+.hexnode--locked {
+  opacity: 0.7;
+}
+
+.hexnode--locked .hexnode__face {
+  fill: var(--hexnode-lock-face);
+  stroke: var(--hexnode-lock-border);
+}
+
+.hexnode--locked .hexnode__inner {
+  stroke: transparent;
+}
+
+.hexnode--locked .hexnode__code,
+.hexnode--locked .hexnode__title {
+  color: var(--hexnode-lock-text);
+}
+
+.hexnode--locked:hover {
+  opacity: 0.9;
+}
+
+/* start marker */
+.hexnode--start .hexnode__face {
+  stroke-width: 2;
+}
+
+.hexnode--start .hexnode__tag {
+  color: var(--branch);
+}
+
+.hexnode.is-dim {
+  opacity: 0.16;
+}
+
+.hexnode.is-selected {
+  z-index: 5;
+}
+
+.hexnode.is-selected .hexnode__face {
+  stroke-width: 2;
+}
+
+/* Edges on the shared side of two background hexes ----------------------- */
+
+.edge--shared {
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: none;
+  animation: none;
+}
+
+.edge--shared.edge--locked {
+  stroke-width: 3;
+  stroke-dasharray: 2 5;
+  opacity: 0.45;
+}
+
+.edge--shared.edge--available {
+  stroke-width: 4;
+  stroke-dasharray: none;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--edge-color) 55%, transparent));
+}
+
+.edge--shared.edge--mastered {
+  stroke-width: 5;
+  stroke-dasharray: none;
+  opacity: 1;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--edge-color) 65%, transparent));
+}
+
+.edge--shared.is-selected {
+  stroke-width: 6;
+  opacity: 1;
+  filter: drop-shadow(0 0 9px var(--edge-color));
+}
+
+.edge--shared.is-dim {
+  opacity: 0.05;
+}
+
+/* Light additions -------------------------------------------------------- */
+
+html[data-theme='light'] .hexnode__face {
+  fill: var(--hexnode-face);
+  stroke: color-mix(in srgb, var(--branch) 45%, #8b9aa5);
+}
+
+html[data-theme='light'] .hexnode__inner {
+  stroke: color-mix(in srgb, var(--branch) 22%, transparent);
+}
+
+html[data-theme='light'] .hexnode__code {
+  color: var(--hexnode-code);
+}
+
+html[data-theme='light'] .hexnode__title {
+  color: var(--hexnode-title);
+}
+
+html[data-theme='light'] .hexnode__badge {
+  border-color: #ffffff;
+}
+
+html[data-theme='light'] .hexnode__lock {
+  background: #e8edf0;
+  color: #5f6f79;
+  border-color: #ffffff;
+}
+
+html[data-theme='light'] .hexnode--available .hexnode__face {
+  fill: color-mix(in srgb, var(--branch) 14%, #ffffff);
+  stroke: color-mix(in srgb, var(--branch) 66%, #51636e);
+}
+
+html[data-theme='light'] .hexnode--available .hexnode__code {
+  color: color-mix(in srgb, var(--branch) 42%, #172933);
+}
+
+html[data-theme='light'] .hexnode--available .hexnode__title {
+  color: #263741;
+}
+
+html[data-theme='light'] .hexnode--available:hover .hexnode__face {
+  fill: color-mix(in srgb, var(--branch) 20%, #ffffff);
+}
+
+html[data-theme='light'] .hexnode--mastered .hexnode__face {
+  fill: color-mix(in srgb, var(--branch) 52%, #ffffff);
+  stroke: color-mix(in srgb, var(--branch) 62%, #455761);
+}
+
+html[data-theme='light'] .hexnode--mastered .hexnode__inner {
+  stroke: rgba(255, 255, 255, 0.45);
+}
+
+html[data-theme='light'] .hexnode--mastered .hexnode__code {
+  color: #15242d;
+}
+
+html[data-theme='light'] .hexnode--mastered .hexnode__title {
+  color: #1c2c36;
+}
+
+html[data-theme='light'] .hexnode--locked .hexnode__face {
+  fill: var(--hexnode-lock-face);
+  stroke: var(--hexnode-lock-border);
+}
+
+html[data-theme='light'] .hexnode--locked .hexnode__code,
+html[data-theme='light'] .hexnode--locked .hexnode__title {
+  color: var(--hexnode-lock-text);
+}
+
+html[data-theme='light'] .hexnode__ring.is-selected,
+html[data-theme='light'] .hexnode:focus-visible .hexnode__ring {
+  stroke: color-mix(in srgb, var(--branch) 70%, #3b4d58);
+}
+
+html[data-theme='light'] .hexnode__tag {
+  color: color-mix(in srgb, var(--branch) 55%, #263943);
+}

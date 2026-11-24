@@ -4,11 +4,9 @@ import Header from './components/Header'
 import Legend from './components/Legend'
 import SkillCanvas from './components/SkillCanvas'
 import {
-  buildStructure,
-  collectRemoval,
-  gateForGroup,
+  collectSubtree,
   layoutSubject,
-  milestoneProgress,
+  missingRequirements,
   nodeState,
   normalizeData,
   sanitizeMastered,
@@ -68,9 +66,8 @@ export default function App() {
         setProgress((current) => {
           const cleaned: ProgressMap = { ...current }
           for (const entry of tree.subjects) {
-            const structure = buildStructure(entry)
             const stored = new Set(current[entry.id] ?? [])
-            cleaned[entry.id] = [...sanitizeMastered(structure, stored)]
+            cleaned[entry.id] = [...sanitizeMastered(entry, stored)]
           }
           return cleaned
         })
@@ -126,11 +123,7 @@ export default function App() {
     [data, subjectId],
   )
 
-  const structure = useMemo(() => (subject ? buildStructure(subject) : null), [subject])
-  const layout = useMemo(
-    () => (subject && structure ? layoutSubject(subject, structure) : null),
-    [subject, structure],
-  )
+  const layout = useMemo(() => (subject ? layoutSubject(subject) : null), [subject])
 
   const mastered = useMemo(() => {
     if (!subject) return new Set<string>()
@@ -163,12 +156,12 @@ export default function App() {
 
   const toggleNode = useCallback(
     (node: SkillNode) => {
-      if (!subject || !structure) return
+      if (!subject) return
       const ids = new Set(progress[subject.id] ?? [])
-      const state = nodeState(node, structure, ids)
+      const state = nodeState(node, ids)
 
       if (state === 'mastered') {
-        const removed = collectRemoval(subject, node, structure, ids)
+        const removed = collectSubtree(subject, node.id)
         const removedMastered = removed.filter((id) => ids.has(id)).length
         removed.forEach((id) => ids.delete(id))
         updateProgress(subject, [...ids])
@@ -177,58 +170,41 @@ export default function App() {
           id: Date.now(),
           message:
             removedMastered > 1
-              ? `Cleared ${removedMastered} mastered nodes`
+              ? `Cleared ${removedMastered} downstream nodes`
               : `Removed: ${node.title}`,
         })
         return
       }
 
-      const group = structure.groupByNode.get(node.id)
-      let message = ''
-
-      if (node.role === 'start') {
-        ids.add(node.id)
-        message = 'Subject started — first milestone unlocked'
-      } else if (!group) {
+      if (state === 'locked') {
+        const missing = missingRequirements(node, ids)
+        const titles = missing
+          .map((id) => subject.nodes.find((entry) => entry.id === id)?.title ?? id)
+          .slice(0, 2)
+        setToast({
+          id: Date.now(),
+          message:
+            missing.length === 1
+              ? `Master ${titles[0]} first`
+              : `Master ${titles.join(', ')}${missing.length > 2 ? ', …' : ''} first`,
+        })
         return
-      } else {
-        const gate = gateForGroup(structure, group)
-        if (!ids.has(gate.id)) {
-          setToast({ id: Date.now(), message: `Clear "${gate.title}" first` })
-          return
-        }
-
-        if (node.role === 'sub') {
-          ids.add(node.id)
-          const progressNow = milestoneProgress(group, ids)
-          message =
-            progressNow.done === progressNow.total
-              ? `Milestone ready: ${group.main.title}`
-              : `Mastered: ${node.title} (${progressNow.done}/${progressNow.total})`
-        } else {
-          const progressNow = milestoneProgress(group, ids)
-          if (progressNow.done < progressNow.total) {
-            const left = progressNow.total - progressNow.done
-            setToast({
-              id: Date.now(),
-              message: `Master ${left} more subskill${left === 1 ? '' : 's'} to claim this milestone`,
-            })
-            return
-          }
-          ids.add(node.id)
-          message = `Milestone cleared: ${node.title}`
-        }
       }
 
+      ids.add(node.id)
       updateProgress(subject, [...ids])
       const remaining = subject.nodes.length - ids.size
       setToast({
         id: Date.now(),
         message:
-          remaining === 0 ? `${subject.name} complete — every node mastered!` : message,
+          remaining === 0
+            ? `${subject.name} complete — every node mastered!`
+            : node.start
+              ? 'Subject started — follow the connected hexes'
+              : `Mastered: ${node.title}`,
       })
     },
-    [progress, structure, subject, updateProgress],
+    [progress, subject, updateProgress],
   )
 
   const handleSelectSubject = useCallback((nextSubjectId: string) => {
@@ -276,7 +252,7 @@ export default function App() {
     )
   }
 
-  if (!data || !subject || !structure || !layout) {
+  if (!data || !subject || !layout) {
     return (
       <div className="boot">
         <div className="boot__loader" aria-hidden="true" />
@@ -302,8 +278,6 @@ export default function App() {
       <main className="stage">
         <SkillCanvas
           subject={subject}
-          structure={structure}
-          stages={data.stages}
           layout={layout}
           mastered={mastered}
           selectedId={selectedId}
@@ -334,8 +308,6 @@ export default function App() {
             key={selectedNode.id}
             subject={subject}
             node={selectedNode}
-            stages={data.stages}
-            structure={structure}
             mastered={mastered}
             onClose={() => setSelectedId(null)}
             onSelect={setSelectedId}
