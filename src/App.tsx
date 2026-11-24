@@ -5,9 +5,22 @@ import Legend from './components/Legend'
 import SkillCanvas from './components/SkillCanvas'
 import { collectSubtree, layoutSubject, normalizeData } from './lib/tree'
 import { loadLastSubject, loadProgress, saveLastSubject, saveProgress, type ProgressMap } from './lib/storage'
-import type { SkillNode, Subject, TreeData } from './types'
+import type { SkillNode, Subject, Theme, TreeData } from './types'
 
 const DATA_URL = `${import.meta.env.BASE_URL}data/upcat-skill-tree.json`
+const THEME_KEY = 'upcat-skill-tree:theme:v1'
+
+function readInitialTheme(): Theme {
+  const attr = document.documentElement.dataset.theme
+  if (attr === 'light' || attr === 'dark') return attr
+  try {
+    const saved = localStorage.getItem(THEME_KEY)
+    if (saved === 'light' || saved === 'dark') return saved
+  } catch {
+    /* storage unavailable */
+  }
+  return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+}
 
 interface Toast {
   id: number
@@ -23,6 +36,7 @@ export default function App() {
   const [branchFilter, setBranchFilter] = useState<string | null>(null)
   const [toast, setToast] = useState<Toast | null>(null)
   const [resetOpen, setResetOpen] = useState(false)
+  const [theme, setTheme] = useState<Theme>(() => readInitialTheme())
 
   /* Load the editable content file ---------------------------------------- */
   useEffect(() => {
@@ -76,6 +90,18 @@ export default function App() {
     setSelectedId(null)
     setBranchFilter(null)
   }, [subjectId])
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', theme === 'light' ? '#eef1f2' : '#080b0e')
+    try {
+      localStorage.setItem(THEME_KEY, theme)
+    } catch {
+      /* storage unavailable */
+    }
+  }, [theme])
 
   const subject = useMemo(
     () => data?.subjects.find((entry) => entry.id === subjectId) ?? data?.subjects[0] ?? null,
@@ -205,7 +231,7 @@ export default function App() {
   }
 
   return (
-    <div className="app" style={{ '--accent': subject.accent } as CSSProperties}>
+    <div className="app" style={{ '--accent-raw': subject.accent } as CSSProperties}>
       <Header
         data={data}
         subject={subject}
@@ -213,6 +239,8 @@ export default function App() {
         onSelectSubject={handleSelectSubject}
         onShare={handleShare}
         onReset={() => setResetOpen(true)}
+        theme={theme}
+        onToggleTheme={() => setTheme((current) => (current === 'light' ? 'dark' : 'light'))}
       />
 
       <main className="stage">

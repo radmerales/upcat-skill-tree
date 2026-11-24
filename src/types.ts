@@ -41,6 +41,8 @@ export interface TreeData {
 
 export type NodeState = 'mastered' | 'available' | 'locked'
 
+export type Theme = 'light' | 'dark'
+
 export interface Point {
   x: number
   y: number

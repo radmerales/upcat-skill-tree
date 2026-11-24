@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import type { ProgressMap } from '../lib/storage'
 import type { Subject, TreeData } from '../types'
-import { Check, ChevronDown, Reset, Share } from './Icons'
+import { Check, ChevronDown, Moon, Reset, Share, Sun } from './Icons'
+import type { Theme } from '../types'
 
 interface HeaderProps {
   data: TreeData
@@ -10,6 +11,8 @@ interface HeaderProps {
   onSelectSubject: (subjectId: string) => void
   onShare: () => void
   onReset: () => void
+  theme: Theme
+  onToggleTheme: () => void
 }
 
 function masteredCount(subject: Subject, progress: ProgressMap): number {
@@ -17,7 +20,7 @@ function masteredCount(subject: Subject, progress: ProgressMap): number {
   return subject.nodes.filter((node) => ids.has(node.id)).length
 }
 
-export default function Header({ data, subject, progress, onSelectSubject, onShare, onReset }: HeaderProps) {
+export default function Header({ data, subject, progress, onSelectSubject, onShare, onReset, theme, onToggleTheme }: HeaderProps) {
   const [open, setOpen] = useState(false)
   const wrapRef = useRef<HTMLDivElement>(null)
 
@@ -66,14 +69,14 @@ export default function Header({ data, subject, progress, onSelectSubject, onSha
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
         >
-          <span className="subject-switch__badge" style={{ borderColor: subject.accent, color: subject.accent }}>
+          <span className="subject-switch__badge">
             <span>{subject.kicker.replace(/\D/g, '')}</span>
           </span>
           <span className="subject-switch__copy">
             <span className="subject-switch__kicker">Now studying</span>
             <span className="subject-switch__name">{subject.name}</span>
           </span>
-          <span className="subject-switch__count" style={{ color: subject.accent }}>
+          <span className="subject-switch__count">
             {done}
             <span>/{total}</span>
           </span>
@@ -134,7 +137,7 @@ export default function Header({ data, subject, progress, onSelectSubject, onSha
               r="15"
               className="progress__fill"
               style={{
-                stroke: subject.accent,
+                stroke: 'var(--accent)',
                 strokeDasharray: `${circumference}`,
                 strokeDashoffset: `${circumference - (percent / 100) * circumference}`,
               }}
@@ -146,6 +149,16 @@ export default function Header({ data, subject, progress, onSelectSubject, onSha
           </div>
         </div>
 
+        <button
+          type="button"
+          className="icon-button"
+          onClick={onToggleTheme}
+          title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+        >
+          {theme === 'light' ? <Moon size={15} /> : <Sun size={15} />}
+          <span className="icon-button__label">{theme === 'light' ? 'Dark' : 'Light'}</span>
+        </button>
         <button
           type="button"
           className="icon-button"

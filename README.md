@@ -2,7 +2,7 @@
 
 An interactive, left-to-right study skill tree for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown, pan around the canvas, and master diamond nodes by following their prerequisites.
 
-The design is inspired by the [ARC Raiders Skill Builder](https://metaforge.app/arc-raiders/skill-builder): a dark pan-and-zoom canvas, glowing skill nodes, prerequisite lines, a mastery counter, click-to-learn, and right-click-to-remove.
+The design is inspired by the [ARC Raiders Skill Builder](https://metaforge.app/arc-raiders/skill-builder): a pan-and-zoom canvas, glowing skill nodes, prerequisite lines, a mastery counter, click-to-learn, and right-click-to-remove. Dark and light themes are both supported.
 
 ## Stack
 
@@ -94,6 +94,7 @@ The app runs the same checks on load and shows a readable error screen if the JS
 | --- | --- |
 | Drag | Pan the tree |
 | Scroll / pinch | Zoom toward the cursor |
+| Theme toggle (sun / moon) | Switch between dark and light mode |
 | Click a diamond | Open the detail panel |
 | Double-click a diamond | Master / unmaster it |
 | Right-click a mastered diamond | Remove it and everything it unlocks |
@@ -101,7 +102,7 @@ The app runs the same checks on load and shows a readable error screen if the JS
 | Subject dropdown | Switch subjects (progress is kept per subject) |
 | Reset | Clear mastered skills for the current subject |
 
-Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
+Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. The theme is saved under `upcat-skill-tree:theme:v1`; on a first visit it follows your system color-scheme preference. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
 
 ## Deployment
 
