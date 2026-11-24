@@ -10,7 +10,6 @@ const errors = []
 const warnings = []
 
 const fail = (message) => errors.push(message)
-
 const isObject = (value) => typeof value === 'object' && value !== null && !Array.isArray(value)
 const isText = (value) => typeof value === 'string' && value.trim().length > 0
 const isInt = (value, min = 0) => Number.isInteger(value) && value >= min
@@ -19,7 +18,7 @@ let raw
 try {
   raw = JSON.parse(await readFile(DATA_FILE, 'utf8'))
 } catch (error) {
-  console.error(`✗ Could not read or parse public/data/upcat-skill-tree.json`)
+  console.error('✗ Could not read or parse public/data/upcat-skill-tree.json')
   console.error(`  ${error.message}`)
   process.exit(1)
 }
@@ -31,14 +30,13 @@ if (!isObject(raw)) {
 
 if (!isText(raw.title)) fail('title must be a non-empty string.')
 if (!isText(raw.subtitle)) fail('subtitle must be a non-empty string.')
-if (!Array.isArray(raw.tiers) || raw.tiers.length === 0) {
-  fail('tiers must be a non-empty array.')
-}
-const tiers = Array.isArray(raw.tiers) ? raw.tiers : []
-tiers.forEach((tier, index) => {
-  if (!isObject(tier)) return fail(`tiers[${index}] must be an object.`)
-  if (!isText(tier.label)) fail(`tiers[${index}].label must be a non-empty string.`)
-  if (!isText(tier.note)) fail(`tiers[${index}].note must be a non-empty string.`)
+
+const stages = Array.isArray(raw.stages) ? raw.stages : []
+if (stages.length === 0) fail('stages must be a non-empty array.')
+stages.forEach((stage, index) => {
+  if (!isObject(stage)) return fail(`stages[${index}] must be an object.`)
+  if (!isText(stage.label)) fail(`stages[${index}].label must be a non-empty string.`)
+  if (!isText(stage.note)) fail(`stages[${index}].note must be a non-empty string.`)
 })
 
 const subjects = Array.isArray(raw.subjects) ? raw.subjects : []
@@ -77,8 +75,6 @@ subjects.forEach((subject, subjectIndex) => {
   totalNodes += nodes.length
 
   const nodeIds = new Set()
-  const cells = new Map()
-
   nodes.forEach((node, nodeIndex) => {
     if (!isObject(node)) return fail(`${where}.nodes[${nodeIndex}] must be an object.`)
     const label = `${where}.${node.id ?? `nodes[${nodeIndex}]`}`
@@ -96,77 +92,56 @@ subjects.forEach((subject, subjectIndex) => {
     if (!isText(node.branch) || !branchIds.has(node.branch)) {
       fail(`${label}.branch must reference a declared branch (got ${JSON.stringify(node.branch)}).`)
     }
-    if (!isInt(node.tier) || node.tier >= tiers.length) {
-      fail(`${label}.tier must be an integer from 0 to ${tiers.length - 1}.`)
+    if (node.role !== 'start' && node.role !== 'main' && node.role !== 'sub') {
+      fail(`${label}.role must be "start", "main", or "sub".`)
+      return
     }
-    if (!isInt(node.lane)) fail(`${label}.lane must be a whole number >= 0.`)
-
-    if (isInt(node.tier) && isInt(node.lane)) {
-      const cell = `${node.tier}:${node.lane}`
-      if (cells.has(cell)) {
-        fail(
-          `${label} overlaps ${cells.get(cell)} at tier ${node.tier}, lane ${node.lane}. ` +
-            `Move one node to a free lane.`,
-        )
-      }
-      cells.set(cell, label)
+    if (node.role === 'start' && node.stage !== undefined) {
+      fail(`${label}: start nodes do not use a stage.`)
     }
-
-    if (node.requires !== undefined) {
-      if (!Array.isArray(node.requires) || node.requires.some((id) => !isText(id))) {
-        fail(`${label}.requires must be an array of node ids.`)
+    if (node.role !== 'start' && (!isInt(node.stage) || node.stage >= stages.length)) {
+      fail(`${label}.stage must be an integer from 0 to ${stages.length - 1}.`)
+    }
+    for (const legacy of ['tier', 'lane', 'requires']) {
+      if (node[legacy] !== undefined) {
+        warnings.push(`${where}.${node.id}: "${legacy}" is no longer used by the hex layout.`)
       }
     }
   })
 
-  nodes.forEach((node) => {
-    if (!isObject(node) || !Array.isArray(node.requires)) return
-    for (const requirementId of node.requires) {
-      if (requirementId === node.id) fail(`${where}.${node.id} requires itself.`)
-      const requirement = nodes.find((candidate) => candidate?.id === requirementId)
-      if (!requirement) {
-        fail(`${where}.${node.id}: unknown prerequisite "${requirementId}".`)
-        continue
-      }
-      if (isInt(node.tier) && isInt(requirement.tier) && requirement.tier >= node.tier) {
-        fail(
-          `${where}.${node.id}: prerequisite "${requirementId}" is in tier ${requirement.tier}; ` +
-            `it must be in an earlier tier than ${node.tier} so the tree flows left to right.`,
-        )
-      }
-    }
+  const startNodes = nodes.filter((node) => node.role === 'start')
+  if (startNodes.length !== 1) {
+    fail(`${where}: exactly one start node is required (found ${startNodes.length}).`)
+  } else if (nodes[0]?.id !== startNodes[0].id) {
+    warnings.push(`${where}: put the start node first in the nodes array for readability.`)
+  }
+
+  const usedStages = [...new Set(nodes.filter((node) => isInt(node.stage)).map((node) => node.stage))].sort(
+    (a, b) => a - b,
+  )
+  if (usedStages.length === 0) fail(`${where}: no milestone stages found.`)
+  usedStages.forEach((stage, index) => {
+    if (stage !== index) fail(`${where}: stages must be numbered contiguously from 0 (missing ${index}).`)
   })
 
-  // Reachability check: every node should be masterable from the roots.
-  const byId = new Map(nodes.filter(isObject).map((node) => [node.id, node]))
-  const reachable = new Set(nodes.filter((node) => (node.requires ?? []).length === 0).map((node) => node.id))
-  let changed = true
-  while (changed) {
-    changed = false
-    for (const node of nodes) {
-      if (reachable.has(node.id)) continue
-      if ((node.requires ?? []).every((id) => reachable.has(id))) {
-        reachable.add(node.id)
-        changed = true
-      }
+  const stageSummary = []
+  for (const stage of usedStages) {
+    const mains = nodes.filter((node) => node.role === 'main' && node.stage === stage)
+    const subs = nodes.filter((node) => node.role === 'sub' && node.stage === stage)
+    if (mains.length !== 1) {
+      fail(`${where}: stage ${stage} must have exactly one main node (found ${mains.length}).`)
     }
-  }
-  for (const id of byId.keys()) {
-    if (!reachable.has(id)) fail(`${where}.${id} can never be unlocked (circular or missing prerequisites).`)
+    if (subs.length === 0) fail(`${where}: stage ${stage} needs at least one subskill around its milestone.`)
+    if (subs.length > 5) {
+      fail(`${where}: stage ${stage} has ${subs.length} subskills; the hex ring supports at most 5.`)
+    }
+    stageSummary.push(`${subs.length} sub${subs.length === 1 ? '' : 's'}`)
   }
 
-  const tierCount = new Set(nodes.map((node) => node.tier).filter((tier) => isInt(tier))).size
-  const maxLane = Math.max(...nodes.map((node) => (isInt(node.lane) ? node.lane : 0)), 0)
-  const rootCount = nodes.filter((node) => (node.requires ?? []).length === 0).length
   console.log(
     `  ${subject.name.padEnd(22)} ${String(nodes.length).padStart(2)} nodes · ` +
-      `${branches.length} branches · ${tierCount} tiers · ${maxLane + 1} lanes · ${rootCount} roots`,
+      `${usedStages.length} stages (${stageSummary.join(' / ')}) · ${branches.length} branches`,
   )
-
-  if (rootCount === 0) warnings.push(`${where}: no root nodes — every node has a prerequisite.`)
-  if (!tiers.every((_, index) => nodes.some((node) => node.tier === index))) {
-    warnings.push(`${where}: at least one tier column is empty.`)
-  }
 })
 
 console.log('')
@@ -182,4 +157,4 @@ if (errors.length) {
   process.exit(1)
 }
 
-console.log(`✓ Skill tree valid — ${subjects.length} subjects, ${totalNodes} nodes, ${tiers.length} tiers.`)
+console.log(`✓ Hex skill tree valid — ${subjects.length} subjects, ${totalNodes} nodes, ${stages.length} stages.`)

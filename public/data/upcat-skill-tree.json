@@ -1,29 +1,7 @@
 {
-  "version": 1,
+  "version": 2,
   "title": "UPCAT Skill Tree",
   "subtitle": "A left-to-right study path for the University of the Philippines College Admission Test.",
-  "tiers": [
-    {
-      "label": "FOUNDATION",
-      "note": "Rebuild the basics"
-    },
-    {
-      "label": "CORE",
-      "note": "Learn the patterns"
-    },
-    {
-      "label": "ADVANCED",
-      "note": "Connect the ideas"
-    },
-    {
-      "label": "MASTERY",
-      "note": "Handle the hardest items"
-    },
-    {
-      "label": "EXAM READY",
-      "note": "Perform under time"
-    }
-  ],
   "subjects": [
     {
       "id": "math",
@@ -55,276 +33,223 @@
       ],
       "nodes": [
         {
+          "id": "math-start",
+          "title": "Start Here",
+          "code": "GO",
+          "branch": "arithmetic",
+          "role": "start",
+          "description": "Take a short diagnostic across arithmetic, algebra, and geometry. Clear this node to open the first arithmetic milestone.",
+          "tip": "Log each miss by topic; your weakest three topics become the first subskills you study."
+        },
+        {
           "id": "math-ops",
           "title": "Operations & Number Sense",
           "code": "OPS",
           "branch": "arithmetic",
-          "tier": 0,
-          "lane": 0,
+          "role": "main",
+          "stage": 0,
           "description": "Integer rules, order of operations, divisibility, primes, and the number properties UPCAT leans on.",
-          "tip": "Drill 20 order-of-operations items daily; write each step instead of computing in your head.",
-          "requires": []
+          "tip": "Drill 20 order-of-operations items daily; write each step instead of computing in your head."
         },
         {
           "id": "math-fractions",
           "title": "Fractions, Decimals & Percents",
           "code": "FRC",
           "branch": "arithmetic",
-          "tier": 0,
-          "lane": 1,
+          "role": "sub",
+          "stage": 0,
           "description": "Convert fluently between forms and handle percent change, discounts, and fractional parts.",
-          "tip": "Memorize the fraction–percent table (1/8 = 12.5%, 1/6 ≈ 16.7%) so you can skip long division.",
-          "requires": []
+          "tip": "Memorize the fraction–percent table (1/8 = 12.5%, 1/6 ≈ 16.7%) so you can skip long division."
         },
         {
           "id": "math-ratios",
           "title": "Ratios & Proportions",
           "code": "RAT",
           "branch": "arithmetic",
-          "tier": 0,
-          "lane": 2,
+          "role": "sub",
+          "stage": 0,
           "description": "Part-to-part and part-to-whole ratios, direct and inverse proportion, and scaling.",
-          "tip": "When a problem gives a ratio, assign a multiplier x and express every quantity in terms of x.",
-          "requires": []
+          "tip": "When a problem gives a ratio, assign a multiplier x and express every quantity in terms of x."
         },
         {
           "id": "math-estimation",
           "title": "Estimation & Mental Math",
           "code": "EST",
           "branch": "arithmetic",
-          "tier": 0,
-          "lane": 3,
+          "role": "sub",
+          "stage": 0,
           "description": "Approximate before you compute, sanity-check answer choices, and use friendly benchmarks.",
-          "tip": "Round first. UPCAT choices are often far enough apart that an estimate eliminates three options.",
-          "requires": []
+          "tip": "Round first. UPCAT choices are often far enough apart that an estimate eliminates three options."
         },
         {
           "id": "math-expressions",
           "title": "Algebraic Expressions",
           "code": "ALG",
           "branch": "algebra",
-          "tier": 0,
-          "lane": 4,
+          "role": "sub",
+          "stage": 0,
           "description": "Simplify expressions, combine like terms, expand, and translate words into algebra.",
-          "tip": "Underline the unknown and write a 'let x =' line before touching the equation.",
-          "requires": []
+          "tip": "Underline the unknown and write a 'let x =' line before touching the equation."
         },
         {
           "id": "math-linear",
           "title": "Linear Equations & Inequalities",
           "code": "LIN",
           "branch": "algebra",
-          "tier": 1,
-          "lane": 1,
+          "role": "main",
+          "stage": 1,
           "description": "Solve one- and two-variable linear equations, work with inequalities, and interpret slope.",
-          "tip": "Whatever you do to one side, do to the other. Flip the inequality sign when multiplying by a negative.",
-          "requires": [
-            "math-expressions",
-            "math-fractions"
-          ]
-        },
-        {
-          "id": "math-angles",
-          "title": "Lines, Angles & Triangles",
-          "code": "ANG",
-          "branch": "geometry",
-          "tier": 1,
-          "lane": 2,
-          "description": "Angle relationships, triangle properties, congruence, and the exterior angle theorem.",
-          "tip": "Draw the figure even when one is provided, and mark every given value on it.",
-          "requires": [
-            "math-ops"
-          ]
-        },
-        {
-          "id": "math-averages",
-          "title": "Averages & Weighted Mean",
-          "code": "AVG",
-          "branch": "data",
-          "tier": 1,
-          "lane": 3,
-          "description": "Mean, median, mode, range, and weighted averages in mixed data sets.",
-          "tip": "For weighted mean, convert each weight into a fraction of the total before multiplying.",
-          "requires": [
-            "math-fractions"
-          ]
+          "tip": "Whatever you do to one side, do to the other. Flip the inequality sign when multiplying by a negative."
         },
         {
           "id": "math-rates",
           "title": "Rates, Work & Mixture",
           "code": "RTE",
           "branch": "arithmetic",
-          "tier": 1,
-          "lane": 4,
+          "role": "sub",
+          "stage": 1,
           "description": "Speed–distance–time, combined work, and mixture problems solved with clean tables.",
-          "tip": "Use the units to decide the operation: 'of the job per hour' means your rates add.",
-          "requires": [
-            "math-ratios",
-            "math-fractions"
-          ]
+          "tip": "Use the units to decide the operation: 'of the job per hour' means your rates add."
         },
         {
           "id": "math-poly",
           "title": "Polynomials & Factoring",
           "code": "POL",
           "branch": "algebra",
-          "tier": 2,
-          "lane": 0,
+          "role": "sub",
+          "stage": 1,
           "description": "Expand, factor, and simplify polynomials including difference of squares and trinomials.",
-          "tip": "Always check for a greatest common factor before trying any other factoring pattern.",
-          "requires": [
-            "math-linear"
-          ]
+          "tip": "Always check for a greatest common factor before trying any other factoring pattern."
         },
         {
           "id": "math-systems",
           "title": "Systems of Equations",
           "code": "SYS",
           "branch": "algebra",
-          "tier": 2,
-          "lane": 1,
+          "role": "sub",
+          "stage": 1,
           "description": "Solve two-variable systems by substitution and elimination; recognize no-solution cases.",
-          "tip": "Elimination is faster when coefficients line up — multiply to create opposites, then add.",
-          "requires": [
-            "math-linear"
-          ]
-        },
-        {
-          "id": "math-coord",
-          "title": "Coordinate Geometry",
-          "code": "CRD",
-          "branch": "geometry",
-          "tier": 2,
-          "lane": 2,
-          "description": "Distance, midpoint, slope, and equations of lines on the Cartesian plane.",
-          "tip": "Sketch the points; most coordinate problems become obvious once the segment or triangle is drawn.",
-          "requires": [
-            "math-angles"
-          ]
-        },
-        {
-          "id": "math-circles",
-          "title": "Circles, Area & Volume",
-          "code": "CIR",
-          "branch": "geometry",
-          "tier": 2,
-          "lane": 3,
-          "description": "Circle measures plus perimeter, area, surface area, and volume of solids.",
-          "tip": "Keep a one-page formula sheet and re-derive it weekly so the formulas actually stick.",
-          "requires": [
-            "math-angles"
-          ]
-        },
-        {
-          "id": "math-prob",
-          "title": "Counting & Probability",
-          "code": "PRB",
-          "branch": "data",
-          "tier": 2,
-          "lane": 4,
-          "description": "Permutations, combinations, and single- and multi-event probability.",
-          "tip": "Ask whether order matters: order matters → permutation, order does not → combination.",
-          "requires": [
-            "math-averages"
-          ]
+          "tip": "Elimination is faster when coefficients line up — multiply to create opposites, then add."
         },
         {
           "id": "math-sequence",
           "title": "Sequences & Series",
           "code": "SEQ",
           "branch": "algebra",
-          "tier": 2,
-          "lane": 5,
+          "role": "sub",
+          "stage": 1,
           "description": "Arithmetic and geometric sequences, nth terms, and simple series sums.",
-          "tip": "List the first four terms before hunting for a formula — the pattern is usually visible.",
-          "requires": [
-            "math-linear"
-          ]
-        },
-        {
-          "id": "math-quadratics",
-          "title": "Quadratic Equations",
-          "code": "QUA",
-          "branch": "algebra",
-          "tier": 3,
-          "lane": 0,
-          "description": "Solve by factoring, completing the square, and the quadratic formula; read parabolas.",
-          "tip": "Check the discriminant first; it tells you how many real roots to expect before you solve.",
-          "requires": [
-            "math-poly"
-          ]
+          "tip": "List the first four terms before hunting for a formula — the pattern is usually visible."
         },
         {
           "id": "math-functions",
           "title": "Functions & Graphs",
           "code": "FNX",
           "branch": "algebra",
-          "tier": 3,
-          "lane": 1,
+          "role": "main",
+          "stage": 2,
           "description": "Function notation, domain and range, transformations, and graph interpretation.",
-          "tip": "Test one input value to match a graph to an equation — faster than analyzing the whole shape.",
-          "requires": [
-            "math-systems",
-            "math-coord"
-          ]
+          "tip": "Test one input value to match a graph to an equation — faster than analyzing the whole shape."
         },
         {
-          "id": "math-data",
-          "title": "Data Interpretation",
-          "code": "DAT",
-          "branch": "data",
-          "tier": 3,
-          "lane": 2,
-          "description": "Read tables, bar graphs, and pie charts; compute rates and compare proportions.",
-          "tip": "Read the axis labels and units before the question; most traps live in 'percent of what?'.",
-          "requires": [
-            "math-prob",
-            "math-averages"
-          ]
-        },
-        {
-          "id": "math-wordadv",
-          "title": "Advanced Word Problems",
-          "code": "ADV",
-          "branch": "arithmetic",
-          "tier": 3,
-          "lane": 3,
-          "description": "Translate multi-step age, digit, investment, and geometry word problems into equations.",
-          "tip": "Write the final question as a sentence with a blank; it tells you exactly what to solve for.",
-          "requires": [
-            "math-rates",
-            "math-systems"
-          ]
-        },
-        {
-          "id": "math-geomaster",
-          "title": "Similarity & Right Triangles",
-          "code": "GEO",
+          "id": "math-angles",
+          "title": "Lines, Angles & Triangles",
+          "code": "ANG",
           "branch": "geometry",
-          "tier": 3,
-          "lane": 4,
-          "description": "Similar figures, Pythagorean triples, and basic right-triangle trigonometry.",
-          "tip": "Memorize 3-4-5, 5-12-13, and 8-15-17 so you can skip the Pythagorean theorem on test day.",
-          "requires": [
-            "math-circles",
-            "math-angles"
-          ]
+          "role": "sub",
+          "stage": 2,
+          "description": "Angle relationships, triangle properties, congruence, and the exterior angle theorem.",
+          "tip": "Draw the figure even when one is provided, and mark every given value on it."
+        },
+        {
+          "id": "math-coord",
+          "title": "Coordinate Geometry",
+          "code": "CRD",
+          "branch": "geometry",
+          "role": "sub",
+          "stage": 2,
+          "description": "Distance, midpoint, slope, and equations of lines on the Cartesian plane.",
+          "tip": "Sketch the points; most coordinate problems become obvious once the segment or triangle is drawn."
+        },
+        {
+          "id": "math-circles",
+          "title": "Circles, Area & Volume",
+          "code": "CIR",
+          "branch": "geometry",
+          "role": "sub",
+          "stage": 2,
+          "description": "Circle measures plus perimeter, area, surface area, and volume of solids.",
+          "tip": "Keep a one-page formula sheet and re-derive it weekly so the formulas actually stick."
+        },
+        {
+          "id": "math-averages",
+          "title": "Averages & Weighted Mean",
+          "code": "AVG",
+          "branch": "data",
+          "role": "sub",
+          "stage": 2,
+          "description": "Mean, median, mode, range, and weighted averages in mixed data sets.",
+          "tip": "For weighted mean, convert each weight into a fraction of the total before multiplying."
         },
         {
           "id": "math-sim",
           "title": "Timed Math Simulation",
           "code": "SIM",
           "branch": "data",
-          "tier": 4,
-          "lane": 2,
+          "role": "main",
+          "stage": 3,
           "description": "Full mixed math sets under the official time limit, followed by an error-log review.",
-          "tip": "Simulate the real clock, then tag every miss by topic. Retake only your two weakest topics first.",
-          "requires": [
-            "math-quadratics",
-            "math-data",
-            "math-wordadv",
-            "math-geomaster"
-          ]
+          "tip": "Simulate the real clock, then tag every miss by topic. Retake only your two weakest topics first."
+        },
+        {
+          "id": "math-prob",
+          "title": "Counting & Probability",
+          "code": "PRB",
+          "branch": "data",
+          "role": "sub",
+          "stage": 3,
+          "description": "Permutations, combinations, and single- and multi-event probability.",
+          "tip": "Ask whether order matters: order matters → permutation, order does not → combination."
+        },
+        {
+          "id": "math-quadratics",
+          "title": "Quadratic Equations",
+          "code": "QUA",
+          "branch": "algebra",
+          "role": "sub",
+          "stage": 3,
+          "description": "Solve by factoring, completing the square, and the quadratic formula; read parabolas.",
+          "tip": "Check the discriminant first; it tells you how many real roots to expect before you solve."
+        },
+        {
+          "id": "math-data",
+          "title": "Data Interpretation",
+          "code": "DAT",
+          "branch": "data",
+          "role": "sub",
+          "stage": 3,
+          "description": "Read tables, bar graphs, and pie charts; compute rates and compare proportions.",
+          "tip": "Read the axis labels and units before the question; most traps live in 'percent of what?'."
+        },
+        {
+          "id": "math-wordadv",
+          "title": "Advanced Word Problems",
+          "code": "ADV",
+          "branch": "arithmetic",
+          "role": "sub",
+          "stage": 3,
+          "description": "Translate multi-step age, digit, investment, and geometry word problems into equations.",
+          "tip": "Write the final question as a sentence with a blank; it tells you exactly what to solve for."
+        },
+        {
+          "id": "math-geomaster",
+          "title": "Similarity & Right Triangles",
+          "code": "GEO",
+          "branch": "geometry",
+          "role": "sub",
+          "stage": 3,
+          "description": "Similar figures, Pythagorean triples, and basic right-triangle trigonometry.",
+          "tip": "Memorize 3-4-5, 5-12-13, and 8-15-17 so you can skip the Pythagorean theorem on test day."
         }
       ]
     },
@@ -363,233 +288,193 @@
       ],
       "nodes": [
         {
+          "id": "science-start",
+          "title": "Start Here",
+          "code": "GO",
+          "branch": "inquiry",
+          "role": "start",
+          "description": "Take a short mixed-science diagnostic covering biology, chemistry, physics, and earth science. Clear this node to open the first science milestone.",
+          "tip": "Sort every miss by branch, then start with the branch that has the most misses."
+        },
+        {
           "id": "sci-inquiry",
           "title": "Scientific Method & Measurement",
           "code": "INQ",
           "branch": "inquiry",
-          "tier": 0,
-          "lane": 0,
+          "role": "main",
+          "stage": 0,
           "description": "Hypotheses, variables, controlled experiments, and SI units with significant figures.",
-          "tip": "For any experiment question, identify the independent variable first — it anchors everything else.",
-          "requires": []
+          "tip": "For any experiment question, identify the independent variable first — it anchors everything else."
         },
         {
           "id": "sci-cells",
           "title": "Cell Structure & Function",
           "code": "CEL",
           "branch": "biology",
-          "tier": 0,
-          "lane": 1,
+          "role": "sub",
+          "stage": 0,
           "description": "Prokaryotic and eukaryotic cells, organelles, membranes, and transport.",
-          "tip": "Link each organelle to a factory job; function questions outnumber structure questions.",
-          "requires": []
+          "tip": "Link each organelle to a factory job; function questions outnumber structure questions."
         },
         {
           "id": "sci-matter",
           "title": "Matter & Its Properties",
           "code": "MAT",
           "branch": "chemistry",
-          "tier": 0,
-          "lane": 2,
+          "role": "sub",
+          "stage": 0,
           "description": "States of matter, physical vs chemical changes, mixtures, and separation techniques.",
-          "tip": "Classify first: if a new substance forms, the change is chemical.",
-          "requires": []
+          "tip": "Classify first: if a new substance forms, the change is chemical."
         },
         {
           "id": "sci-earth",
           "title": "Earth's Structure & Rocks",
           "code": "ERT",
           "branch": "earth",
-          "tier": 0,
-          "lane": 3,
+          "role": "sub",
+          "stage": 0,
           "description": "Layers of the Earth, the rock cycle, minerals, and soil formation.",
-          "tip": "Sketch the rock cycle once from memory; most items test transitions, not definitions.",
-          "requires": []
-        },
-        {
-          "id": "sci-atomic",
-          "title": "Atomic Structure & Periodic Table",
-          "code": "ATO",
-          "branch": "chemistry",
-          "tier": 1,
-          "lane": 0,
-          "description": "Subatomic particles, electron configuration, and periodic trends.",
-          "tip": "Trends follow position: radius grows down and left; electronegativity grows up and right.",
-          "requires": [
-            "sci-matter"
-          ]
+          "tip": "Sketch the rock cycle once from memory; most items test transitions, not definitions."
         },
         {
           "id": "sci-forces",
           "title": "Forces & Equilibrium",
           "code": "FOR",
           "branch": "physics",
-          "tier": 1,
-          "lane": 1,
+          "role": "sub",
+          "stage": 0,
           "description": "Types of forces, free-body diagrams, friction, and balanced vs unbalanced systems.",
-          "tip": "Draw the free-body diagram before choosing an equation; never skip the normal force.",
-          "requires": [
-            "sci-inquiry"
-          ]
-        },
-        {
-          "id": "sci-genetics",
-          "title": "Genetics & Heredity",
-          "code": "GEN",
-          "branch": "biology",
-          "tier": 1,
-          "lane": 2,
-          "description": "DNA, Mendelian crosses, Punnett squares, and pedigree analysis.",
-          "tip": "For dihybrid crosses, split the problem into two monohybrid crosses and multiply.",
-          "requires": [
-            "sci-cells"
-          ]
-        },
-        {
-          "id": "sci-plate",
-          "title": "Plate Tectonics & Earthquakes",
-          "code": "PLT",
-          "branch": "earth",
-          "tier": 1,
-          "lane": 3,
-          "description": "Plate boundaries, fault types, seismic waves, and volcanoes.",
-          "tip": "Divergent → ridge, convergent → trench or mountain, transform → fault. Match boundary to landform.",
-          "requires": [
-            "sci-earth"
-          ]
+          "tip": "Draw the free-body diagram before choosing an equation; never skip the normal force."
         },
         {
           "id": "sci-bonding",
           "title": "Chemical Bonding",
           "code": "BND",
           "branch": "chemistry",
-          "tier": 2,
-          "lane": 0,
+          "role": "main",
+          "stage": 1,
           "description": "Ionic vs covalent bonds, Lewis structures, and intermolecular forces.",
-          "tip": "Metal + nonmetal is ionic; nonmetal + nonmetal is covalent. That one rule answers many items.",
-          "requires": [
-            "sci-atomic"
-          ]
+          "tip": "Metal + nonmetal is ionic; nonmetal + nonmetal is covalent. That one rule answers many items."
+        },
+        {
+          "id": "sci-atomic",
+          "title": "Atomic Structure & Periodic Table",
+          "code": "ATO",
+          "branch": "chemistry",
+          "role": "sub",
+          "stage": 1,
+          "description": "Subatomic particles, electron configuration, and periodic trends.",
+          "tip": "Trends follow position: radius grows down and left; electronegativity grows up and right."
+        },
+        {
+          "id": "sci-plate",
+          "title": "Plate Tectonics & Earthquakes",
+          "code": "PLT",
+          "branch": "earth",
+          "role": "sub",
+          "stage": 1,
+          "description": "Plate boundaries, fault types, seismic waves, and volcanoes.",
+          "tip": "Divergent → ridge, convergent → trench or mountain, transform → fault. Match boundary to landform."
         },
         {
           "id": "sci-motion",
           "title": "Motion & Newton's Laws",
           "code": "MOT",
           "branch": "physics",
-          "tier": 2,
-          "lane": 1,
+          "role": "sub",
+          "stage": 1,
           "description": "Kinematics graphs, acceleration, and Newton's three laws applied to real systems.",
-          "tip": "In a velocity–time graph, slope is acceleration and area under the line is displacement.",
-          "requires": [
-            "sci-forces"
-          ]
-        },
-        {
-          "id": "sci-body",
-          "title": "Human Body Systems",
-          "code": "BDY",
-          "branch": "biology",
-          "tier": 2,
-          "lane": 2,
-          "description": "Circulation, respiration, digestion, excretion, and nervous coordination.",
-          "tip": "Trace one oxygen molecule and one glucose molecule through the body; most items follow those paths.",
-          "requires": [
-            "sci-genetics"
-          ]
-        },
-        {
-          "id": "sci-weather",
-          "title": "Weather, Climate & Oceans",
-          "code": "WTH",
-          "branch": "earth",
-          "tier": 2,
-          "lane": 3,
-          "description": "Atmosphere layers, fronts, storms, ocean currents, and climate patterns.",
-          "tip": "Low pressure means rising air and rain; high pressure means sinking air and fair weather.",
-          "requires": [
-            "sci-plate"
-          ]
+          "tip": "In a velocity–time graph, slope is acceleration and area under the line is displacement."
         },
         {
           "id": "sci-reactions",
           "title": "Reactions & Stoichiometry",
           "code": "RXN",
           "branch": "chemistry",
-          "tier": 3,
-          "lane": 0,
+          "role": "sub",
+          "stage": 1,
           "description": "Balancing equations, reaction types, moles, and limiting reactants.",
-          "tip": "Balance oxygen and hydrogen last; leave the most complex formula for the final count.",
-          "requires": [
-            "sci-bonding"
-          ]
+          "tip": "Balance oxygen and hydrogen last; leave the most complex formula for the final count."
         },
         {
-          "id": "sci-energy",
-          "title": "Work, Energy & Momentum",
-          "code": "ENR",
-          "branch": "physics",
-          "tier": 3,
-          "lane": 1,
-          "description": "Work, power, conservation of energy, and collisions.",
-          "tip": "Check whether the system is closed; if it is, mechanical energy at the start equals the end.",
-          "requires": [
-            "sci-motion"
-          ]
+          "id": "sci-body",
+          "title": "Human Body Systems",
+          "code": "BDY",
+          "branch": "biology",
+          "role": "main",
+          "stage": 2,
+          "description": "Circulation, respiration, digestion, excretion, and nervous coordination.",
+          "tip": "Trace one oxygen molecule and one glucose molecule through the body; most items follow those paths."
+        },
+        {
+          "id": "sci-genetics",
+          "title": "Genetics & Heredity",
+          "code": "GEN",
+          "branch": "biology",
+          "role": "sub",
+          "stage": 2,
+          "description": "DNA, Mendelian crosses, Punnett squares, and pedigree analysis.",
+          "tip": "For dihybrid crosses, split the problem into two monohybrid crosses and multiply."
+        },
+        {
+          "id": "sci-weather",
+          "title": "Weather, Climate & Oceans",
+          "code": "WTH",
+          "branch": "earth",
+          "role": "sub",
+          "stage": 2,
+          "description": "Atmosphere layers, fronts, storms, ocean currents, and climate patterns.",
+          "tip": "Low pressure means rising air and rain; high pressure means sinking air and fair weather."
         },
         {
           "id": "sci-ecology",
           "title": "Ecology & Evolution",
           "code": "ECO",
           "branch": "biology",
-          "tier": 3,
-          "lane": 2,
+          "role": "sub",
+          "stage": 2,
           "description": "Food webs, population dynamics, natural selection, and biodiversity.",
-          "tip": "Removing a top predator cascades downward; trace the chain two steps before answering.",
-          "requires": [
-            "sci-body"
-          ]
-        },
-        {
-          "id": "sci-waves",
-          "title": "Waves, Light & Electricity",
-          "code": "WAV",
-          "branch": "physics",
-          "tier": 3,
-          "lane": 3,
-          "description": "Wave properties, reflection and refraction, circuits, and Ohm's law.",
-          "tip": "For circuits, find total resistance first, then total current, then branch values.",
-          "requires": [
-            "sci-motion"
-          ]
-        },
-        {
-          "id": "sci-space",
-          "title": "Solar System & the Universe",
-          "code": "SPC",
-          "branch": "earth",
-          "tier": 3,
-          "lane": 4,
-          "description": "Planets, seasons, tides, stars, and the Big Bang.",
-          "tip": "Seasons come from axial tilt, not distance from the Sun — a classic UPCAT trap.",
-          "requires": [
-            "sci-weather"
-          ]
+          "tip": "Removing a top predator cascades downward; trace the chain two steps before answering."
         },
         {
           "id": "sci-sim",
           "title": "Science Simulation",
           "code": "SIM",
           "branch": "inquiry",
-          "tier": 4,
-          "lane": 2,
+          "role": "main",
+          "stage": 3,
           "description": "Mixed science sets under time pressure with error-log review.",
-          "tip": "Log every miss by topic; revisit the weakest branch before the next simulation.",
-          "requires": [
-            "sci-reactions",
-            "sci-energy",
-            "sci-ecology",
-            "sci-waves"
-          ]
+          "tip": "Log every miss by topic; revisit the weakest branch before the next simulation."
+        },
+        {
+          "id": "sci-energy",
+          "title": "Work, Energy & Momentum",
+          "code": "ENR",
+          "branch": "physics",
+          "role": "sub",
+          "stage": 3,
+          "description": "Work, power, conservation of energy, and collisions.",
+          "tip": "Check whether the system is closed; if it is, mechanical energy at the start equals the end."
+        },
+        {
+          "id": "sci-waves",
+          "title": "Waves, Light & Electricity",
+          "code": "WAV",
+          "branch": "physics",
+          "role": "sub",
+          "stage": 3,
+          "description": "Wave properties, reflection and refraction, circuits, and Ohm's law.",
+          "tip": "For circuits, find total resistance first, then total current, then branch values."
+        },
+        {
+          "id": "sci-space",
+          "title": "Solar System & the Universe",
+          "code": "SPC",
+          "branch": "earth",
+          "role": "sub",
+          "stage": 3,
+          "description": "Planets, seasons, tides, stars, and the Big Bang.",
+          "tip": "Seasons come from axial tilt, not distance from the Sun — a classic UPCAT trap."
         }
       ]
     },
@@ -623,210 +508,173 @@
       ],
       "nodes": [
         {
-          "id": "lang-parts",
-          "title": "Parts of Speech",
-          "code": "POS",
+          "id": "language-start",
+          "title": "Start Here",
+          "code": "GO",
           "branch": "grammar",
-          "tier": 0,
-          "lane": 0,
-          "description": "Nouns, verbs, adjectives, adverbs, prepositions, and how a word's role shifts by sentence.",
-          "tip": "Identify the word's job, not its dictionary category; the same word can be noun or verb.",
-          "requires": []
-        },
-        {
-          "id": "lang-roots",
-          "title": "Word Roots & Context Clues",
-          "code": "ROOT",
-          "branch": "vocabulary",
-          "tier": 0,
-          "lane": 1,
-          "description": "Prefixes, suffixes, common roots, and using surrounding text to infer meaning.",
-          "tip": "Build a 30-root deck (bene, mal, chron, graph, spect) and review it in five-minute bursts.",
-          "requires": []
+          "role": "start",
+          "description": "Take a short language diagnostic on grammar, vocabulary, and usage. Clear this node to open the first language milestone.",
+          "tip": "Mark the rule behind every error, not just the answer you missed."
         },
         {
           "id": "lang-sentence",
           "title": "Sentence Fundamentals",
           "code": "SENT",
           "branch": "usage",
-          "tier": 0,
-          "lane": 2,
+          "role": "main",
+          "stage": 0,
           "description": "Subjects, predicates, phrases, clauses, and the anatomy of a complete sentence.",
-          "tip": "Find the verb first, then ask who or what is doing it — the subject appears quickly.",
-          "requires": []
+          "tip": "Find the verb first, then ask who or what is doing it — the subject appears quickly."
+        },
+        {
+          "id": "lang-parts",
+          "title": "Parts of Speech",
+          "code": "POS",
+          "branch": "grammar",
+          "role": "sub",
+          "stage": 0,
+          "description": "Nouns, verbs, adjectives, adverbs, prepositions, and how a word's role shifts by sentence.",
+          "tip": "Identify the word's job, not its dictionary category; the same word can be noun or verb."
+        },
+        {
+          "id": "lang-roots",
+          "title": "Word Roots & Context Clues",
+          "code": "ROOT",
+          "branch": "vocabulary",
+          "role": "sub",
+          "stage": 0,
+          "description": "Prefixes, suffixes, common roots, and using surrounding text to infer meaning.",
+          "tip": "Build a 30-root deck (bene, mal, chron, graph, spect) and review it in five-minute bursts."
         },
         {
           "id": "lang-agreement",
           "title": "Subject–Verb Agreement",
           "code": "SVA",
           "branch": "grammar",
-          "tier": 1,
-          "lane": 0,
+          "role": "sub",
+          "stage": 0,
           "description": "Singular and plural agreement with tricky subjects, collective nouns, and inverted sentences.",
-          "tip": "Cross out prepositional phrases between the subject and verb; they hide the real subject.",
-          "requires": [
-            "lang-parts"
-          ]
-        },
-        {
-          "id": "lang-synonym",
-          "title": "Synonyms & Antonyms",
-          "code": "SYN",
-          "branch": "vocabulary",
-          "tier": 1,
-          "lane": 1,
-          "description": "Shades of meaning, precise word choice, and elimination by connotation.",
-          "tip": "Sort choices from most positive to most negative; the outlier is usually the trap.",
-          "requires": [
-            "lang-roots"
-          ]
-        },
-        {
-          "id": "lang-punct",
-          "title": "Punctuation & Mechanics",
-          "code": "PUN",
-          "branch": "usage",
-          "tier": 1,
-          "lane": 2,
-          "description": "Commas, semicolons, colons, dashes, and capitalization rules that get tested often.",
-          "tip": "A semicolon joins two complete sentences; if either side cannot stand alone, use a comma instead.",
-          "requires": [
-            "lang-sentence"
-          ]
+          "tip": "Cross out prepositional phrases between the subject and verb; they hide the real subject."
         },
         {
           "id": "lang-tenses",
           "title": "Verb Tenses & Forms",
           "code": "TNS",
           "branch": "grammar",
-          "tier": 1,
-          "lane": 3,
+          "role": "main",
+          "stage": 1,
           "description": "Perfect tenses, active vs passive voice, and consistency across a passage.",
-          "tip": "Look for time markers (since, by the time, already); they identify the perfect tense almost every time.",
-          "requires": [
-            "lang-parts"
-          ]
+          "tip": "Look for time markers (since, by the time, already); they identify the perfect tense almost every time."
+        },
+        {
+          "id": "lang-synonym",
+          "title": "Synonyms & Antonyms",
+          "code": "SYN",
+          "branch": "vocabulary",
+          "role": "sub",
+          "stage": 1,
+          "description": "Shades of meaning, precise word choice, and elimination by connotation.",
+          "tip": "Sort choices from most positive to most negative; the outlier is usually the trap."
+        },
+        {
+          "id": "lang-punct",
+          "title": "Punctuation & Mechanics",
+          "code": "PUN",
+          "branch": "usage",
+          "role": "sub",
+          "stage": 1,
+          "description": "Commas, semicolons, colons, dashes, and capitalization rules that get tested often.",
+          "tip": "A semicolon joins two complete sentences; if either side cannot stand alone, use a comma instead."
         },
         {
           "id": "lang-modifiers",
           "title": "Modifiers & Parallelism",
           "code": "MOD",
           "branch": "usage",
-          "tier": 2,
-          "lane": 0,
+          "role": "sub",
+          "stage": 1,
           "description": "Misplaced and dangling modifiers plus parallel structure in lists and comparisons.",
-          "tip": "Ask what a modifier is describing; if the answer is not the nearest noun, it is misplaced.",
-          "requires": [
-            "lang-tenses",
-            "lang-punct"
-          ]
-        },
-        {
-          "id": "lang-idioms",
-          "title": "Idioms & Analogies",
-          "code": "IDM",
-          "branch": "vocabulary",
-          "tier": 2,
-          "lane": 1,
-          "description": "Common idioms, preposition pairings, and bridge-building for analogy items.",
-          "tip": "Write the analogy as a sentence before reading the choices; match the relationship, not the topic.",
-          "requires": [
-            "lang-synonym"
-          ]
-        },
-        {
-          "id": "lang-pronoun",
-          "title": "Pronoun Reference & Case",
-          "code": "PRO",
-          "branch": "grammar",
-          "tier": 2,
-          "lane": 2,
-          "description": "Pronoun–antecedent agreement, ambiguous references, and nominative vs objective case.",
-          "tip": "Replace each pronoun with its supposed noun; the sentence will expose ambiguity instantly.",
-          "requires": [
-            "lang-agreement"
-          ]
-        },
-        {
-          "id": "lang-figures",
-          "title": "Figures of Speech",
-          "code": "FIG",
-          "branch": "rhetoric",
-          "tier": 2,
-          "lane": 3,
-          "description": "Simile, metaphor, personification, hyperbole, irony, and rhetorical devices.",
-          "tip": "Label the comparison first; if it uses like or as it is a simile, otherwise test for direct substitution.",
-          "requires": [
-            "lang-roots"
-          ]
-        },
-        {
-          "id": "lang-flow",
-          "title": "Sentence Combining & Flow",
-          "code": "FLOW",
-          "branch": "usage",
-          "tier": 3,
-          "lane": 0,
-          "description": "Combine choppy sentences and choose the most concise, logical arrangement.",
-          "tip": "Prefer the shortest option that keeps every original idea; extra words are usually wrong.",
-          "requires": [
-            "lang-modifiers"
-          ]
-        },
-        {
-          "id": "lang-context",
-          "title": "Vocabulary in Context",
-          "code": "CTX",
-          "branch": "vocabulary",
-          "tier": 3,
-          "lane": 1,
-          "description": "Choose the meaning that fits the passage, including figurative and technical uses.",
-          "tip": "Substitute each choice into the sentence and read it aloud in your head; awkwardness eliminates options.",
-          "requires": [
-            "lang-idioms"
-          ]
+          "tip": "Ask what a modifier is describing; if the answer is not the nearest noun, it is misplaced."
         },
         {
           "id": "lang-tone",
           "title": "Rhetoric & Tone",
           "code": "TONE",
           "branch": "rhetoric",
-          "tier": 3,
-          "lane": 2,
+          "role": "main",
+          "stage": 2,
           "description": "Author's attitude, persuasion techniques, and register shifts in nonfiction.",
-          "tip": "Tone lives in adjectives and adverbs; circle them before choosing an answer.",
-          "requires": [
-            "lang-figures"
-          ]
+          "tip": "Tone lives in adjectives and adverbs; circle them before choosing an answer."
         },
         {
-          "id": "lang-register",
-          "title": "Precision & Register",
-          "code": "REG",
+          "id": "lang-idioms",
+          "title": "Idioms & Analogies",
+          "code": "IDM",
           "branch": "vocabulary",
-          "tier": 3,
-          "lane": 3,
-          "description": "Formal vs informal diction, connotation, and eliminating wordiness.",
-          "tip": "Formal writing avoids contractions, slang, and 'you'; use that to eliminate choices fast.",
-          "requires": [
-            "lang-idioms"
-          ]
+          "role": "sub",
+          "stage": 2,
+          "description": "Common idioms, preposition pairings, and bridge-building for analogy items.",
+          "tip": "Write the analogy as a sentence before reading the choices; match the relationship, not the topic."
+        },
+        {
+          "id": "lang-pronoun",
+          "title": "Pronoun Reference & Case",
+          "code": "PRO",
+          "branch": "grammar",
+          "role": "sub",
+          "stage": 2,
+          "description": "Pronoun–antecedent agreement, ambiguous references, and nominative vs objective case.",
+          "tip": "Replace each pronoun with its supposed noun; the sentence will expose ambiguity instantly."
+        },
+        {
+          "id": "lang-figures",
+          "title": "Figures of Speech",
+          "code": "FIG",
+          "branch": "rhetoric",
+          "role": "sub",
+          "stage": 2,
+          "description": "Simile, metaphor, personification, hyperbole, irony, and rhetorical devices.",
+          "tip": "Label the comparison first; if it uses like or as it is a simile, otherwise test for direct substitution."
         },
         {
           "id": "lang-sim",
           "title": "Language Simulation",
           "code": "SIM",
           "branch": "usage",
-          "tier": 4,
-          "lane": 2,
+          "role": "main",
+          "stage": 3,
           "description": "Full language section under time with targeted error review.",
-          "tip": "Keep an error log by rule type; most students lose the same three points repeatedly.",
-          "requires": [
-            "lang-flow",
-            "lang-context",
-            "lang-tone",
-            "lang-pronoun"
-          ]
+          "tip": "Keep an error log by rule type; most students lose the same three points repeatedly."
+        },
+        {
+          "id": "lang-flow",
+          "title": "Sentence Combining & Flow",
+          "code": "FLOW",
+          "branch": "usage",
+          "role": "sub",
+          "stage": 3,
+          "description": "Combine choppy sentences and choose the most concise, logical arrangement.",
+          "tip": "Prefer the shortest option that keeps every original idea; extra words are usually wrong."
+        },
+        {
+          "id": "lang-context",
+          "title": "Vocabulary in Context",
+          "code": "CTX",
+          "branch": "vocabulary",
+          "role": "sub",
+          "stage": 3,
+          "description": "Choose the meaning that fits the passage, including figurative and technical uses.",
+          "tip": "Substitute each choice into the sentence and read it aloud in your head; awkwardness eliminates options."
+        },
+        {
+          "id": "lang-register",
+          "title": "Precision & Register",
+          "code": "REG",
+          "branch": "vocabulary",
+          "role": "sub",
+          "stage": 3,
+          "description": "Formal vs informal diction, connotation, and eliminating wordiness.",
+          "tip": "Formal writing avoids contractions, slang, and 'you'; use that to eliminate choices fast."
         }
       ]
     },
@@ -860,170 +708,143 @@
       ],
       "nodes": [
         {
-          "id": "read-active",
-          "title": "Active Reading & Annotation",
-          "code": "ACT",
-          "branch": "strategy",
-          "tier": 0,
-          "lane": 0,
-          "description": "Read with purpose: mark claims, turns, and names instead of highlighting everything.",
-          "tip": "Annotate the margin with two or three words per paragraph; it makes questions locatable.",
-          "requires": []
+          "id": "reading-start",
+          "title": "Start Here",
+          "code": "GO",
+          "branch": "comprehension",
+          "role": "start",
+          "description": "Take one timed short passage and note where you lose time or accuracy. Clear this node to open the first reading milestone.",
+          "tip": "Time the passage, then classify each miss as a detail, inference, or trap answer."
         },
         {
           "id": "read-main",
           "title": "Main Idea & Theme",
           "code": "MAIN",
           "branch": "comprehension",
-          "tier": 0,
-          "lane": 1,
+          "role": "main",
+          "stage": 0,
           "description": "Distinguish topic, main idea, and theme across paragraphs and whole passages.",
-          "tip": "State the passage's point in one sentence before looking at the choices.",
-          "requires": []
+          "tip": "State the passage's point in one sentence before looking at the choices."
+        },
+        {
+          "id": "read-active",
+          "title": "Active Reading & Annotation",
+          "code": "ACT",
+          "branch": "strategy",
+          "role": "sub",
+          "stage": 0,
+          "description": "Read with purpose: mark claims, turns, and names instead of highlighting everything.",
+          "tip": "Annotate the margin with two or three words per paragraph; it makes questions locatable."
         },
         {
           "id": "read-vocab",
           "title": "Vocabulary in Context",
           "code": "VOC",
           "branch": "analysis",
-          "tier": 0,
-          "lane": 2,
+          "role": "sub",
+          "stage": 0,
           "description": "Infer word meaning from syntax, contrast, and examples inside the passage.",
-          "tip": "Cover the word and predict a substitute from the sentence, then match your prediction to the options.",
-          "requires": []
+          "tip": "Cover the word and predict a substitute from the sentence, then match your prediction to the options."
         },
         {
           "id": "read-details",
           "title": "Supporting Details",
           "code": "DET",
           "branch": "comprehension",
-          "tier": 1,
-          "lane": 0,
+          "role": "sub",
+          "stage": 0,
           "description": "Locate explicit evidence and distinguish it from plausible but unsupported claims.",
-          "tip": "Every detail answer must be provable by a specific line; no line, no selection.",
-          "requires": [
-            "read-main"
-          ]
-        },
-        {
-          "id": "read-inference",
-          "title": "Inference & Implication",
-          "code": "INF",
-          "branch": "analysis",
-          "tier": 1,
-          "lane": 1,
-          "description": "Draw only the conclusions the text forces, not ones that are merely possible.",
-          "tip": "Ask 'does the passage have to mean this?' If not, eliminate the choice.",
-          "requires": [
-            "read-vocab"
-          ]
+          "tip": "Every detail answer must be provable by a specific line; no line, no selection."
         },
         {
           "id": "read-structure",
           "title": "Text Structure & Organization",
           "code": "STR",
           "branch": "analysis",
-          "tier": 1,
-          "lane": 2,
+          "role": "main",
+          "stage": 1,
           "description": "Chronology, cause and effect, comparison, problem-solution, and their signposts.",
-          "tip": "Map the passage's skeleton (each paragraph's purpose) rather than its content.",
-          "requires": [
-            "read-main"
-          ]
+          "tip": "Map the passage's skeleton (each paragraph's purpose) rather than its content."
         },
         {
-          "id": "read-purpose",
-          "title": "Author's Purpose & Tone",
-          "code": "PUR",
+          "id": "read-inference",
+          "title": "Inference & Implication",
+          "code": "INF",
           "branch": "analysis",
-          "tier": 2,
-          "lane": 0,
-          "description": "Identify why the author writes and how attitude shapes word choice.",
-          "tip": "Separate purpose (why) from tone (how it sounds); they are usually two different questions.",
-          "requires": [
-            "read-structure"
-          ]
+          "role": "sub",
+          "stage": 1,
+          "description": "Draw only the conclusions the text forces, not ones that are merely possible.",
+          "tip": "Ask 'does the passage have to mean this?' If not, eliminate the choice."
         },
         {
           "id": "read-compare",
           "title": "Compare & Contrast Passages",
           "code": "CMP",
           "branch": "comprehension",
-          "tier": 2,
-          "lane": 1,
+          "role": "sub",
+          "stage": 1,
           "description": "Handle paired passages by mapping agreements and disagreements first.",
-          "tip": "Build a two-column table for paired passages before answering; shared claims are common answers.",
-          "requires": [
-            "read-details"
-          ]
+          "tip": "Build a two-column table for paired passages before answering; shared claims are common answers."
         },
         {
           "id": "read-critical",
           "title": "Critical Reading & Bias",
           "code": "CRT",
           "branch": "analysis",
-          "tier": 3,
-          "lane": 0,
+          "role": "main",
+          "stage": 2,
           "description": "Evaluate evidence, assumptions, and persuasive framing in an argument.",
-          "tip": "Find the unstated assumption: it is the bridge between evidence and conclusion.",
-          "requires": [
-            "read-purpose",
-            "read-inference"
-          ]
+          "tip": "Find the unstated assumption: it is the bridge between evidence and conclusion."
+        },
+        {
+          "id": "read-purpose",
+          "title": "Author's Purpose & Tone",
+          "code": "PUR",
+          "branch": "analysis",
+          "role": "sub",
+          "stage": 2,
+          "description": "Identify why the author writes and how attitude shapes word choice.",
+          "tip": "Separate purpose (why) from tone (how it sounds); they are usually two different questions."
         },
         {
           "id": "read-question",
           "title": "Question-Type Strategy",
           "code": "QTS",
           "branch": "strategy",
-          "tier": 2,
-          "lane": 2,
+          "role": "sub",
+          "stage": 2,
           "description": "Match question stems to the right reading approach and predicted answer.",
-          "tip": "Read the question stem before the answer choices; predicting first prevents trap answers.",
-          "requires": [
-            "read-active"
-          ]
-        },
-        {
-          "id": "read-elim",
-          "title": "Elimination Tactics",
-          "code": "ELIM",
-          "branch": "strategy",
-          "tier": 3,
-          "lane": 2,
-          "description": "Recognize extreme, out-of-scope, and true-but-irrelevant distractors.",
-          "tip": "Cross out choices with absolutes (always, never, all) unless the passage states them plainly.",
-          "requires": [
-            "read-question"
-          ]
-        },
-        {
-          "id": "read-timing",
-          "title": "Passage Mapping & Timing",
-          "code": "TIM",
-          "branch": "speed",
-          "tier": 3,
-          "lane": 3,
-          "description": "Budget minutes per passage and decide when to move on.",
-          "tip": "Cap each passage at its budget; flag one hard question and return only if time remains.",
-          "requires": [
-            "read-structure"
-          ]
+          "tip": "Read the question stem before the answer choices; predicting first prevents trap answers."
         },
         {
           "id": "read-sim",
           "title": "Reading Simulation",
           "code": "SIM",
           "branch": "comprehension",
-          "tier": 4,
-          "lane": 2,
+          "role": "main",
+          "stage": 3,
           "description": "Timed multi-passage practice with error analysis.",
-          "tip": "Review wrong answers by naming the trap type, not just the correct letter.",
-          "requires": [
-            "read-critical",
-            "read-elim",
-            "read-timing"
-          ]
+          "tip": "Review wrong answers by naming the trap type, not just the correct letter."
+        },
+        {
+          "id": "read-elim",
+          "title": "Elimination Tactics",
+          "code": "ELIM",
+          "branch": "strategy",
+          "role": "sub",
+          "stage": 3,
+          "description": "Recognize extreme, out-of-scope, and true-but-irrelevant distractors.",
+          "tip": "Cross out choices with absolutes (always, never, all) unless the passage states them plainly."
+        },
+        {
+          "id": "read-timing",
+          "title": "Passage Mapping & Timing",
+          "code": "TIM",
+          "branch": "speed",
+          "role": "sub",
+          "stage": 3,
+          "description": "Budget minutes per passage and decide when to move on.",
+          "tip": "Cap each passage at its budget; flag one hard question and return only if time remains."
         }
       ]
     },
@@ -1057,176 +878,163 @@
       ],
       "nodes": [
         {
-          "id": "essay-prompt",
-          "title": "Decode the Prompt",
-          "code": "PRM",
+          "id": "essay-start",
+          "title": "Start Here",
+          "code": "GO",
           "branch": "planning",
-          "tier": 0,
-          "lane": 0,
-          "description": "Identify the task, scope, and key terms before planning a response.",
-          "tip": "Underline the instruction verb and the limits; a response that ignores scope is capped early.",
-          "requires": []
+          "role": "start",
+          "description": "Read three essay prompts and write a five-minute outline for one without notes. Clear this node to open the first writing milestone.",
+          "tip": "Plan before you write; a five-minute outline is the cheapest score you can buy."
         },
         {
           "id": "essay-outline",
           "title": "Brainstorm & Outline",
           "code": "OUT",
           "branch": "planning",
-          "tier": 0,
-          "lane": 1,
+          "role": "main",
+          "stage": 0,
           "description": "Generate a position, two or three supports, and a counterpoint in five minutes.",
-          "tip": "Use a three-line skeleton: claim, two reasons, one objection. Fill in details while writing.",
-          "requires": []
+          "tip": "Use a three-line skeleton: claim, two reasons, one objection. Fill in details while writing."
         },
         {
-          "id": "essay-thesis",
-          "title": "Thesis & Position",
-          "code": "THS",
-          "branch": "structure",
-          "tier": 1,
-          "lane": 0,
-          "description": "Write a specific, arguable thesis that answers the prompt directly.",
-          "tip": "Put the thesis in the last sentence of your introduction and echo it in the conclusion.",
-          "requires": [
-            "essay-prompt",
-            "essay-outline"
-          ]
-        },
-        {
-          "id": "essay-paragraph",
-          "title": "Paragraph Architecture",
-          "code": "PAR",
-          "branch": "structure",
-          "tier": 1,
-          "lane": 1,
-          "description": "Topic sentence, evidence, analysis, and a bridge to the next idea.",
-          "tip": "Every body paragraph should be explainable by its topic sentence alone.",
-          "requires": [
-            "essay-outline"
-          ]
+          "id": "essay-prompt",
+          "title": "Decode the Prompt",
+          "code": "PRM",
+          "branch": "planning",
+          "role": "sub",
+          "stage": 0,
+          "description": "Identify the task, scope, and key terms before planning a response.",
+          "tip": "Underline the instruction verb and the limits; a response that ignores scope is capped early."
         },
         {
           "id": "essay-mode",
           "title": "Choose Your Mode",
           "code": "MODE",
           "branch": "planning",
-          "tier": 1,
-          "lane": 2,
+          "role": "sub",
+          "stage": 0,
           "description": "Decide quickly between a personal narrative and an argumentative response, then commit to one structure.",
-          "tip": "Pick the mode that fits the prompt's verb; switching halfway wastes the most time.",
-          "requires": [
-            "essay-prompt"
-          ]
+          "tip": "Pick the mode that fits the prompt's verb; switching halfway wastes the most time."
+        },
+        {
+          "id": "essay-thesis",
+          "title": "Thesis & Position",
+          "code": "THS",
+          "branch": "structure",
+          "role": "sub",
+          "stage": 0,
+          "description": "Write a specific, arguable thesis that answers the prompt directly.",
+          "tip": "Put the thesis in the last sentence of your introduction and echo it in the conclusion."
         },
         {
           "id": "essay-evidence",
           "title": "Evidence & Examples",
           "code": "EVD",
           "branch": "structure",
-          "tier": 2,
-          "lane": 0,
+          "role": "main",
+          "stage": 1,
           "description": "Use concrete, relevant examples, including Philippine and personal contexts.",
-          "tip": "One well-explained example beats three name-drops; analysis earns the points.",
-          "requires": [
-            "essay-thesis",
-            "essay-paragraph"
-          ]
+          "tip": "One well-explained example beats three name-drops; analysis earns the points."
+        },
+        {
+          "id": "essay-paragraph",
+          "title": "Paragraph Architecture",
+          "code": "PAR",
+          "branch": "structure",
+          "role": "sub",
+          "stage": 1,
+          "description": "Topic sentence, evidence, analysis, and a bridge to the next idea.",
+          "tip": "Every body paragraph should be explainable by its topic sentence alone."
         },
         {
           "id": "essay-transitions",
           "title": "Transitions & Cohesion",
           "code": "TRN",
           "branch": "expression",
-          "tier": 2,
-          "lane": 1,
+          "role": "sub",
+          "stage": 1,
           "description": "Logical connectors and echo phrases that tie paragraphs into one argument.",
-          "tip": "Transition with ideas, not just words: end a paragraph with the question the next one answers.",
-          "requires": [
-            "essay-paragraph"
-          ]
-        },
-        {
-          "id": "essay-voice",
-          "title": "Voice & Word Choice",
-          "code": "VOI",
-          "branch": "expression",
-          "tier": 2,
-          "lane": 2,
-          "description": "Clear, varied sentences and precise diction under exam conditions.",
-          "tip": "Cut adverbs and 'very'; replace vague praise with specific verbs.",
-          "requires": [
-            "essay-paragraph"
-          ]
-        },
-        {
-          "id": "essay-counter",
-          "title": "Counterargument & Nuance",
-          "code": "CNT",
-          "branch": "structure",
-          "tier": 3,
-          "lane": 0,
-          "description": "Acknowledge the strongest objection and answer it without weakening your claim.",
-          "tip": "Concede one real limitation, then explain why your position still holds.",
-          "requires": [
-            "essay-evidence"
-          ]
+          "tip": "Transition with ideas, not just words: end a paragraph with the question the next one answers."
         },
         {
           "id": "essay-style",
           "title": "Style Polish",
           "code": "STY",
           "branch": "expression",
-          "tier": 3,
-          "lane": 1,
+          "role": "main",
+          "stage": 2,
           "description": "Rhythm, emphasis, and control of sentence length in a timed draft.",
-          "tip": "Vary sentence openings; three sentences in a row with the same subject reads flat.",
-          "requires": [
-            "essay-voice"
-          ]
+          "tip": "Vary sentence openings; three sentences in a row with the same subject reads flat."
         },
         {
-          "id": "essay-practice",
-          "title": "Timed Essay Practice",
-          "code": "PRA",
-          "branch": "practice",
-          "tier": 3,
-          "lane": 2,
-          "description": "Plan, draft, and review a complete essay in the official time limit.",
-          "tip": "Reserve the last five minutes for a read-through; fix agreement and tense errors first.",
-          "requires": [
-            "essay-transitions"
-          ]
+          "id": "essay-voice",
+          "title": "Voice & Word Choice",
+          "code": "VOI",
+          "branch": "expression",
+          "role": "sub",
+          "stage": 2,
+          "description": "Clear, varied sentences and precise diction under exam conditions.",
+          "tip": "Cut adverbs and 'very'; replace vague praise with specific verbs."
         },
         {
-          "id": "essay-conclusion",
-          "title": "Conclusion & Final Impression",
-          "code": "END",
+          "id": "essay-counter",
+          "title": "Counterargument & Nuance",
+          "code": "CNT",
           "branch": "structure",
-          "tier": 3,
-          "lane": 3,
-          "description": "Close the argument by answering 'so what?' and linking back to the thesis without repeating it.",
-          "tip": "End on the implication, not a summary; the last line is what the reader remembers.",
-          "requires": [
-            "essay-evidence"
-          ]
+          "role": "sub",
+          "stage": 2,
+          "description": "Acknowledge the strongest objection and answer it without weakening your claim.",
+          "tip": "Concede one real limitation, then explain why your position still holds."
         },
         {
           "id": "essay-sim",
           "title": "Essay Simulation",
           "code": "SIM",
           "branch": "practice",
-          "tier": 4,
-          "lane": 2,
+          "role": "main",
+          "stage": 3,
           "description": "Full-length timed essay with a self-scoring rubric.",
-          "tip": "Score with the same rubric every time so improvements are actually comparable.",
-          "requires": [
-            "essay-counter",
-            "essay-style",
-            "essay-practice",
-            "essay-conclusion"
-          ]
+          "tip": "Score with the same rubric every time so improvements are actually comparable."
+        },
+        {
+          "id": "essay-practice",
+          "title": "Timed Essay Practice",
+          "code": "PRA",
+          "branch": "practice",
+          "role": "sub",
+          "stage": 3,
+          "description": "Plan, draft, and review a complete essay in the official time limit.",
+          "tip": "Reserve the last five minutes for a read-through; fix agreement and tense errors first."
+        },
+        {
+          "id": "essay-conclusion",
+          "title": "Conclusion & Final Impression",
+          "code": "END",
+          "branch": "structure",
+          "role": "sub",
+          "stage": 3,
+          "description": "Close the argument by answering 'so what?' and linking back to the thesis without repeating it.",
+          "tip": "End on the implication, not a summary; the last line is what the reader remembers."
         }
       ]
+    }
+  ],
+  "stages": [
+    {
+      "label": "FOUNDATION",
+      "note": "Rebuild the basics"
+    },
+    {
+      "label": "CORE",
+      "note": "Learn the patterns"
+    },
+    {
+      "label": "ADVANCED",
+      "note": "Connect the ideas"
+    },
+    {
+      "label": "EXAM READY",
+      "note": "Perform under time"
     }
   ]
 }

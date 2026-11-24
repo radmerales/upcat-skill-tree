@@ -1,8 +1,8 @@
 # UPCAT Skill Tree
 
-An interactive, left-to-right study skill tree for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown, pan around the canvas, and master diamond nodes by following their prerequisites.
+An interactive, left-to-right study skill tree for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown, pan around the hex grid, and work from the start node through milestones that are surrounded by subskills.
 
-The design is inspired by the [ARC Raiders Skill Builder](https://metaforge.app/arc-raiders/skill-builder): a pan-and-zoom canvas, glowing skill nodes, prerequisite lines, a mastery counter, click-to-learn, and right-click-to-remove. Dark and light themes are both supported.
+The design is inspired by the [ARC Raiders Skill Builder](https://metaforge.app/arc-raiders/skill-builder): a pan-and-zoom canvas, glowing nodes, milestone gates, a mastery counter, click-to-learn, and right-click-to-remove. Every node sits on a true pointy-top hex lattice, with the connecting edges running along hex directions. Dark and light themes are both supported.
 
 ## Stack
 
@@ -27,64 +27,102 @@ Everything is in [`public/data/upcat-skill-tree.json`](public/data/upcat-skill-t
 
 ```jsonc
 {
-  "version": 1,
+  "version": 2,
   "title": "UPCAT Skill Tree",
   "subtitle": "…",
-  "tiers": [
+  "stages": [
     { "label": "FOUNDATION", "note": "Rebuild the basics" }
-    // tier 0, tier 1, … — column headers, left to right
+    // one entry per milestone stage, left to right
   ],
   "subjects": [
     {
-      "id": "math",                  // unique, used in ?subject=math
-      "name": "Mathematics",         // shown in the dropdown
+      "id": "math",
+      "name": "Mathematics",
       "kicker": "SUBTEST 01",
-      "blurb": "…",                  // shown in the dropdown
-      "accent": "#f6b93b",           // subject accent color
+      "blurb": "…",
+      "accent": "#f6b93b",
       "branches": [
         { "id": "algebra", "name": "Algebra", "color": "#ff8f4d" }
       ],
       "nodes": [
         {
-          "id": "math-ops",          // unique within the subject
+          "id": "math-start",
+          "title": "Start Here",
+          "code": "GO",
+          "branch": "arithmetic",
+          "role": "start",              // exactly one per subject, no stage
+          "description": "…",
+          "tip": "…"
+        },
+        {
+          "id": "math-ops",
           "title": "Operations & Number Sense",
-          "code": "OPS",             // 2–4 characters shown inside the diamond
-          "branch": "algebra",       // must exist in this subject's branches
-          "tier": 0,                 // column, 0 = leftmost
-          "lane": 0,                 // row inside the column
-          "description": "…",        // detail panel body
-          "tip": "…",                // optional "study method" callout
-          "requires": []             // ids of earlier-tier prerequisites
+          "code": "OPS",
+          "branch": "arithmetic",
+          "role": "main",               // exactly one main per stage
+          "stage": 0,
+          "description": "…",
+          "tip": "…"
+        },
+        {
+          "id": "math-fractions",
+          "title": "Fractions, Decimals & Percents",
+          "code": "FRC",
+          "branch": "arithmetic",
+          "role": "sub",                // 1–5 subskills per stage
+          "stage": 0,
+          "description": "…",
+          "tip": "…"
         }
+        // …stage 1 main and subskills, stage 2, etc.
       ]
     }
   ]
 }
 ```
 
-### Add a skill
+### How the hex tree works
 
-1. Give it a unique `id` (e.g. `math-trig`).
-2. Pick a `branch`, a `tier` column, and a free `lane` row.
-3. List prerequisite ids in `requires`. They **must sit in an earlier tier** so the graph always flows left to right.
-4. Add the node to that subject's `nodes` array and run `npm run validate`.
+1. The **start node** is always available and opens the first stage.
+2. A stage's **subskills** become available when the previous stage's milestone is claimed (or when the start node is cleared, for stage 1).
+3. Master every subskill in a stage's ring, then claim the **milestone** at its centre.
+4. Claiming that milestone opens the next stage. The final milestone completes the subject.
 
-### Add a branch
+Subskills are placed automatically on the six cells surrounding their milestone. **Array order decides the slot**, so keep a stage's main node followed by its subskills in the order you want them around the ring:
 
-Add `{ "id": "...", "name": "...", "color": "#rrggbb" }` to the subject's `branches`. The branch color drives the node border, mastered fill, connection line, and the legend chip.
+| Subskills | Slots used |
+| --- | --- |
+| 1 | NE |
+| 2 | NW, SE |
+| 3 | NW, NE, SE |
+| 4 | NW, NE, SE, SW |
+| 5 | NW, NE, SE, SW, E (best saved for the final stage) |
+
+### Add a subskill
+
+1. Give it a unique `id` and pick one of the subject's `branch` ids.
+2. Set `"role": "sub"` and the `stage` it belongs to.
+3. Put it directly after the other subskills of that stage (up to 5) and run `npm run validate`.
+
+### Add a stage
+
+1. Add `{ "role": "main", "stage": N, ... }` plus at least one `{ "role": "sub", "stage": N, ... }` under the subject.
+2. Stage numbers must be contiguous from `0`, and there can be only one main per stage.
+3. Each stage uses `stages[N]` for its header label.
 
 ### Add a subject
 
-Copy a subject object, give it a unique `id`, and fill in `branches` and `nodes`. The header dropdown builds itself from this array, and progress is stored per subject id.
+Copy a subject object, give it a unique `id`, and fill in its branches, start node, and 4-stage path. The header dropdown, legend, progress, and ring layout are all derived automatically.
 
 ### Rules enforced by `npm run validate`
 
 - Unique subject, branch, and node ids.
-- Every `requires` id exists in the same subject.
-- Prerequisites are in an earlier tier than the node that needs them.
-- No two nodes share the same `tier` + `lane`.
-- Every node is reachable from a root node.
-- Tiers referenced by nodes exist in the `tiers` array.
+- Exactly one `start` node per subject, with no `stage`.
+- Exactly one `main` node per stage, and at least one (at most five) `sub` nodes.
+- Stage numbers are contiguous from `0`.
+- Every node's branch and stage exist.
+- Hex ring capacity is respected.
+- Legacy `tier`, `lane`, and `requires` fields are reported so old data can be cleaned up.
 
 The app runs the same checks on load and shows a readable error screen if the JSON is invalid.
 
@@ -96,8 +134,11 @@ The app runs the same checks on load and shows a readable error screen if the JS
 | Scroll / pinch | Zoom toward the cursor |
 | Theme toggle (sun / moon) | Switch between dark and light mode |
 | Click a diamond | Open the detail panel |
-| Double-click a diamond | Master / unmaster it |
-| Right-click a mastered diamond | Remove it and everything it unlocks |
+| Double-click a diamond | Master / unmaster a node |
+| Master a subskill | Adds one segment to its milestone's progress pips |
+| Right-click a mastered diamond | Remove it and its downstream stages |
+| Claim milestone | Available once every subskill in the ring is mastered |
+| Unlearn milestone | Clears its ring and every later stage |
 | Branch chip | Dim everything outside that branch |
 | Subject dropdown | Switch subjects (progress is kept per subject) |
 | Reset | Clear mastered skills for the current subject |

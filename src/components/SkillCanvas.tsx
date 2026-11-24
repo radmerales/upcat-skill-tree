@@ -1,18 +1,27 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEvent as ReactMouseEvent,
+  type PointerEvent as ReactPointerEvent,
+} from 'react'
 import {
   branchMap,
   clamp,
-  COL_GAP,
+  hexPoints,
   nodeState,
-  ORIGIN_X,
-  TIER_HEAD_Y,
+  stateLabel,
 } from '../lib/tree'
-import type { SkillNode, Subject, SubjectLayout, Tier } from '../types'
+import type { SkillNode, Stage, Subject, SubjectLayout, SubjectStructure } from '../types'
 import { Fit, Minus, Plus } from './Icons'
 
 interface SkillCanvasProps {
   subject: Subject
-  tiers: Tier[]
+  stages: Stage[]
+  structure: SubjectStructure
   layout: SubjectLayout
   mastered: Set<string>
   selectedId: string | null
@@ -38,7 +47,8 @@ interface DragState {
 
 export default function SkillCanvas({
   subject,
-  tiers,
+  stages,
+  structure,
   layout,
   mastered,
   selectedId,
@@ -92,16 +102,17 @@ export default function SkillCanvas({
     setFitted(true)
   }, [layout.height, layout.width, size.height, size.width])
 
-  /* Opening view: postcard-large on phones, whole tree (a touch zoomed) on desktop. */
+  /* Opening view: focused on phones, whole map on desktop. */
   const frameStart = useCallback(() => {
     if (!size.width || !size.height) return
 
     if (size.width < 720) {
-      const k = 0.72
+      const k = 0.68
+      const start = layout.positions[structure.start.id]
       setView({
         k,
-        x: 86 - ORIGIN_X * k,
-        y: 14,
+        x: 48 - start.x * k,
+        y: Math.max(14, size.height * 0.42 - start.y * k),
       })
       setFitted(true)
       return
@@ -120,7 +131,7 @@ export default function SkillCanvas({
       y: Math.max(8, (size.height - layout.height * k) / 2),
     })
     setFitted(true)
-  }, [layout.height, layout.width, size.height, size.width])
+  }, [layout, size.height, size.width, structure.start.id])
 
   useEffect(() => {
     setFitted(false)
@@ -158,7 +169,6 @@ export default function SkillCanvas({
   /* Pan ------------------------------------------------------------------- */
   const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (event.button !== 0) return
-    // Let node clicks and double-clicks through; dragging starts on empty canvas.
     if ((event.target as HTMLElement).closest('.node')) return
     dragRef.current = {
       pointerId: event.pointerId,
@@ -210,10 +220,18 @@ export default function SkillCanvas({
 
   const handleContextMenu = (event: ReactMouseEvent, node: SkillNode) => {
     event.preventDefault()
-    if (nodeState(node, mastered) === 'mastered') onToggle(node)
+    if (nodeState(node, structure, mastered) === 'mastered') onToggle(node)
   }
 
-  const tierCount = Math.min(tiers.length, layout.maxTier + 1)
+  const edges = useMemo(() => {
+    const list: Array<{ key: string; from: SkillNode; to: SkillNode }> = []
+    structure.groups.forEach((group, index) => {
+      const gate = index === 0 ? structure.start : structure.groups[index - 1].main
+      list.push({ key: `spine-${group.stage}`, from: gate, to: group.main })
+      for (const sub of group.subs) list.push({ key: `ring-${sub.id}`, from: group.main, to: sub })
+    })
+    return list
+  }, [structure])
 
   return (
     <div
@@ -226,10 +244,6 @@ export default function SkillCanvas({
       onClick={() => {
         suppressClickRef.current = false
       }}
-      style={{
-        backgroundPosition: `${view.x}px ${view.y}px, ${view.x}px ${view.y}px`,
-        backgroundSize: `${32 * view.k}px ${32 * view.k}px, ${160 * view.k}px ${160 * view.k}px`,
-      }}
     >
       <div
         className="canvas__world"
@@ -240,25 +254,40 @@ export default function SkillCanvas({
           opacity: fitted ? 1 : 0,
         }}
       >
-        {Array.from({ length: tierCount }, (_, index) => (
-          <div
-            key={`rail-${index}`}
-            className="tier-rail"
-            style={railStyle(layout, index)}
-          />
-        ))}
+        <svg
+          className="hex-grid"
+          width={layout.width}
+          height={layout.height}
+          viewBox={`0 0 ${layout.width} ${layout.height}`}
+          aria-hidden="true"
+        >
+          {layout.hexCells.map((cell, index) => (
+            <polygon
+              key={`hex-${index}`}
+              points={hexPoints(cell.x, cell.y)}
+              className={`hex-cell${cell.occupied ? ' is-occupied' : ''}`}
+            />
+          ))}
+        </svg>
 
-        {Array.from({ length: tierCount }, (_, index) => (
-          <div
-            key={`head-${index}`}
-            className="tier-head"
-            style={tierHeadStyle(index)}
-          >
-            <span className="tier-head__index">{String(index + 1).padStart(2, '0')}</span>
-            <span className="tier-head__label">{tiers[index].label}</span>
-            <span className="tier-head__note">{tiers[index].note}</span>
-          </div>
-        ))}
+        {structure.groups.map((group) => {
+          const header = layout.stageHeaders.find((entry) => entry.stage === group.stage)
+          const meta = stages[group.stage]
+          if (!header || !meta) return null
+          return (
+            <div
+              key={`stage-${group.stage}`}
+              className="stage-head"
+              style={{ left: header.x, top: header.y }}
+            >
+              <span className="stage-head__index">
+                STAGE {String(group.stage + 1).padStart(2, '0')}
+              </span>
+              <span className="stage-head__label">{meta.label}</span>
+              <span className="stage-head__note">{meta.note}</span>
+            </div>
+          )
+        })}
 
         <svg
           className="edges"
@@ -267,55 +296,62 @@ export default function SkillCanvas({
           viewBox={`0 0 ${layout.width} ${layout.height}`}
           aria-hidden="true"
         >
-          {subject.nodes.flatMap((node) =>
-            node.requires.map((requirementId) => {
-              const from = layout.positions[requirementId]
-              const to = layout.positions[node.id]
-              if (!from || !to) return null
+          {edges.map((edge) => {
+            const from = layout.positions[edge.from.id]
+            const to = layout.positions[edge.to.id]
+            if (!from || !to) return null
 
-              const startX = from.x + 32
-              const endX = to.x - 32
-              const bend = Math.max(48, (endX - startX) * 0.48)
-              const path = `M ${startX} ${from.y} C ${startX + bend} ${from.y}, ${endX - bend} ${to.y}, ${endX} ${to.y}`
-              const state = nodeState(node, mastered)
-              const color = branches[node.branch]?.color ?? subject.accent
-              const isSelected = selectedId === node.id || selectedId === requirementId
-              const isDim = branchFilter !== null && node.branch !== branchFilter
-              const classes = [
-                'edge',
-                `edge--${state}`,
-                isSelected ? 'is-selected' : '',
-                isDim ? 'is-dim' : '',
-              ]
-                .filter(Boolean)
-                .join(' ')
+            const state = nodeState(edge.to, structure, mastered)
+            const edgeState = state === 'mastered' ? 'mastered' : state === 'locked' ? 'locked' : 'available'
+            const color = branches[edge.to.branch]?.color ?? subject.accent
+            const isSelected = selectedId === edge.from.id || selectedId === edge.to.id
+            const isDim = branchFilter !== null && edge.to.branch !== branchFilter
+            const classes = [
+              'edge',
+              `edge--${edgeState}`,
+              `edge--${edge.from.role}-to-${edge.to.role}`,
+              isSelected ? 'is-selected' : '',
+              isDim ? 'is-dim' : '',
+            ]
+              .filter(Boolean)
+              .join(' ')
 
-              return (
-                <path
-                  key={`${requirementId}->${node.id}`}
-                  d={path}
-                  className={classes}
-                  style={{ stroke: color, '--edge-color': color } as CSSProperties}
-                />
-              )
-            }),
-          )}
+            return (
+              <line
+                key={edge.key}
+                x1={from.x}
+                y1={from.y}
+                x2={to.x}
+                y2={to.y}
+                className={classes}
+                style={{ stroke: color, '--edge-color': color } as CSSProperties}
+              />
+            )
+          })}
         </svg>
 
         {subject.nodes.map((node) => {
           const position = layout.positions[node.id]
+          if (!position) return null
           const branch = branches[node.branch] ?? subject.branches[0]
-          const state = nodeState(node, mastered)
+          const state = nodeState(node, structure, mastered)
+          const group = structure.groupByNode.get(node.id)
           const isSelected = selectedId === node.id
           const isDim = branchFilter !== null && node.branch !== branchFilter
           const classes = [
             'node',
             `node--${state}`,
+            `node--role-${node.role}`,
             isSelected ? 'is-selected' : '',
             isDim ? 'is-dim' : '',
           ]
             .filter(Boolean)
             .join(' ')
+
+          const label =
+            node.role === 'main' && group
+              ? `${node.title} — ${stateLabel(state)}, ${group.subs.filter((sub) => mastered.has(sub.id)).length} of ${group.subs.length} subskills`
+              : `${node.title} — ${stateLabel(state)}`
 
           return (
             <button
@@ -326,16 +362,17 @@ export default function SkillCanvas({
                 {
                   left: position.x,
                   top: position.y,
-                  '--branch': branch.color,
+                  '--branch': node.role === 'start' ? subject.accent : branch.color,
                 } as CSSProperties
               }
-              aria-label={`${node.title} — ${state}`}
+              aria-label={label}
               aria-pressed={state === 'mastered'}
               onClick={() => handleNodeClick(node)}
               onDoubleClick={() => onToggle(node)}
               onContextMenu={(event) => handleContextMenu(event, node)}
             >
               <span className="node__selection" aria-hidden="true" />
+              {node.role === 'start' && <span className="node__tag">START</span>}
               <span className="node__diamond">
                 <span className="node__inner" aria-hidden="true" />
                 <span className={`node__code${node.code.length > 3 ? ' is-long' : ''}`}>{node.code}</span>
@@ -348,6 +385,13 @@ export default function SkillCanvas({
               {state === 'locked' && (
                 <span className="node__badge node__badge--lock" aria-hidden="true">
                   <LockMark />
+                </span>
+              )}
+              {node.role === 'main' && group && (
+                <span className={`node__pips${state === 'mastered' ? ' is-complete' : ''}`} aria-hidden="true">
+                  {group.subs.map((sub) => (
+                    <span key={sub.id} className={mastered.has(sub.id) ? 'is-filled' : ''} />
+                  ))}
                 </span>
               )}
               <span className="node__label">{node.title}</span>
@@ -373,19 +417,6 @@ export default function SkillCanvas({
 }
 
 /* -------------------------------------------------------------------------- */
-
-function railStyle(layout: SubjectLayout, index: number): CSSProperties {
-  return {
-    left: ORIGIN_X + index * COL_GAP,
-    top: TIER_HEAD_Y + 52,
-    height: Math.max(0, layout.height - TIER_HEAD_Y - 110),
-  }
-}
-
-function tierHeadStyle(index: number): CSSProperties {
-  const x = ORIGIN_X + index * COL_GAP
-  return { left: x - 84, top: 34, width: 168 }
-}
 
 function CheckMark() {
   return (
