@@ -2,7 +2,7 @@
 
 An interactive flowchart-style study map for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown and work from the start node through skills placed on the corners of a triangular lattice.
 
-The design is inspired by the [ARC Raiders Skill Builder](https://metaforge.app/arc-raiders/skill-builder): a pan-and-zoom canvas, glowing nodes, a mastery counter, click-to-learn, and right-click-to-remove. Every node is a small hexagon sitting on a triangle corner, and prerequisite lines are routed along the triangle edges like a flowchart. Dark and light themes are both supported.
+The design is inspired by the [ARC Raiders Skill Builder](https://metaforge.app/arc-raiders/skill-builder): a pan-and-zoom canvas, glowing nodes, a mastery counter, click-to-learn, and right-click-to-remove. Every node is a diamond sitting on a triangle corner, and prerequisite lines are routed along the triangle edges like a flowchart. Dark and light themes are both supported.
 
 ## Stack
 
@@ -74,7 +74,7 @@ Everything is in [`public/data/upcat-skill-tree.json`](public/data/upcat-skill-t
 
 The background is an equilateral **triangle mesh**. Nodes live on its **corners**, not inside the triangles or beside each other. `u` and `v` are corner-lattice coordinates: `u` moves horizontally and `v` moves down one triangle row. The start node uses `0,0`. Every integer `u,v` pair is a valid triangle corner.
 
-Each node is a small hexagon with its label underneath, like a flowchart node. Connector lines are path-found across the triangle graph between a node and each of its prerequisites, so lines only ever run along background triangle edges. The router also prefers fewer bends, which keeps paths clean.
+Each node is a small diamond with its label underneath, like a flowchart node. Connector lines are path-found across the triangle graph between a node and each of its prerequisites, so lines only ever run along background triangle edges. The router also prefers fewer bends, which keeps paths clean.
 
 For easy editing, copy a node's `u,v` and move by one triangle edge:
 
@@ -118,13 +118,15 @@ The app runs the same checks on load and shows a readable error screen if the JS
 | Theme toggle (sun / moon) | Switch between dark and light mode |
 | Click a node | Open the detail panel |
 | Double-click a node | Master / unmaster a node |
+| Select a node | Marching-ants outline around its diamond |
+| Next available edges | Marching dashes animate from mastered nodes to the next unmastered nodes |
 | Right-click a mastered node | Remove it and every node that depends on it |
 | Start node | Master it to open the three connected arms |
 | Branch chip | Dim everything outside that branch |
 | Subject dropdown | Switch subjects (progress is kept per subject) |
 | Reset | Clear mastered skills for the current subject |
 
-Flowchart lines travel along the triangle edges. Master a node to open every node that requires it. Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. The theme is saved under `upcat-skill-tree:theme:v1`; on a first visit it follows your system color-scheme preference. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
+Flowchart lines travel along the triangle edges. Master a node to open every node that requires it, and the next available edges will pulse with marching dashes. Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. The theme is saved under `upcat-skill-tree:theme:v1`; on a first visit it follows your system color-scheme preference. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
 
 ## Deployment
 

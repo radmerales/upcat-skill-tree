@@ -43,10 +43,10 @@ interface DragState {
 }
 
 const NODE_W = 92
-const NODE_H = 106
-const PLATE = '50,2 97,29 97,87 50,114 3,87 3,29'
-const PLATE_INNER = '50,13 88,35 88,81 50,103 12,81 12,35'
-const PLATE_RING = '50,0 100,29 100,87 50,116 0,87 0,29'
+const NODE_H = 92
+const PLATE = '50,5 95,50 50,95 5,50'
+const PLATE_INNER = '50,17 83,50 50,83 17,50'
+const PLATE_RING = '50,1 99,50 50,99 1,50'
 
 export default function SkillCanvas({
   subject,
@@ -338,7 +338,7 @@ export default function SkillCanvas({
               onContextMenu={(event) => handleContextMenu(event, node)}
             >
               <span className="vnode__shape" aria-hidden="true">
-                <svg viewBox="0 0 100 116" preserveAspectRatio="none">
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none">
                   <polygon points={PLATE} className="vnode__face" />
                   <polygon points={PLATE_INNER} className="vnode__inner" />
                   <polygon

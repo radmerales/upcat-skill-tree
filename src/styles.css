@@ -3391,8 +3391,11 @@ html[data-theme='light'] {
 .vnode:focus-visible .vnode__ring,
 .vnode__ring.is-selected {
   stroke: color-mix(in srgb, var(--branch) 90%, #ffffff 10%);
-  stroke-width: 1.5;
-  stroke-dasharray: 4 4;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 6 5;
+  animation: nodeMarch 1.8s linear infinite;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--branch) 65%, transparent));
 }
 
 .vnode__body {
@@ -3450,7 +3453,7 @@ html[data-theme='light'] {
 .vnode__badge,
 .vnode__lock {
   position: absolute;
-  top: 9px;
+  top: 16px;
   right: 16px;
   display: grid;
   place-items: center;
@@ -3469,7 +3472,7 @@ html[data-theme='light'] {
 .vnode__lock {
   width: 13px;
   height: 13px;
-  top: 10px;
+  top: 17px;
   right: 17px;
   background: #151e25;
   color: #7f8d97;
@@ -3565,8 +3568,10 @@ html[data-theme='light'] {
 
 .edge--route.edge--available {
   stroke-width: 2.6;
-  stroke-dasharray: none;
+  stroke-linecap: round;
+  stroke-dasharray: 7 6;
   opacity: 0.95;
+  animation: edgeMarch 1.15s linear infinite;
   filter: drop-shadow(0 0 4px color-mix(in srgb, var(--edge-color) 50%, transparent));
 }
 
@@ -3581,6 +3586,22 @@ html[data-theme='light'] {
   stroke-width: 4;
   opacity: 1;
   filter: drop-shadow(0 0 8px var(--edge-color));
+}
+
+.edge--route.edge--available.is-selected {
+  animation-duration: 0.7s;
+}
+
+@keyframes edgeMarch {
+  to {
+    stroke-dashoffset: -26;
+  }
+}
+
+@keyframes nodeMarch {
+  to {
+    stroke-dashoffset: -22;
+  }
 }
 
 .edge--route.is-dim {
