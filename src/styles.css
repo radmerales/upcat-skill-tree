@@ -1907,7 +1907,7 @@ button:focus-visible {
 /* ========================================================================== */
 
 html[data-theme='light'] {
-  --bg: #e5eaed;
+  --bg: #e1e7ea;
   --bg-soft: #f3f6f8;
   --panel: #ffffff;
   --panel-2: #f5f8f9;
@@ -2038,7 +2038,7 @@ html[data-theme='light'] .icon-button:hover {
 /* Canvas ----------------------------------------------------------------- */
 
 html[data-theme='light'] .canvas {
-  background-color: #e5eaed;
+  background-color: #e1e7ea;
   background-image:
     radial-gradient(circle, rgba(61, 88, 104, 0.22) 1px, transparent 1.3px),
     radial-gradient(circle, rgba(61, 88, 104, 0.09) 1px, transparent 1.2px);
@@ -2061,7 +2061,7 @@ html[data-theme='light'] .edges {
 }
 
 html[data-theme='light'] .edge {
-  stroke: color-mix(in srgb, var(--edge-color) 48%, #1f3441) !important;
+  stroke: color-mix(in srgb, var(--edge-color) 44%, #1c303d) !important;
 }
 
 html[data-theme='light'] .edge--locked {
@@ -2115,7 +2115,7 @@ html[data-theme='light'] .node__code {
 }
 
 html[data-theme='light'] .node__label {
-  color: #4d5e69;
+  color: #465863;
 }
 
 html[data-theme='light'] .node--available .node__diamond {
@@ -2183,11 +2183,11 @@ html[data-theme='light'] .node--locked .node__diamond {
 }
 
 html[data-theme='light'] .node--locked .node__code {
-  color: #74838d;
+  color: #6b7a85;
 }
 
 html[data-theme='light'] .node--locked .node__label {
-  color: #5d6e79;
+  color: #536570;
 }
 
 html[data-theme='light'] .node__badge {
@@ -2494,8 +2494,8 @@ html[data-theme='light'] .boot__hint code {
 }
 
 html[data-theme='light'] {
-  --hex-line: rgba(34, 62, 80, 0.16);
-  --hex-fill: rgba(255, 255, 255, 0.3);
+  --hex-line: rgba(30, 58, 76, 0.2);
+  --hex-fill: rgba(255, 255, 255, 0.18);
   --pip-empty: #9cadb8;
   --pip-track: #dbe4e9;
 }
@@ -2834,7 +2834,7 @@ html[data-theme='light'] {
 
 html[data-theme='light'] .canvas {
   background-image: none;
-  background-color: #e5eaed;
+  background-color: #e1e7ea;
 }
 
 html[data-theme='light'] .stage-head {
@@ -2842,11 +2842,11 @@ html[data-theme='light'] .stage-head {
 }
 
 html[data-theme='light'] .stage-head__label {
-  color: #2f3e49;
+  color: #26343e;
 }
 
 html[data-theme='light'] .stage-head__note {
-  color: #6f7f89;
+  color: #647580;
 }
 
 html[data-theme='light'] .node--role-main .node__diamond {
