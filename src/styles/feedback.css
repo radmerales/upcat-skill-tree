@@ -1,0 +1,167 @@
+/*  Toast + modal                                                              */
+/* ========================================================================== */
+
+.toast {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  max-width: calc(100% - 24px);
+  padding: 9px 16px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: #eaf1f5;
+  background: rgba(14, 20, 25, 0.95);
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, var(--line));
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+  pointer-events: none;
+  animation: toastIn 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(4, 7, 9, 0.72);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.16s ease-out;
+}
+
+.modal {
+  width: 430px;
+  max-width: 100%;
+  padding: 24px;
+  background: #11181e;
+  border: 1px solid var(--line);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+  animation: modalIn 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.modal__kicker {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.modal h2 {
+  margin: 8px 0 10px;
+  font-family: var(--font-display);
+  font-size: 23px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.modal p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.modal__actions .action {
+  width: auto;
+  min-width: 130px;
+}
+
+/* ========================================================================== */
+/*  Boot screens                                                               */
+/* ========================================================================== */
+
+.boot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 100dvh;
+  padding: 24px;
+  text-align: center;
+  background:
+    radial-gradient(700px 400px at 50% 35%, rgba(246, 185, 59, 0.06), transparent 60%),
+    var(--bg);
+}
+
+.boot__loader {
+  width: 38px;
+  height: 38px;
+  border: 1px solid color-mix(in srgb, var(--accent) 65%, transparent);
+  transform: rotate(45deg);
+  animation: bootPulse 1.6s ease-in-out infinite;
+}
+
+.boot__kicker {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.boot p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.boot--error {
+  text-align: left;
+}
+
+.boot__card {
+  width: 480px;
+  max-width: 100%;
+  padding: 26px;
+  background: #11181e;
+  border: 1px solid var(--line);
+}
+
+.boot__card h1 {
+  margin: 8px 0 12px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.boot__card p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.boot__hint {
+  margin: 12px 0 18px !important;
+  color: var(--muted-2) !important;
+}
+
+.boot__hint code {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--accent);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 5px;
+}
+
+.boot__card .action {
+  width: auto;
+  padding: 0 24px;
+}
+

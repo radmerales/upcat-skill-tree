@@ -117,6 +117,7 @@ The app runs the same checks on load and shows a readable error screen if the JS
 | Scroll / pinch | Zoom toward the cursor |
 | Theme toggle (sun / moon) | Switch between dark and light mode |
 | Click a node | Open the detail panel |
+| Click outside the panel | Close the detail panel |
 | Double-click a node | Master / unmaster a node |
 | Select a node | Marching-ants outline around its diamond |
 | Next available edges | Marching dashes animate from mastered nodes to the next unmastered nodes |

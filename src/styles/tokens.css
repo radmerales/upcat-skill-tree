@@ -1,0 +1,79 @@
+:root {
+  --bg: #080b0e;
+  --bg-soft: #0c1115;
+  --panel: #11181e;
+  --panel-2: #151e25;
+  --line: #23303a;
+  --line-soft: #1a242c;
+  --text: #e9f0f4;
+  --muted: #8d9ba5;
+  --muted-2: #5e6c76;
+  --danger: #e06464;
+  --accent: #f6b93b;
+  --accent-raw: #f6b93b;
+  --header-h: 76px;
+
+  --font-display: 'Chakra Petch', 'Trebuchet MS', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --tri-line: rgba(151, 176, 191, 0.11);
+  --tri-fill: transparent;
+
+  --vnode-face: #0a0e12;
+  --vnode-code: #c9d5dd;
+  --vnode-title: #8b99a3;
+  --vnode-lock-border: #303c45;
+  --vnode-lock-text: #65737d;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+  color: #fff;
+}
+
+.app {
+  --accent: var(--accent-raw);
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background:
+    radial-gradient(1100px 600px at 12% -10%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 60%),
+    radial-gradient(900px 700px at 100% 110%, rgba(84, 130, 150, 0.09), transparent 60%),
+    var(--bg);
+  transition: background 0.4s ease;
+}
