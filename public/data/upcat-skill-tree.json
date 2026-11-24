@@ -1106,6 +1106,19 @@
           ]
         },
         {
+          "id": "essay-mode",
+          "title": "Choose Your Mode",
+          "code": "MODE",
+          "branch": "planning",
+          "tier": 1,
+          "lane": 2,
+          "description": "Decide quickly between a personal narrative and an argumentative response, then commit to one structure.",
+          "tip": "Pick the mode that fits the prompt's verb; switching halfway wastes the most time.",
+          "requires": [
+            "essay-prompt"
+          ]
+        },
+        {
           "id": "essay-evidence",
           "title": "Evidence & Examples",
           "code": "EVD",
@@ -1185,6 +1198,19 @@
           ]
         },
         {
+          "id": "essay-conclusion",
+          "title": "Conclusion & Final Impression",
+          "code": "END",
+          "branch": "structure",
+          "tier": 3,
+          "lane": 3,
+          "description": "Close the argument by answering 'so what?' and linking back to the thesis without repeating it.",
+          "tip": "End on the implication, not a summary; the last line is what the reader remembers.",
+          "requires": [
+            "essay-evidence"
+          ]
+        },
+        {
           "id": "essay-sim",
           "title": "Essay Simulation",
           "code": "SIM",
@@ -1196,7 +1222,8 @@
           "requires": [
             "essay-counter",
             "essay-style",
-            "essay-practice"
+            "essay-practice",
+            "essay-conclusion"
           ]
         }
       ]
