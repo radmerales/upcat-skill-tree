@@ -3310,3 +3310,361 @@ html[data-theme='light'] .hexnode:focus-visible .hexnode__ring {
 html[data-theme='light'] .hexnode__tag {
   color: color-mix(in srgb, var(--branch) 55%, #263943);
 }
+
+/* ========================================================================== */
+/*  Flowchart nodes on honeycomb corners                                      */
+/* ========================================================================== */
+
+:root {
+  --vnode-face: #0b1116;
+  --vnode-code: #c9d5dd;
+  --vnode-title: #8b99a3;
+  --vnode-lock-face: #0a0e12;
+  --vnode-lock-border: #303c45;
+  --vnode-lock-text: #65737d;
+}
+
+html[data-theme='light'] {
+  --vnode-face: #ffffff;
+  --vnode-code: #283a44;
+  --vnode-title: #52646f;
+  --vnode-lock-face: #f6f8f9;
+  --vnode-lock-border: #c2ced5;
+  --vnode-lock-text: #5f707a;
+}
+
+.vnode {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: transform 0.18s ease, opacity 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.vnode:hover {
+  transform: translate(-50%, -50%) scale(1.07);
+  z-index: 5;
+}
+
+.vnode:focus-visible {
+  outline: none;
+}
+
+.vnode__shape {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.vnode__shape svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.vnode__face {
+  fill: var(--vnode-face);
+  stroke: color-mix(in srgb, var(--branch) 58%, #2d3942);
+  stroke-width: 1.8;
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+.vnode__inner {
+  fill: none;
+  stroke: color-mix(in srgb, var(--branch) 20%, transparent);
+  stroke-width: 1.1;
+  transition: stroke 0.2s ease;
+}
+
+.vnode__ring {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 2;
+  transition: stroke 0.15s ease;
+}
+
+.vnode:focus-visible .vnode__ring,
+.vnode__ring.is-selected {
+  stroke: color-mix(in srgb, var(--branch) 90%, #ffffff 10%);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+}
+
+.vnode__body {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 12px;
+  pointer-events: none;
+}
+
+.vnode__tag {
+  font-family: var(--font-mono);
+  font-size: 6px;
+  letter-spacing: 0.2em;
+  color: var(--branch);
+}
+
+.vnode__code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--vnode-code);
+  transition: color 0.2s ease;
+}
+
+.vnode__code.is-long {
+  font-size: 10px;
+  letter-spacing: 0;
+}
+
+.vnode__title {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 156px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 9.5px;
+  font-weight: 500;
+  line-height: 1.22;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  color: var(--vnode-title);
+  pointer-events: auto;
+  text-wrap: balance;
+  transition: color 0.2s ease;
+}
+
+.vnode__badge,
+.vnode__lock {
+  position: absolute;
+  top: 9px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid rgba(8, 13, 18, 0.7);
+  pointer-events: none;
+}
+
+.vnode__badge {
+  background: var(--branch);
+  color: #071014;
+}
+
+.vnode__lock {
+  width: 13px;
+  height: 13px;
+  top: 10px;
+  right: 17px;
+  background: #151e25;
+  color: #7f8d97;
+}
+
+/* states */
+.vnode--available .vnode__face {
+  fill: color-mix(in srgb, var(--branch) 12%, var(--vnode-face));
+  stroke: color-mix(in srgb, var(--branch) 82%, #ffffff 8%);
+  stroke-width: 2;
+}
+
+.vnode--available .vnode__code {
+  color: color-mix(in srgb, var(--branch) 60%, #ffffff);
+}
+
+.vnode--available .vnode__title {
+  color: #c8d4dc;
+}
+
+.vnode--available:hover .vnode__face {
+  fill: color-mix(in srgb, var(--branch) 20%, var(--vnode-face));
+}
+
+.vnode--mastered .vnode__face {
+  fill: color-mix(in srgb, var(--branch) 28%, var(--vnode-face));
+  stroke: color-mix(in srgb, var(--branch) 88%, #ffffff 8%);
+  stroke-width: 2.2;
+}
+
+.vnode--mastered .vnode__inner {
+  stroke: color-mix(in srgb, var(--branch) 42%, transparent);
+}
+
+.vnode--mastered .vnode__code {
+  color: color-mix(in srgb, var(--branch) 62%, #ffffff);
+}
+
+.vnode--mastered .vnode__title {
+  color: #eef5f8;
+}
+
+.vnode--locked {
+  opacity: 0.72;
+}
+
+.vnode--locked .vnode__face {
+  fill: var(--vnode-lock-face);
+  stroke: var(--vnode-lock-border);
+}
+
+.vnode--locked .vnode__inner {
+  stroke: transparent;
+}
+
+.vnode--locked .vnode__code,
+.vnode--locked .vnode__title {
+  color: var(--vnode-lock-text);
+}
+
+.vnode--locked:hover {
+  opacity: 0.92;
+}
+
+.vnode--start .vnode__face {
+  stroke-width: 2.2;
+}
+
+.vnode.is-dim {
+  opacity: 0.16;
+}
+
+.vnode.is-selected {
+  z-index: 6;
+}
+
+/* Routed flowchart edges ------------------------------------------------- */
+
+.edge--route {
+  fill: none;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: none;
+  animation: none;
+}
+
+.edge--route.edge--locked {
+  stroke-width: 1.8;
+  stroke-dasharray: 3 6;
+  opacity: 0.4;
+}
+
+.edge--route.edge--available {
+  stroke-width: 2.6;
+  stroke-dasharray: none;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--edge-color) 50%, transparent));
+}
+
+.edge--route.edge--mastered {
+  stroke-width: 3;
+  stroke-dasharray: none;
+  opacity: 1;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--edge-color) 65%, transparent));
+}
+
+.edge--route.is-selected {
+  stroke-width: 4;
+  opacity: 1;
+  filter: drop-shadow(0 0 8px var(--edge-color));
+}
+
+.edge--route.is-dim {
+  opacity: 0.05;
+}
+
+/* Light theme flowchart additions --------------------------------------- */
+
+html[data-theme='light'] .vnode__face {
+  fill: var(--vnode-face);
+  stroke: color-mix(in srgb, var(--branch) 45%, #8b9aa5);
+}
+
+html[data-theme='light'] .vnode__inner {
+  stroke: color-mix(in srgb, var(--branch) 24%, transparent);
+}
+
+html[data-theme='light'] .vnode__code {
+  color: var(--vnode-code);
+}
+
+html[data-theme='light'] .vnode__title {
+  color: var(--vnode-title);
+}
+
+html[data-theme='light'] .vnode__badge {
+  border-color: #ffffff;
+}
+
+html[data-theme='light'] .vnode__lock {
+  background: #e8edf0;
+  color: #5f6f79;
+  border-color: #ffffff;
+}
+
+html[data-theme='light'] .vnode--available .vnode__face {
+  fill: color-mix(in srgb, var(--branch) 14%, #ffffff);
+  stroke: color-mix(in srgb, var(--branch) 68%, #51636e);
+}
+
+html[data-theme='light'] .vnode--available .vnode__code {
+  color: color-mix(in srgb, var(--branch) 42%, #172933);
+}
+
+html[data-theme='light'] .vnode--available .vnode__title {
+  color: #263741;
+}
+
+html[data-theme='light'] .vnode--available:hover .vnode__face {
+  fill: color-mix(in srgb, var(--branch) 20%, #ffffff);
+}
+
+html[data-theme='light'] .vnode--mastered .vnode__face {
+  fill: color-mix(in srgb, var(--branch) 48%, #ffffff);
+  stroke: color-mix(in srgb, var(--branch) 64%, #455761);
+}
+
+html[data-theme='light'] .vnode--mastered .vnode__inner {
+  stroke: rgba(255, 255, 255, 0.5);
+}
+
+html[data-theme='light'] .vnode--mastered .vnode__code {
+  color: #15242d;
+}
+
+html[data-theme='light'] .vnode--mastered .vnode__title {
+  color: #1c2c36;
+}
+
+html[data-theme='light'] .vnode--locked .vnode__face {
+  fill: var(--vnode-lock-face);
+  stroke: var(--vnode-lock-border);
+}
+
+html[data-theme='light'] .vnode--locked .vnode__code,
+html[data-theme='light'] .vnode--locked .vnode__title {
+  color: var(--vnode-lock-text);
+}
+
+html[data-theme='light'] .vnode__ring.is-selected,
+html[data-theme='light'] .vnode:focus-visible .vnode__ring {
+  stroke: color-mix(in srgb, var(--branch) 72%, #3b4d58);
+}
+
+html[data-theme='light'] .vnode__tag {
+  color: color-mix(in srgb, var(--branch) 55%, #263943);
+}

@@ -14,7 +14,16 @@ const isObject = (value) => typeof value === 'object' && value !== null && !Arra
 const isText = (value) => typeof value === 'string' && value.trim().length > 0
 const isInt = (value) => Number.isInteger(value)
 
-const STEPS = new Set(['1,0', '-1,0', '0,1', '0,-1', '1,-1', '-1,1'])
+/** Corners of the background honeycomb: even-sum lattice, minus cell centres. */
+const isHexVertex = (u, v) => {
+  if (!isInt(u) || !isInt(v)) return false
+  if ((u + v) % 2 !== 0) return false
+  if (v % 3 === 0) {
+    const q = (u - v / 3) / 2
+    if (Number.isInteger(q)) return false
+  }
+  return true
+}
 
 let raw
 try {
@@ -33,7 +42,7 @@ if (!isObject(raw)) {
 if (!isText(raw.title)) fail('title must be a non-empty string.')
 if (!isText(raw.subtitle)) fail('subtitle must be a non-empty string.')
 for (const legacy of ['stages', 'tiers']) {
-  if (raw[legacy] !== undefined) warnings.push(`"${legacy}" is no longer used; stage grouping has been removed.`)
+  if (raw[legacy] !== undefined) warnings.push(`"${legacy}" is no longer used.`)
 }
 
 const subjects = Array.isArray(raw.subjects) ? raw.subjects : []
@@ -72,7 +81,7 @@ subjects.forEach((subject, subjectIndex) => {
   totalNodes += nodes.length
 
   const nodeIds = new Set()
-  const cells = new Map()
+  const corners = new Map()
 
   nodes.forEach((node, nodeIndex) => {
     if (!isObject(node)) return fail(`${where}.nodes[${nodeIndex}] must be an object.`)
@@ -91,8 +100,11 @@ subjects.forEach((subject, subjectIndex) => {
     if (!isText(node.branch) || !branchIds.has(node.branch)) {
       fail(`${label}.branch must reference a declared branch (got ${JSON.stringify(node.branch)}).`)
     }
-    if (!isInt(node.q)) fail(`${label}.q must be a whole number.`)
-    if (!isInt(node.r)) fail(`${label}.r must be a whole number.`)
+    if (!isInt(node.u)) fail(`${label}.u must be a whole number.`)
+    if (!isInt(node.v)) fail(`${label}.v must be a whole number.`)
+    if (!isHexVertex(node.u, node.v)) {
+      fail(`${label}: ${node.u},${node.v} is not a corner of the background honeycomb.`)
+    }
     if (node.start !== undefined && typeof node.start !== 'boolean') {
       fail(`${label}.start must be true when present.`)
     }
@@ -100,14 +112,14 @@ subjects.forEach((subject, subjectIndex) => {
       fail(`${label}.requires must be an array of node ids.`)
       return
     }
-    for (const legacy of ['role', 'stage', 'tier', 'lane']) {
+    for (const legacy of ['role', 'stage', 'tier', 'lane', 'q', 'r']) {
       if (node[legacy] !== undefined) warnings.push(`${where}.${node.id}: "${legacy}" is no longer used.`)
     }
 
-    if (isInt(node.q) && isInt(node.r)) {
-      const cell = `${node.q}:${node.r}`
-      if (cells.has(cell)) fail(`${label} shares hex cell ${cell} with "${cells.get(cell)}".`)
-      cells.set(cell, node.id)
+    if (isInt(node.u) && isInt(node.v)) {
+      const corner = `${node.u}:${node.v}`
+      if (corners.has(corner)) fail(`${label} shares corner ${corner} with "${corners.get(corner)}".`)
+      corners.set(corner, node.id)
     }
   })
 
@@ -129,19 +141,7 @@ subjects.forEach((subject, subjectIndex) => {
     }
     for (const requirementId of node.requires) {
       if (requirementId === node.id) fail(`${where}.${node.id} requires itself.`)
-      const requirement = byId.get(requirementId)
-      if (!requirement) {
-        fail(`${where}.${node.id}: unknown prerequisite "${requirementId}".`)
-        continue
-      }
-      const dq = node.q - requirement.q
-      const dr = node.r - requirement.r
-      if (!STEPS.has(`${dq},${dr}`)) {
-        fail(
-          `${where}.${node.id} requires "${requirementId}" but their cells do not share an edge ` +
-            `(${node.q}:${node.r} vs ${requirement.q}:${requirement.r}).`,
-        )
-      }
+      if (!byId.has(requirementId)) fail(`${where}.${node.id}: unknown prerequisite "${requirementId}".`)
     }
   })
 
@@ -162,12 +162,12 @@ subjects.forEach((subject, subjectIndex) => {
     if (!reachable.has(id)) fail(`${where}.${id} can never unlock (cycle or orphaned requirement chain).`)
   }
 
-  const qs = nodes.filter(isObject).map((node) => node.q)
-  const rs = nodes.filter(isObject).map((node) => node.r)
+  const us = nodes.filter(isObject).map((node) => node.u)
+  const vs = nodes.filter(isObject).map((node) => node.v)
   const links = nodes.reduce((sum, node) => sum + (Array.isArray(node.requires) ? node.requires.length : 0), 0)
   console.log(
-    `  ${subject.name.padEnd(22)} ${String(nodes.length).padStart(2)} hexes · ` +
-      `${Math.min(...qs)}..${Math.max(...qs)} columns · ${Math.min(...rs)}..${Math.max(...rs)} rows · ${links} shared-edge links`,
+    `  ${subject.name.padEnd(22)} ${String(nodes.length).padStart(2)} corners · ` +
+      `u ${Math.min(...us)}..${Math.max(...us)} · v ${Math.min(...vs)}..${Math.max(...vs)} · ${links} routed links`,
   )
 })
 
@@ -184,4 +184,4 @@ if (errors.length) {
   process.exit(1)
 }
 
-console.log(`✓ Hex map valid — ${subjects.length} subjects, ${totalNodes} nodes on one honeycomb.`)
+console.log(`✓ Honeycomb flowchart valid — ${subjects.length} subjects, ${totalNodes} corner nodes.`)

@@ -10,13 +10,9 @@ import {
 } from 'react'
 import {
   branchMap,
-  cellPolygon,
   clamp,
-  HEX_R,
-  HEX_W,
   hexPoints,
   nodeState,
-  sharedEdge,
   stateLabel,
 } from '../lib/tree'
 import type { SkillNode, Subject, SubjectLayout } from '../types'
@@ -47,10 +43,11 @@ interface DragState {
   moved: boolean
 }
 
-const CELL_H = HEX_R * 2
-const FACE = cellPolygon(0.06)
-const RING = cellPolygon(0.012)
-const INNER = cellPolygon(0.11)
+const NODE_W = 92
+const NODE_H = 106
+const PLATE = '50,2 97,29 97,87 50,114 3,87 3,29'
+const PLATE_INNER = '50,13 88,35 88,81 50,103 12,81 12,35'
+const PLATE_RING = '50,0 100,29 100,87 50,116 0,87 0,29'
 
 export default function SkillCanvas({
   subject,
@@ -90,15 +87,15 @@ export default function SkillCanvas({
   /* Fit to view ----------------------------------------------------------- */
   const frameAll = useCallback(() => {
     if (!size.width || !size.height) return
-    const paddingX = size.width < 720 ? 18 : 34
-    const paddingY = size.height < 560 ? 18 : 32
+    const paddingX = size.width < 720 ? 16 : 34
+    const paddingY = size.height < 560 ? 16 : 32
     const k = clamp(
       Math.min(
         (size.width - paddingX * 2) / layout.width,
         (size.height - paddingY * 2) / layout.height,
       ),
-      0.22,
-      1.2,
+      0.24,
+      1.35,
     )
     setView({
       k,
@@ -112,12 +109,12 @@ export default function SkillCanvas({
     if (!size.width || !size.height) return
 
     if (size.width < 720) {
-      const k = 0.68
+      const k = 0.76
       const start = layout.positions[subject.nodes.find((node) => node.start)?.id ?? subject.nodes[0].id]
       setView({
         k,
-        x: 78 - start.x * k,
-        y: Math.max(30, size.height * 0.42 - start.y * k),
+        x: 56 - start.x * k,
+        y: Math.max(24, size.height * 0.4 - start.y * k),
       })
       setFitted(true)
       return
@@ -129,7 +126,7 @@ export default function SkillCanvas({
       (size.width - paddingX * 2) / layout.width,
       (size.height - paddingY * 2) / layout.height,
     )
-    const k = clamp(fit * 1.04, 0.66, 1.05)
+    const k = clamp(fit * 1.04, 0.66, 1.25)
     setView({
       k,
       x: Math.max(24, (size.width - layout.width * k) / 2),
@@ -158,7 +155,7 @@ export default function SkillCanvas({
       const pointerY = event.clientY - rect.top
       const current = viewRef.current
       const factor = Math.exp(-event.deltaY * 0.0016)
-      const k = clamp(current.k * factor, 0.22, 2.1)
+      const k = clamp(current.k * factor, 0.24, 2.2)
       const ratio = k / current.k
       setView({
         k,
@@ -174,7 +171,7 @@ export default function SkillCanvas({
   /* Pan ------------------------------------------------------------------- */
   const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (event.button !== 0) return
-    if ((event.target as HTMLElement).closest('.hexnode')) return
+    if ((event.target as HTMLElement).closest('.vnode')) return
     dragRef.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
@@ -207,7 +204,7 @@ export default function SkillCanvas({
 
   const zoomBy = (factor: number) => {
     const current = viewRef.current
-    const k = clamp(current.k * factor, 0.22, 2.1)
+    const k = clamp(current.k * factor, 0.24, 2.2)
     const ratio = k / current.k
     const centerX = size.width / 2
     const centerY = size.height / 2
@@ -227,21 +224,6 @@ export default function SkillCanvas({
     event.preventDefault()
     if (nodeState(node, mastered) === 'mastered') onToggle(node)
   }
-
-  const edges = useMemo(
-    () =>
-      subject.nodes.flatMap((node) =>
-        node.requires.map((requirementId) => {
-          const fromNode = nodeById.get(requirementId)
-          if (!fromNode) return null
-          const from = layout.positions[fromNode.id]
-          const to = layout.positions[node.id]
-          if (!from || !to) return null
-          return { key: `${requirementId}->${node.id}`, fromNode, toNode: node, from, to, ...sharedEdge(from, to) }
-        }),
-      ),
-    [layout.positions, nodeById, subject.nodes],
-  )
 
   return (
     <div
@@ -275,7 +257,7 @@ export default function SkillCanvas({
             <polygon
               key={`hex-${index}`}
               points={hexPoints(cell.x, cell.y)}
-              className={`hex-cell${cell.occupied ? ' is-occupied' : ''}`}
+              className="hex-cell"
             />
           ))}
         </svg>
@@ -287,30 +269,31 @@ export default function SkillCanvas({
           viewBox={`0 0 ${layout.width} ${layout.height}`}
           aria-hidden="true"
         >
-          {edges.map((edge) => {
-            if (!edge) return null
-            const state = nodeState(edge.toNode, mastered)
+          {layout.edgePaths.map((edge) => {
+            const target = nodeById.get(edge.to)
+            if (!target) return null
+            const state = nodeState(target, mastered)
             const edgeState = state === 'mastered' ? 'mastered' : state === 'locked' ? 'locked' : 'available'
-            const color = branches[edge.toNode.branch]?.color ?? subject.accent
-            const isSelected = selectedId === edge.fromNode.id || selectedId === edge.toNode.id
-            const isDim = branchFilter !== null && edge.toNode.branch !== branchFilter
+            const color = branches[target.branch]?.color ?? subject.accent
+            const isSelected = selectedId === edge.from || selectedId === edge.to
+            const isDim = branchFilter !== null && target.branch !== branchFilter
             const classes = [
               'edge',
-              'edge--shared',
+              'edge--route',
               `edge--${edgeState}`,
               isSelected ? 'is-selected' : '',
               isDim ? 'is-dim' : '',
             ]
               .filter(Boolean)
               .join(' ')
+            const d = edge.points
+              .map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`)
+              .join(' ')
 
             return (
-              <line
+              <path
                 key={edge.key}
-                x1={edge.x1}
-                y1={edge.y1}
-                x2={edge.x2}
-                y2={edge.y2}
+                d={d}
                 className={classes}
                 style={{ stroke: color, '--edge-color': color } as CSSProperties}
               />
@@ -326,9 +309,9 @@ export default function SkillCanvas({
           const isSelected = selectedId === node.id
           const isDim = branchFilter !== null && node.branch !== branchFilter
           const classes = [
-            'hexnode',
-            `hexnode--${state}`,
-            node.start ? 'hexnode--start' : '',
+            'vnode',
+            `vnode--${state}`,
+            node.start ? 'vnode--start' : '',
             isSelected ? 'is-selected' : '',
             isDim ? 'is-dim' : '',
           ]
@@ -344,8 +327,8 @@ export default function SkillCanvas({
                 {
                   left: position.x,
                   top: position.y,
-                  width: HEX_W,
-                  height: CELL_H,
+                  width: NODE_W,
+                  height: NODE_H,
                   '--branch': node.start ? subject.accent : branch.color,
                 } as CSSProperties
               }
@@ -355,30 +338,33 @@ export default function SkillCanvas({
               onDoubleClick={() => onToggle(node)}
               onContextMenu={(event) => handleContextMenu(event, node)}
             >
-              <svg
-                className="hexnode__shape"
-                viewBox={`0 0 ${HEX_W} ${CELL_H}`}
-                aria-hidden="true"
-              >
-                <polygon points={FACE} className="hexnode__face" />
-                <polygon points={INNER} className="hexnode__inner" />
-                <polygon points={RING} className={`hexnode__ring${isSelected ? ' is-selected' : ''}`} />
-              </svg>
-              <span className="hexnode__body">
-                {node.start && <span className="hexnode__tag">START</span>}
-                <span className={`hexnode__code${node.code.length > 3 ? ' is-long' : ''}`}>{node.code}</span>
-                <span className="hexnode__title">{node.title}</span>
+              <span className="vnode__shape" aria-hidden="true">
+                <svg viewBox="0 0 100 116" preserveAspectRatio="none">
+                  <polygon points={PLATE} className="vnode__face" />
+                  <polygon points={PLATE_INNER} className="vnode__inner" />
+                  <polygon
+                    points={PLATE_RING}
+                    className={`vnode__ring${isSelected ? ' is-selected' : ''}`}
+                  />
+                </svg>
+              </span>
+              <span className="vnode__body">
+                {node.start && <span className="vnode__tag">START</span>}
+                <span className={`vnode__code${node.code.length > 3 ? ' is-long' : ''}`}>
+                  {node.code}
+                </span>
               </span>
               {state === 'mastered' && (
-                <span className="hexnode__badge" aria-hidden="true">
+                <span className="vnode__badge" aria-hidden="true">
                   <CheckMark />
                 </span>
               )}
               {state === 'locked' && (
-                <span className="hexnode__lock" aria-hidden="true">
+                <span className="vnode__lock" aria-hidden="true">
                   <LockMark />
                 </span>
               )}
+              <span className="vnode__title">{node.title}</span>
             </button>
           )
         })}
@@ -404,7 +390,7 @@ export default function SkillCanvas({
 
 function CheckMark() {
   return (
-    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M4 12.5l5.5 5.5L20 6.5" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
@@ -412,7 +398,7 @@ function CheckMark() {
 
 function LockMark() {
   return (
-    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <rect x="5" y="10.5" width="14" height="9.5" rx="1.5" stroke="currentColor" strokeWidth="2.4" />
       <path d="M8 10.5V7.5a4 4 0 018 0v3" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
     </svg>

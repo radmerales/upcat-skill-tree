@@ -9,8 +9,8 @@ export interface SkillNode {
   title: string
   code: string
   branch: string
-  q: number
-  r: number
+  u: number
+  v: number
   start?: boolean
   description: string
   tip: string
@@ -47,9 +47,17 @@ export interface HexCell extends Point {
   occupied: boolean
 }
 
+export interface RoutedEdge {
+  key: string
+  from: string
+  to: string
+  points: Point[]
+}
+
 export interface SubjectLayout {
   positions: Record<string, Point>
   width: number
   height: number
   hexCells: HexCell[]
+  edgePaths: RoutedEdge[]
 }

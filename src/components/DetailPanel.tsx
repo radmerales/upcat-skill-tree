@@ -56,7 +56,7 @@ export default function DetailPanel({
             {branch.name}
           </span>
           {node.start && <span className="role-chip role-chip--start">Start</span>}
-          <span className="tier-chip">Hex {node.q},{node.r}</span>
+          <span className="tier-chip">Corner {node.u},{node.v}</span>
         </div>
 
         <h2 className="panel__title">{node.title}</h2>
@@ -130,8 +130,8 @@ export default function DetailPanel({
         </section>
 
         <p className="panel__hint">
-          Nodes share a side with their prerequisites. Master connected nodes to open the next hexes,
-          and follow the honeycomb to the final capstone.
+          Prerequisite lines are routed along the honeycomb edges. Master connected nodes to open the
+          next skills, and follow the grid to the final capstone.
         </p>
       </div>
 
