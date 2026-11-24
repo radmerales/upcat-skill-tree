@@ -1,6 +1,6 @@
 import type {
   Branch,
-  HexCell,
+  TriangleCell,
   NodeState,
   Point,
   RoutedEdge,
@@ -11,89 +11,54 @@ import type {
 } from '../types'
 
 /* -------------------------------------------------------------------------- */
-/*  Hex geometry                                                               */
+/*  Triangle geometry                                                          */
 /* -------------------------------------------------------------------------- */
 
-/** Background hex cell: circumradius and its width/height steps. */
-export const HEX_R = 108
-export const HEX_W = Math.sqrt(3) * HEX_R
-export const HEX_V = 1.5 * HEX_R
+/** Equilateral triangle side, and the height of one row of triangles. */
+export const TRI_S = 92
+export const TRI_H = (TRI_S * Math.sqrt(3)) / 2
 
-/** Vertex lattice steps: every honeycomb corner is a multiple of these. */
-export const VERTEX_S = HEX_W / 2
-export const VERTEX_H = HEX_R / 2
+/** Every corner of the triangular lattice. */
+export function vertexPoint(u: number, v: number): Point {
+  return { x: (u + v / 2) * TRI_S, y: v * TRI_H }
+}
+
+const TRI_NEIGHBORS: Array<[number, number]> = [
+  [1, 0],
+  [-1, 0],
+  [0, 1],
+  [0, -1],
+  [1, -1],
+  [-1, 1],
+]
 
 const PAD = 84
 const NODE_HALF_W = 84
 const NODE_TOP = 58
-const NODE_BOTTOM = 100
+const NODE_BOTTOM = 102
 
-const VERTEX_STEPS: Array<[number, number]> = [
-  [1, 1],
-  [1, -1],
-  [-1, 1],
-  [-1, -1],
-  [0, 2],
-  [0, -2],
-]
-
-export function isHexVertex(u: number, v: number): boolean {
-  if (!Number.isInteger(u) || !Number.isInteger(v)) return false
-  if ((u + v) % 2 !== 0) return false
-  // Cell centres satisfy v = 3r and u = 2q + r. They are not corners.
-  if (v % 3 === 0) {
-    const q = (u - v / 3) / 2
-    if (Number.isInteger(q)) return false
-  }
-  return true
-}
-
-export function vertexPoint(u: number, v: number): Point {
-  return { x: u * VERTEX_S, y: v * VERTEX_H }
-}
-
-export function hexPoints(x: number, y: number): string {
-  const hw = HEX_W / 2
-  const hr = HEX_R / 2
-  return [
-    `${x},${y - HEX_R}`,
-    `${x + hw},${y - hr}`,
-    `${x + hw},${y + hr}`,
-    `${x},${y + HEX_R}`,
-    `${x - hw},${y + hr}`,
-    `${x - hw},${y - hr}`,
-  ].join(' ')
-}
-
-/* -------------------------------------------------------------------------- */
-/*  Layout                                                                     */
-/* -------------------------------------------------------------------------- */
-
-function buildVertexGraph(minU: number, maxU: number, minV: number, maxV: number) {
+function buildGraph(minU: number, maxU: number, minV: number, maxV: number) {
   const verts = new Set<string>()
   for (let v = minV; v <= maxV; v += 1) {
-    for (let u = minU; u <= maxU; u += 1) {
-      if (isHexVertex(u, v)) verts.add(`${u},${v}`)
-    }
+    for (let u = minU; u <= maxU; u += 1) verts.add(`${u},${v}`)
   }
 
   const neighbors = new Map<string, string[]>()
   for (const key of verts) {
     const [u, v] = key.split(',').map(Number)
     const list: string[] = []
-    for (const [du, dv] of VERTEX_STEPS) {
+    for (const [du, dv] of TRI_NEIGHBORS) {
       const nk = `${u + du},${v + dv}`
       if (verts.has(nk)) list.push(nk)
     }
     neighbors.set(key, list)
   }
-
   return { verts, neighbors }
 }
 
-/** Shortest honeycomb-edge route, preferring fewer bends. */
+/** Shortest route across triangle edges, preferring fewer bends. */
 function routeEdge(
-  graph: ReturnType<typeof buildVertexGraph>,
+  graph: ReturnType<typeof buildGraph>,
   from: string,
   to: string,
   blocked: Set<string>,
@@ -107,13 +72,11 @@ function routeEdge(
     path: string[]
   }
 
-  const queue: State[] = [{ key: from, dir: -1, cost: 0, path: [from] }]
-  const best = new Map<string, number>()
-  const startKey = `${from}|-1`
-  best.set(startKey, 0)
+  const dirIndex = new Map<string, number>()
+  TRI_NEIGHBORS.forEach((step, index) => dirIndex.set(`${step[0]},${step[1]}`, index))
 
-  const stepDir = new Map<string, number>()
-  VERTEX_STEPS.forEach((step, index) => stepDir.set(`${step[0]},${step[1]}`, index))
+  const queue: State[] = [{ key: from, dir: -1, cost: 0, path: [from] }]
+  const best = new Map<string, number>([[`${from}|-1`, 0]])
 
   while (queue.length) {
     queue.sort((a, b) => a.cost - b.cost)
@@ -128,29 +91,21 @@ function routeEdge(
       })
     }
 
-    const currentList = graph.neighbors.get(current.key) ?? []
     const [cu, cv] = current.key.split(',').map(Number)
-
-    for (const nextKey of currentList) {
+    for (const nextKey of graph.neighbors.get(current.key) ?? []) {
       if (blocked.has(nextKey) && nextKey !== to) continue
       const [nu, nv] = nextKey.split(',').map(Number)
-      const dir = stepDir.get(`${nu - cu},${nv - cv}`) ?? -1
+      const dir = dirIndex.get(`${nu - cu},${nv - cv}`) ?? -1
       if (dir === -1) continue
-      const turn = current.dir === -1 || current.dir === dir ? 0 : 0.35
+      const turn = current.dir === -1 || current.dir === dir ? 0 : 0.3
       const cost = current.cost + 1 + turn
       const stateKey = `${nextKey}|${dir}`
       const known = best.get(stateKey)
       if (known !== undefined && known <= cost) continue
       best.set(stateKey, cost)
-      queue.push({
-        key: nextKey,
-        dir,
-        cost,
-        path: [...current.path, nextKey],
-      })
+      queue.push({ key: nextKey, dir, cost, path: [...current.path, nextKey] })
     }
   }
-
   return null
 }
 
@@ -200,24 +155,31 @@ export function layoutSubject(subject: Subject): SubjectLayout {
     positions[id] = { x: point.x + offsetX, y: point.y + offsetY }
   }
 
-  /* Background honeycomb cells across the whole area ---------------------- */
-  const hexCells: HexCell[] = []
-  const rStart = Math.floor((minY - HEX_V * 2) / HEX_V)
-  const rEnd = Math.ceil((maxY + HEX_V * 2) / HEX_V)
-  for (let r = rStart; r <= rEnd; r += 1) {
-    const qStart = Math.floor((minX - HEX_W * 2) / HEX_W - r / 2)
-    const qEnd = Math.ceil((maxX + HEX_W * 2) / HEX_W - r / 2)
-    for (let q = qStart; q <= qEnd; q += 1) {
-      hexCells.push({
-        x: HEX_W * (q + r / 2) + offsetX,
-        y: HEX_V * r + offsetY,
-        occupied: false,
-      })
+  /* Background triangle tessellation ------------------------------------- */
+  const triangles: TriangleCell[] = []
+  const vStart = minV - 5
+  const vEnd = maxV + 5
+  const uStart = minU - 6
+  const uEnd = maxU + 6
+  const at = (u: number, v: number): Point => {
+    const point = vertexPoint(u, v)
+    return { x: point.x + offsetX, y: point.y + offsetY }
+  }
+
+  for (let v = vStart; v <= vEnd; v += 1) {
+    for (let u = uStart; u <= uEnd; u += 1) {
+      const alt = (u + v) % 2 === 0
+      const tl = at(u, v)
+      const tr = at(u + 1, v)
+      const ml = at(u, v + 1)
+      const mr = at(u + 1, v + 1)
+      triangles.push({ points: [tl, tr, ml], alt })
+      triangles.push({ points: [tr, mr, ml], alt: !alt })
     }
   }
 
-  /* Route every prerequisite along the honeycomb edges -------------------- */
-  const graph = buildVertexGraph(minU - 10, maxU + 10, minV - 10, maxV + 10)
+  /* Route prerequisites along triangle edges ----------------------------- */
+  const graph = buildGraph(minU - 10, maxU + 11, minV - 10, maxV + 10)
   const blocked = new Set(subject.nodes.map((node) => `${node.u},${node.v}`))
   const edgePaths: RoutedEdge[] = []
 
@@ -230,18 +192,13 @@ export function layoutSubject(subject: Subject): SubjectLayout {
       let route = routeEdge(graph, fromKey, toKey, blocked)
       if (!route) route = routeEdge(graph, fromKey, toKey, new Set())
 
-      const points = (route ?? [
-        [requirement.u, requirement.v],
-        [node.u, node.v],
-      ]).map(([u, v]) => {
+      const points = (route ?? [[requirement.u, requirement.v], [node.u, node.v]]).map(([u, v]) => {
         const point = vertexPoint(u, v)
         return { x: point.x + offsetX, y: point.y + offsetY }
       })
-
-      // A direct segment is a fallback only; normal routes bend along the grid.
-      const simplified = simplify(
-        points.map((point) => [point.x, point.y] as [number, number]),
-      ).map(([x, y]) => ({ x, y }))
+      const simplified = simplify(points.map((point) => [point.x, point.y] as [number, number])).map(
+        ([x, y]) => ({ x, y }),
+      )
 
       edgePaths.push({
         key: `${requirementId}->${node.id}`,
@@ -256,7 +213,7 @@ export function layoutSubject(subject: Subject): SubjectLayout {
     positions,
     width: maxX - minX + PAD * 2,
     height: maxY - minY + PAD * 2,
-    hexCells,
+    triangles,
     edgePaths,
   }
 }
@@ -417,9 +374,6 @@ export function normalizeData(raw: unknown): TreeData {
 
       const u = readInt(node.u, `${where}.${nodeId}.u`)
       const v = readInt(node.v, `${where}.${nodeId}.v`)
-      if (!isHexVertex(u, v)) {
-        fail(`${where}.${nodeId}: ${u},${v} is not a corner of the background honeycomb.`)
-      }
       const cell = `${u}:${v}`
       if (seenVertices.has(cell)) {
         fail(`${where}.${nodeId} shares corner ${cell} with "${seenVertices.get(cell)}".`)

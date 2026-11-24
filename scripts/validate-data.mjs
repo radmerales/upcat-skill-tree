@@ -14,17 +14,6 @@ const isObject = (value) => typeof value === 'object' && value !== null && !Arra
 const isText = (value) => typeof value === 'string' && value.trim().length > 0
 const isInt = (value) => Number.isInteger(value)
 
-/** Corners of the background honeycomb: even-sum lattice, minus cell centres. */
-const isHexVertex = (u, v) => {
-  if (!isInt(u) || !isInt(v)) return false
-  if ((u + v) % 2 !== 0) return false
-  if (v % 3 === 0) {
-    const q = (u - v / 3) / 2
-    if (Number.isInteger(q)) return false
-  }
-  return true
-}
-
 let raw
 try {
   raw = JSON.parse(await readFile(DATA_FILE, 'utf8'))
@@ -102,9 +91,6 @@ subjects.forEach((subject, subjectIndex) => {
     }
     if (!isInt(node.u)) fail(`${label}.u must be a whole number.`)
     if (!isInt(node.v)) fail(`${label}.v must be a whole number.`)
-    if (!isHexVertex(node.u, node.v)) {
-      fail(`${label}: ${node.u},${node.v} is not a corner of the background honeycomb.`)
-    }
     if (node.start !== undefined && typeof node.start !== 'boolean') {
       fail(`${label}.start must be true when present.`)
     }
@@ -184,4 +170,4 @@ if (errors.length) {
   process.exit(1)
 }
 
-console.log(`✓ Honeycomb flowchart valid — ${subjects.length} subjects, ${totalNodes} corner nodes.`)
+console.log(`✓ Triangle flowchart valid — ${subjects.length} subjects, ${totalNodes} corner nodes.`)

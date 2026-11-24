@@ -3326,11 +3326,11 @@ html[data-theme='light'] .hexnode__tag {
 
 html[data-theme='light'] {
   --vnode-face: #ffffff;
-  --vnode-code: #283a44;
-  --vnode-title: #52646f;
+  --vnode-code: #243740;
+  --vnode-title: #4a5c67;
   --vnode-lock-face: #f6f8f9;
-  --vnode-lock-border: #c2ced5;
-  --vnode-lock-text: #5f707a;
+  --vnode-lock-border: #b3c1ca;
+  --vnode-lock-text: #4c5e69;
 }
 
 .vnode {
@@ -3436,9 +3436,9 @@ html[data-theme='light'] {
   width: 156px;
   text-align: center;
   font-family: var(--font-display);
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 500;
-  line-height: 1.22;
+  line-height: 1.2;
   letter-spacing: 0.035em;
   text-transform: uppercase;
   color: var(--vnode-title);
@@ -3603,7 +3603,7 @@ html[data-theme='light'] .vnode__code {
 }
 
 html[data-theme='light'] .vnode__title {
-  color: var(--vnode-title);
+  color: #43555f;
 }
 
 html[data-theme='light'] .vnode__badge {
@@ -3650,6 +3650,10 @@ html[data-theme='light'] .vnode--mastered .vnode__title {
   color: #1c2c36;
 }
 
+html[data-theme='light'] .vnode--locked {
+  opacity: 0.9;
+}
+
 html[data-theme='light'] .vnode--locked .vnode__face {
   fill: var(--vnode-lock-face);
   stroke: var(--vnode-lock-border);
@@ -3667,4 +3671,47 @@ html[data-theme='light'] .vnode:focus-visible .vnode__ring {
 
 html[data-theme='light'] .vnode__tag {
   color: color-mix(in srgb, var(--branch) 55%, #263943);
+}
+
+html[data-theme='light'] .edge--route.edge--locked {
+  opacity: 0.52;
+}
+
+/* ========================================================================== */
+/*  Triangular lattice                                                        */
+/* ========================================================================== */
+
+:root {
+  --tri-line: rgba(151, 176, 191, 0.11);
+  --tri-fill: rgba(255, 255, 255, 0.016);
+}
+
+html[data-theme='light'] {
+  --tri-line: rgba(34, 62, 80, 0.15);
+  --tri-fill: rgba(255, 255, 255, 0.22);
+}
+
+.triangle-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.tri-cell {
+  fill: transparent;
+  stroke: var(--tri-line);
+  stroke-width: 1;
+}
+
+.tri-cell.is-alt {
+  fill: var(--tri-fill);
+}
+
+.vnode__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }

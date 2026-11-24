@@ -130,8 +130,8 @@ export default function DetailPanel({
         </section>
 
         <p className="panel__hint">
-          Prerequisite lines are routed along the honeycomb edges. Master connected nodes to open the
-          next skills, and follow the grid to the final capstone.
+          Prerequisite lines are routed along the triangle edges. Master connected nodes to open the
+          next skills, and follow the mesh to the final capstone.
         </p>
       </div>
 

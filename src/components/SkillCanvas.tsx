@@ -11,7 +11,6 @@ import {
 import {
   branchMap,
   clamp,
-  hexPoints,
   nodeState,
   stateLabel,
 } from '../lib/tree'
@@ -247,17 +246,17 @@ export default function SkillCanvas({
         }}
       >
         <svg
-          className="hex-grid"
+          className="triangle-grid"
           width={layout.width}
           height={layout.height}
           viewBox={`0 0 ${layout.width} ${layout.height}`}
           aria-hidden="true"
         >
-          {layout.hexCells.map((cell, index) => (
+          {layout.triangles.map((triangle, index) => (
             <polygon
-              key={`hex-${index}`}
-              points={hexPoints(cell.x, cell.y)}
-              className="hex-cell"
+              key={`tri-${index}`}
+              points={triangle.points.map((point) => `${point.x},${point.y}`).join(' ')}
+              className={`tri-cell${triangle.alt ? ' is-alt' : ''}`}
             />
           ))}
         </svg>

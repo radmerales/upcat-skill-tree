@@ -200,7 +200,7 @@ export default function App() {
           remaining === 0
             ? `${subject.name} complete — every node mastered!`
             : node.start
-              ? 'Subject started — follow the connected hexes'
+              ? 'Subject started — follow the connected paths'
               : `Mastered: ${node.title}`,
       })
     },

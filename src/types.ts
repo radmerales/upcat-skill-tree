@@ -43,8 +43,9 @@ export interface Point {
   y: number
 }
 
-export interface HexCell extends Point {
-  occupied: boolean
+export interface TriangleCell {
+  points: Point[]
+  alt: boolean
 }
 
 export interface RoutedEdge {
@@ -58,6 +59,6 @@ export interface SubjectLayout {
   positions: Record<string, Point>
   width: number
   height: number
-  hexCells: HexCell[]
+  triangles: TriangleCell[]
   edgePaths: RoutedEdge[]
 }

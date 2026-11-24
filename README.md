@@ -1,8 +1,8 @@
 # UPCAT Skill Tree
 
-An interactive flowchart-style study map for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown and work from the start node through skills placed on the corners of a honeycomb.
+An interactive flowchart-style study map for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown and work from the start node through skills placed on the corners of a triangular lattice.
 
-The design is inspired by the [ARC Raiders Skill Builder](https://metaforge.app/arc-raiders/skill-builder): a pan-and-zoom canvas, glowing nodes, a mastery counter, click-to-learn, and right-click-to-remove. Every node is a small hexagon sitting on a background honeycomb corner, and prerequisite lines are routed along the honeycomb edges like a flowchart. Dark and light themes are both supported.
+The design is inspired by the [ARC Raiders Skill Builder](https://metaforge.app/arc-raiders/skill-builder): a pan-and-zoom canvas, glowing nodes, a mastery counter, click-to-learn, and right-click-to-remove. Every node is a small hexagon sitting on a triangle corner, and prerequisite lines are routed along the triangle edges like a flowchart. Dark and light themes are both supported.
 
 ## Stack
 
@@ -27,7 +27,7 @@ Everything is in [`public/data/upcat-skill-tree.json`](public/data/upcat-skill-t
 
 ```jsonc
 {
-  "version": 4,
+  "version": 5,
   "title": "UPCAT Skill Tree",
   "subtitle": "…",
   "subjects": [
@@ -46,8 +46,8 @@ Everything is in [`public/data/upcat-skill-tree.json`](public/data/upcat-skill-t
           "title": "Start Here",
           "code": "GO",
           "branch": "arithmetic",
-          "u": 0,                     // corner coordinates (see below)
-          "v": -2,
+          "u": 0,                     // triangle corner coordinates (see below)
+          "v": 0,
           "start": true,              // exactly one node per subject
           "description": "…",
           "tip": "…",
@@ -58,8 +58,8 @@ Everything is in [`public/data/upcat-skill-tree.json`](public/data/upcat-skill-t
           "title": "Algebraic Expressions",
           "code": "ALG",
           "branch": "algebra",
-          "u": 1,
-          "v": -5,
+          "u": 4,
+          "v": -2,
           "description": "…",
           "tip": "…",
           "requires": ["math-start"]  // any node can be a prerequisite
@@ -70,23 +70,23 @@ Everything is in [`public/data/upcat-skill-tree.json`](public/data/upcat-skill-t
 }
 ```
 
-### Corners and routed prerequisites
+### Triangle corners and routed prerequisites
 
-Nodes live on the **corners** of the background honeycomb, not inside its cells. `u` and `v` are corner-lattice coordinates: the horizontal step is half a hex width, the vertical step is half a hex radius. A valid corner has an even `u + v` sum and is not a cell centre. The start node in the data uses `0,-2`.
+The background is an equilateral **triangle mesh**. Nodes live on its **corners**, not inside the triangles or beside each other. `u` and `v` are corner-lattice coordinates: `u` moves horizontally and `v` moves down one triangle row. The start node uses `0,0`. Every integer `u,v` pair is a valid triangle corner.
 
-Corners are spaced apart on purpose — nodes are **not** placed side by side. Each node is a small hexagon with its label underneath, like a flowchart node. Connector lines are path-found across the honeycomb graph between a node and each of its prerequisites, so lines only ever run along the background hex edges.
+Each node is a small hexagon with its label underneath, like a flowchart node. Connector lines are path-found across the triangle graph between a node and each of its prerequisites, so lines only ever run along background triangle edges. The router also prefers fewer bends, which keeps paths clean.
 
-For easy editing, copy a node's `u,v` and move by one background edge:
+For easy editing, copy a node's `u,v` and move by one triangle edge:
 
-| Step | `u` change | `v` change |
+| Direction | `u` change | `v` change |
 | --- | --- | --- |
-| Up-right / down-left | ±1 | ±1 |
-| Up-left / down-right | ∓1 | ±1 |
-| Vertical | 0 | ±2 |
+| Right / left | ±1 | 0 |
+| Down-right / up-left | 0 | ±1 |
+| Up-right / down-left | ±1 | ∓1 |
 
-`requires` can point at any node — it does not have to be the nearest one. The router will find a clean path through empty background edges, preferring fewer turns. Validation still requires every corner to be unique and every prerequisite chain to be reachable.
+`requires` can point at any node — it does not have to be the nearest one. The router finds a path through empty triangle edges. Validation requires every corner to be unique and every prerequisite chain to be reachable.
 
-The current maps use three arms that start from the start node and converge on a final capstone, but the geometry is completely free-form: add, branch, or reconnect nodes wherever there is a free corner.
+The current maps use three arms that start from the start node and converge on a final capstone, but the geometry is free-form: add, branch, or reconnect nodes wherever there is a free corner.
 
 ### Add a branch
 
@@ -102,7 +102,7 @@ Copy a subject object, give it a unique `id`, and fill in branches and a set of 
 - Exactly one start node, with no prerequisites.
 - Every non-start node has at least one prerequisite.
 - Every prerequisite exists and is not the node itself.
-- Every `u,v` pair is a real honeycomb corner.
+- Every `u,v` pair is a real triangle corner.
 - No two nodes share the same corner.
 - Every node can eventually be unlocked from the start.
 - Legacy `role`, `stage`, `tier`, and `lane` fields are reported so old data can be cleaned up.
@@ -116,15 +116,15 @@ The app runs the same checks on load and shows a readable error screen if the JS
 | Drag | Pan the tree |
 | Scroll / pinch | Zoom toward the cursor |
 | Theme toggle (sun / moon) | Switch between dark and light mode |
-| Click a hex | Open the detail panel |
-| Double-click a hex | Master / unmaster a node |
-| Right-click a mastered hex | Remove it and every node that depends on it |
+| Click a node | Open the detail panel |
+| Double-click a node | Master / unmaster a node |
+| Right-click a mastered node | Remove it and every node that depends on it |
 | Start node | Master it to open the three connected arms |
 | Branch chip | Dim everything outside that branch |
 | Subject dropdown | Switch subjects (progress is kept per subject) |
 | Reset | Clear mastered skills for the current subject |
 
-Flowchart lines travel along the honeycomb edges. Master a node to open every node that requires it. Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. The theme is saved under `upcat-skill-tree:theme:v1`; on a first visit it follows your system color-scheme preference. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
+Flowchart lines travel along the triangle edges. Master a node to open every node that requires it. Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. The theme is saved under `upcat-skill-tree:theme:v1`; on a first visit it follows your system color-scheme preference. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
 
 ## Deployment
 
