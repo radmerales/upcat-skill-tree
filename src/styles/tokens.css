@@ -1,42 +1,54 @@
-/* Design tokens ----------------------------------------------------------- */
+/* Design tokens — inspired by Primary for Obsidian by Cecilia May
+   https://github.com/primary-theme/obsidian  */
 
 :root {
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --surface-2: #f6f5f2;
-  --surface-3: #ecebe7;
-  --line: #e4e2dc;
-  --line-soft: #efede8;
-  --line-strong: #cbc7bf;
-  --text: #24221e;
-  --muted: #6c665d;
-  --muted-2: #9c958a;
-  --amber: #dfa01f;
-  --amber-strong: #c98a17;
-  --amber-fill: #f0b429;
-  --amber-fill-hover: #e6a91e;
-  --amber-soft: #fbf0d4;
-  --on-amber: #2b1f06;
-  --danger: #b4402f;
-  --accent: var(--amber);
-  --accent-raw: #dfa01f;
+  --bg: #f4eee2;
+  --surface: #fbf6ec;
+  --surface-2: #efe6d4;
+  --surface-3: #e5dac3;
+  --line: #e1d4bd;
+  --line-soft: #ece2d0;
+  --line-strong: #c9b592;
+
+  --text: #453320;
+  --muted: #8a7559;
+  --muted-2: #b29b7c;
+
+  --yellow: #e8b62a;
+  --yellow-strong: #d2a014;
+  --yellow-soft: #f8e7b4;
+  --on-yellow: #43310f;
+
+  --red: #d9544b;
+  --blue: #2f7fb5;
+  --green: #3f9e74;
+  --green-soft: #dcefe2;
+
+  --accent: var(--yellow);
+  --accent-raw: #e8b62a;
   --header-h: 64px;
 
-  --shadow-soft: 0 1px 2px rgba(52, 44, 31, 0.06);
-  --shadow-pop: 0 10px 28px rgba(52, 44, 31, 0.14);
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 1px 0 rgba(96, 74, 43, 0.05), 0 4px 12px rgba(96, 74, 43, 0.06);
+  --shadow-pop: 0 12px 28px rgba(96, 74, 43, 0.18);
+  --shadow-button: 0 2px 0 var(--line-strong);
 
   --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  --tri-line: rgba(52, 44, 31, 0.06);
-  --tri-fill: rgba(52, 44, 31, 0.014);
+  --tri-line: rgba(96, 74, 43, 0.075);
+  --tri-fill: rgba(96, 74, 43, 0.02);
 
-  --vnode-face: #ffffff;
-  --vnode-code: #4a453e;
-  --vnode-title: #6f6a62;
-  --vnode-lock-border: #e2ded5;
-  --vnode-lock-text: #b0a99d;
+  --vnode-face: #fdf9f1;
+  --vnode-code: #4a3a26;
+  --vnode-title: #8a7559;
+  --vnode-lock-border: #ddcfb8;
+  --vnode-lock-text: #b7a48a;
 
   color-scheme: light;
 }
@@ -68,17 +80,16 @@ body {
 button {
   font: inherit;
   color: inherit;
-  border-radius: 0;
 }
 
 button:focus-visible {
-  outline: 2px solid var(--amber);
-  outline-offset: 1px;
+  outline: 2px solid var(--yellow-strong);
+  outline-offset: 2px;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--amber) 32%, transparent);
-  color: var(--text);
+  background: color-mix(in srgb, var(--yellow) 45%, transparent);
+  color: var(--on-yellow);
 }
 
 .app {

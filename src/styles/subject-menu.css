@@ -2,7 +2,7 @@
 
 .subject-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%);
   width: 400px;
@@ -10,8 +10,10 @@
   z-index: 60;
   padding: 0;
   background: var(--surface);
-  border: 1px solid var(--line-strong);
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-pop);
+  overflow: hidden;
   animation: dropIn 0.14s ease-out;
 }
 
@@ -19,7 +21,7 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  padding: 9px 12px;
+  padding: 10px 14px;
   background: var(--surface-2);
   border-bottom: 1px solid var(--line);
   font-size: 11px;
@@ -28,11 +30,15 @@
 
 .subject-menu__blurb {
   margin: 0;
-  padding: 11px 12px;
-  border-bottom: 1px solid var(--line-soft);
+  padding: 12px 14px;
+  border-bottom: 1px dashed var(--line);
   font-size: 12px;
   line-height: 1.55;
   color: var(--muted);
+}
+
+.subject-list {
+  padding: 8px;
 }
 
 .subject-option {
@@ -41,13 +47,13 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  padding: 10px 12px;
+  padding: 9px 10px;
   text-align: left;
   cursor: pointer;
   background: transparent;
-  border: 1px solid transparent;
-  border-bottom: 1px solid var(--line-soft);
-  transition: background 0.12s ease, color 0.12s ease;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-sm);
+  transition: background 0.12s ease, border-color 0.12s ease;
 }
 
 .subject-option:hover {
@@ -55,20 +61,20 @@
 }
 
 .subject-option.is-active {
-  background: var(--amber-fill);
-  border-color: var(--amber-fill);
-  color: var(--on-amber);
+  background: var(--yellow-soft);
+  border-color: var(--yellow-strong);
+  color: var(--on-yellow);
 }
 
 .subject-option__dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--option-accent);
 }
 
 .subject-option.is-active .subject-option__dot {
-  background: var(--on-amber);
+  background: var(--on-yellow);
 }
 
 .subject-option__copy {
@@ -84,7 +90,7 @@
 
 .subject-option__name {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text);
 }
 
@@ -98,7 +104,7 @@
 .subject-option.is-active .subject-option__name,
 .subject-option.is-active .subject-option__count,
 .subject-option.is-active .subject-option__check {
-  color: var(--on-amber);
+  color: var(--on-yellow);
 }
 
 .subject-option__check {
@@ -106,11 +112,12 @@
   place-items: center;
   width: 16px;
   height: 16px;
-  color: var(--amber);
+  color: var(--yellow-strong);
 }
 
 .subject-menu__foot {
-  padding: 10px 12px;
+  padding: 10px 14px;
+  border-top: 1px dashed var(--line);
   font-size: 11px;
   line-height: 1.5;
   color: var(--muted-2);

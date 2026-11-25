@@ -7,13 +7,15 @@
   transform: translateX(-50%);
   z-index: 30;
   max-width: calc(100% - 24px);
-  padding: 9px 14px;
+  padding: 9px 16px;
   text-align: center;
   font-size: 12.5px;
+  font-weight: 500;
   color: var(--text);
   background: var(--surface);
-  border: 1px solid var(--line-strong);
-  border-left: 3px solid var(--amber);
+  border: 1.5px solid var(--line-strong);
+  border-left: 4px solid var(--yellow-strong);
+  border-radius: var(--radius);
   box-shadow: var(--shadow-pop);
   pointer-events: none;
   animation: toastIn 0.2s ease;
@@ -26,36 +28,39 @@
   display: grid;
   place-items: center;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.3);
+  background: color-mix(in srgb, var(--text) 26%, transparent);
   animation: fadeIn 0.15s ease-out;
 }
 
 .modal {
-  width: 420px;
+  width: 430px;
   max-width: 100%;
-  padding: 22px;
+  padding: 0 24px 24px;
   background: var(--surface);
-  border: 1px solid var(--line-strong);
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-pop);
+  overflow: hidden;
   animation: modalIn 0.18s ease-out;
 }
 
 .modal__kicker {
   display: block;
-  margin: -22px -22px 16px;
-  padding: 9px 22px;
+  margin: 0 -24px 16px;
+  padding: 10px 24px;
   background: var(--surface-2);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px dashed var(--line-strong);
   font-size: 11px;
+  font-weight: 600;
   color: var(--muted);
 }
 
 .modal h2 {
   margin: 0 0 10px;
   font-family: var(--font-body);
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -0.015em;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .modal p {
@@ -92,10 +97,10 @@
 }
 
 .boot__loader {
-  width: 26px;
-  height: 26px;
-  border: 2px solid var(--line);
-  border-top-color: var(--amber);
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--line);
+  border-top-color: var(--yellow-strong);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -103,6 +108,7 @@
 .boot__kicker {
   margin-top: 6px;
   font-size: 11px;
+  font-weight: 600;
   color: var(--muted);
 }
 
@@ -117,19 +123,20 @@
 }
 
 .boot__card {
-  width: 460px;
+  width: 470px;
   max-width: 100%;
-  padding: 22px;
+  padding: 24px;
   background: var(--surface);
-  border: 1px solid var(--line-strong);
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-pop);
 }
 
 .boot__card h1 {
   margin: 6px 0 10px;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -0.015em;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .boot__card p {
@@ -149,7 +156,8 @@
   color: var(--text);
   background: var(--surface-2);
   border: 1px solid var(--line);
-  padding: 1px 4px;
+  border-radius: 5px;
+  padding: 1px 5px;
 }
 
 .boot__card .action {

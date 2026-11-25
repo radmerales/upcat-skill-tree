@@ -85,38 +85,40 @@ export default function Header({ data, subject, progress, onSelectSubject, onSha
               <span>{data.subjects.length} subtests</span>
             </div>
             <p className="subject-menu__blurb">{subject.blurb}</p>
-            {data.subjects.map((entry) => {
-              const entryDone = masteredCount(entry, progress)
-              const active = entry.id === subject.id
-              return (
-                <button
-                  key={entry.id}
-                  type="button"
-                  role="option"
-                  aria-selected={active}
-                  className={`subject-option${active ? ' is-active' : ''}`}
-                  style={{ '--option-accent': entry.accent } as CSSProperties}
-                  onClick={() => {
-                    onSelectSubject(entry.id)
-                    setOpen(false)
-                  }}
-                >
-                  <span className="subject-option__dot" />
-                  <span className="subject-option__copy">
-                    <span className="subject-option__kicker">{entry.kicker}</span>
-                    <span className="subject-option__name">{entry.name}</span>
-                  </span>
-                  <span className="subject-option__count">
-                    {entryDone}/{entry.nodes.length}
-                  </span>
-                  {active && (
-                    <span className="subject-option__check">
-                      <Check size={12} />
+            <div className="subject-list">
+              {data.subjects.map((entry) => {
+                const entryDone = masteredCount(entry, progress)
+                const active = entry.id === subject.id
+                return (
+                  <button
+                    key={entry.id}
+                    type="button"
+                    role="option"
+                    aria-selected={active}
+                    className={`subject-option${active ? ' is-active' : ''}`}
+                    style={{ '--option-accent': entry.accent } as CSSProperties}
+                    onClick={() => {
+                      onSelectSubject(entry.id)
+                      setOpen(false)
+                    }}
+                  >
+                    <span className="subject-option__dot" />
+                    <span className="subject-option__copy">
+                      <span className="subject-option__kicker">{entry.kicker}</span>
+                      <span className="subject-option__name">{entry.name}</span>
                     </span>
-                  )}
-                </button>
-              )
-            })}
+                    <span className="subject-option__count">
+                      {entryDone}/{entry.nodes.length}
+                    </span>
+                    {active && (
+                      <span className="subject-option__check">
+                        <Check size={12} />
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
             <div className="subject-menu__foot">Switch subjects any time — progress is saved per subject.</div>
           </div>
         )}

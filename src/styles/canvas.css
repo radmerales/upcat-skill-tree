@@ -79,20 +79,22 @@
   z-index: 15;
   display: flex;
   flex-direction: column;
-  width: 34px;
+  width: 36px;
   background: var(--surface);
-  border: 1px solid var(--line);
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
+  overflow: hidden;
 }
 
 .zoom-controls button {
   display: grid;
   place-items: center;
-  height: 32px;
+  height: 33px;
   padding: 0;
   background: transparent;
   border: 0;
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px dashed var(--line);
   color: var(--muted);
   cursor: pointer;
   transition: color 0.15s ease, background 0.15s ease;
@@ -111,9 +113,10 @@
   padding: 5px 0;
   text-align: center;
   font-size: 10px;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: var(--muted);
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px dashed var(--line);
   background: var(--surface-2);
 }
 
@@ -127,39 +130,36 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0;
+  gap: 2px;
   max-width: calc(100% - 32px);
-  padding: 0;
+  padding: 5px;
   background: var(--surface);
-  border: 1px solid var(--line);
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
 }
 
 .legend__label {
-  margin: 0;
-  padding: 9px 10px;
+  margin: 0 4px 0 6px;
   font-size: 11px;
+  font-weight: 600;
   color: var(--muted);
-  border-right: 1px solid var(--line-soft);
 }
 
 .legend__chip {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 9px 10px;
+  padding: 5px 10px;
   cursor: pointer;
   background: transparent;
-  border: 0;
-  border-right: 1px solid var(--line-soft);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-pill);
   font-size: 12px;
+  font-weight: 500;
   color: var(--muted);
   white-space: nowrap;
-  transition: color 0.12s ease, background 0.12s ease;
-}
-
-.legend__chip:last-child {
-  border-right: 0;
+  transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
 }
 
 .legend__chip:hover {
@@ -168,14 +168,15 @@
 }
 
 .legend__chip.is-active {
-  background: var(--amber-fill);
-  color: var(--on-amber);
+  background: var(--yellow-soft);
+  border-color: var(--yellow-strong);
+  color: var(--on-yellow);
 }
 
 .legend__dot,
 .legend__all-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   flex: none;
   border-radius: 50%;
   background: var(--chip-color);
@@ -187,7 +188,7 @@
 
 .legend__chip.is-active .legend__dot,
 .legend__chip.is-active .legend__all-dot {
-  background: var(--on-amber);
+  background: var(--on-yellow);
 }
 
 .legend__count {
@@ -197,7 +198,7 @@
 }
 
 .legend__chip.is-active .legend__count {
-  color: color-mix(in srgb, var(--on-amber) 70%, transparent);
+  color: color-mix(in srgb, var(--on-yellow) 70%, transparent);
 }
 
 .hints {

@@ -3,9 +3,11 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 9px;
+  padding: 4px 10px;
   font-size: 11px;
-  border: 1px solid var(--line);
+  font-weight: 500;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-pill);
   background: var(--surface-2);
   color: var(--muted);
 }
@@ -15,8 +17,8 @@
 }
 
 .branch-chip__dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--chip-color);
 }
@@ -24,9 +26,9 @@
 .panel__title {
   margin: 14px 0 10px;
   font-family: var(--font-body);
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.015em;
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1.2;
   color: var(--text);
 }
@@ -35,23 +37,25 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 9px;
+  padding: 4px 10px;
   font-size: 11px;
-  border: 1px solid var(--line);
+  font-weight: 600;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-pill);
   background: var(--surface-2);
   color: var(--muted);
 }
 
 .state-pill--mastered {
-  color: var(--on-amber);
-  border-color: var(--amber-fill);
-  background: var(--amber-fill);
+  color: #ffffff;
+  border-color: var(--green);
+  background: var(--green);
 }
 
 .state-pill--available {
-  color: var(--text);
-  border-color: var(--line-strong);
-  background: var(--surface);
+  color: var(--on-yellow);
+  border-color: var(--yellow-strong);
+  background: var(--yellow-soft);
 }
 
 .state-pill--locked {
@@ -73,28 +77,37 @@
   justify-content: center;
   gap: 8px;
   width: 100%;
-  min-height: 40px;
+  min-height: 42px;
   padding: 0 16px;
   cursor: pointer;
   font-size: 13px;
-  font-weight: 500;
-  border: 1px solid transparent;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  font-weight: 600;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.action:active {
+  transform: translateY(1px);
 }
 
 .action--primary {
-  background: var(--amber-fill);
-  color: var(--on-amber);
+  background: var(--yellow);
+  border-color: var(--yellow-strong);
+  color: var(--on-yellow);
+  box-shadow: var(--shadow-button);
 }
 
 .action--primary:hover {
-  background: var(--amber-fill-hover);
+  background: color-mix(in srgb, var(--yellow) 85%, #ffffff);
 }
 
 .action--ghost {
   background: var(--surface);
   border-color: var(--line-strong);
   color: var(--text);
+  box-shadow: var(--shadow-button);
 }
 
 .action--ghost:hover {
@@ -102,9 +115,9 @@
 }
 
 .panel__foot .action--ghost:hover {
-  border-color: var(--danger);
-  color: var(--danger);
-  background: var(--surface);
+  border-color: var(--red);
+  color: var(--red);
+  background: color-mix(in srgb, var(--red) 8%, var(--surface));
 }
 
 .action--locked {
@@ -112,15 +125,18 @@
   border-color: var(--line);
   color: var(--muted-2);
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .action--danger {
-  background: var(--danger);
+  background: var(--red);
+  border-color: color-mix(in srgb, var(--red) 70%, #000000);
   color: #ffffff;
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--red) 55%, #000000);
 }
 
 .action--danger:hover {
-  background: color-mix(in srgb, var(--danger) 85%, #000000);
+  background: color-mix(in srgb, var(--red) 88%, #000000);
 }
 
 .action__note {
@@ -131,15 +147,17 @@
 .role-chip {
   display: inline-flex;
   align-items: center;
-  padding: 4px 9px;
+  padding: 4px 10px;
   font-size: 11px;
-  border: 1px solid var(--line);
+  font-weight: 600;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-pill);
   background: var(--surface-2);
   color: var(--muted);
 }
 
 .role-chip--start {
-  color: var(--text);
-  border-color: var(--amber);
-  background: var(--amber-soft);
+  color: var(--on-yellow);
+  border-color: var(--yellow-strong);
+  background: var(--yellow-soft);
 }

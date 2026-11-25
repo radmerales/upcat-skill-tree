@@ -2,7 +2,7 @@
 
 An interactive flowchart-style study map for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown and work from the start node through skills placed on the corners of a triangular lattice.
 
-A clean, game-menu-inspired study map: flat white panels on a white canvas, hairline borders, square corners, and a single amber accent for highlights, the selected node, and primary actions. Every node sits on a triangle corner — lessons are circles, quizzes are diamonds — and thin prerequisite lines are routed along the triangle edges like a flowchart.
+A warm, Primary-inspired study map: cream paper surfaces, rounded cards and pill chips, soft warm borders, green completion checks, and playful yellow, red, and blue accents. Every node sits on a triangle corner — lessons are circles, quizzes are diamonds — and thin prerequisite lines are routed along the triangle edges like a flowchart.
 
 ## Stack
 
@@ -121,15 +121,19 @@ The app runs the same checks on load and shows a readable error screen if the JS
 | Click outside the panel | Close the detail panel |
 | Double-click a node | Master / unmaster a node |
 | Select a node | Amber outline around its shape |
-| Next available edges | Connector lines to the next unmastered nodes are highlighted in amber |
+| Next available edges | Connector lines to the next unmastered nodes are highlighted in yellow |
 | Right-click a mastered node | Remove it and every node that depends on it |
 | Start node | Master it to open the three connected arms |
 | Branch chip | Dim everything outside that branch |
 | Subject dropdown | Switch subjects (progress is kept per subject) |
 | Reset | Clear mastered skills for the current subject |
 
-Flowchart lines travel along the triangle edges. Master a node to open every node that requires it, and the next available edges are highlighted in amber. Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
+Flowchart lines travel along the triangle edges. Master a node to open every node that requires it, and the next available edges are highlighted in yellow. Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
 
 ## Deployment
 
 Pushes to `main` run `.github/workflows/deploy.yml`, which validates the JSON, builds the site, and publishes `dist/` to GitHub Pages. Enable **Settings → Pages → Source: GitHub Actions** once for a new repository.
+
+## Credits
+
+The visual theme is inspired by [Primary](https://github.com/primary-theme/obsidian) for Obsidian by Cecilia May ([Ko-fi](https://ko-fi.com/ceciliamay)).
