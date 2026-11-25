@@ -22,7 +22,7 @@ export function useTheme() {
     document.documentElement.dataset.theme = theme
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', theme === 'light' ? '#f6f6f3' : '#0f1011')
+      ?.setAttribute('content', theme === 'light' ? '#eef1f2' : '#080b0e')
     try {
       localStorage.setItem(THEME_KEY, theme)
     } catch {

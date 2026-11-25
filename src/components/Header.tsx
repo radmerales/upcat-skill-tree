@@ -54,7 +54,9 @@ export default function Header({ data, subject, progress, onSelectSubject, onSha
           <span className="brand__mark-core" />
         </span>
         <div className="brand__text">
-          <div className="brand__title">UPCAT Skill Tree</div>
+          <div className="brand__title">
+            UPCAT <span>//</span> SKILL TREE
+          </div>
           <div className="brand__sub">Study path builder</div>
         </div>
       </div>

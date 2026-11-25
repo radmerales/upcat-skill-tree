@@ -58,7 +58,7 @@ export default function RoutedEdges({
             key={edge.key}
             d={d}
             className={classes}
-            style={{ '--edge-color': color } as CSSProperties}
+            style={{ stroke: color, '--edge-color': color } as CSSProperties}
           />
         )
       })}
