@@ -15,6 +15,7 @@ interface SkillNodeViewProps {
   selected: boolean
   dim: boolean
   dragging: boolean
+  swapPreview: boolean
   color: string
   onClick: () => void
   onPointerDown: (event: ReactPointerEvent<HTMLButtonElement>) => void
@@ -28,6 +29,7 @@ export default function SkillNodeView({
   selected,
   dim,
   dragging,
+  swapPreview,
   color,
   onClick,
   onPointerDown,
@@ -41,6 +43,7 @@ export default function SkillNodeView({
     selected ? 'is-selected' : '',
     dim ? 'is-dim' : '',
     dragging ? 'is-dragging' : '',
+    swapPreview ? 'is-swap-preview' : '',
   ]
     .filter(Boolean)
     .join(' ')

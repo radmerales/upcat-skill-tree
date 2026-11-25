@@ -9,7 +9,6 @@ interface RoutedEdgesProps {
   mastered: Set<string>
   selectedId: string | null
   branchFilter: string | null
-  hiddenNodeId: string | null
 }
 
 export default function RoutedEdges({
@@ -19,7 +18,6 @@ export default function RoutedEdges({
   mastered,
   selectedId,
   branchFilter,
-  hiddenNodeId,
 }: RoutedEdgesProps) {
   const branches = useMemo(() => branchMap(subject), [subject])
   const nodeById = useMemo(
@@ -38,7 +36,6 @@ export default function RoutedEdges({
       {paths.map((edge) => {
         const target = nodeById.get(edge.to)
         if (!target || edge.points.length < 2) return null
-        if (hiddenNodeId && (edge.from === hiddenNodeId || edge.to === hiddenNodeId)) return null
 
         const state = nodeState(target, mastered)
         const edgeState =

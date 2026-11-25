@@ -82,6 +82,21 @@
   stroke: var(--line-strong);
 }
 
+.vnode.is-dragging .vnode__ring {
+  stroke: var(--yellow-strong);
+  stroke-width: 2.5;
+  stroke-dasharray: 4 3;
+}
+
+.vnode.is-swap-preview {
+  opacity: 0.5;
+}
+
+.vnode.is-swap-preview .vnode__face {
+  stroke: var(--yellow-strong);
+  stroke-dasharray: 3 3;
+}
+
 .vnode__body {
   position: absolute;
   inset: 0;

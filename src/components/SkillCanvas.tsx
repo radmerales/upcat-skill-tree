@@ -22,6 +22,13 @@ interface SkillCanvasProps {
   onToggle: (node: SkillNode) => void
 }
 
+interface DragPreview {
+  id: string
+  origin: AnchorPoint
+  target: AnchorPoint
+  occupantId: string | null
+}
+
 const DRAG_THRESHOLD = 4
 
 export default function SkillCanvas({
@@ -46,14 +53,27 @@ export default function SkillCanvas({
     Record<string, Record<string, AnchorPoint>>
   >({})
   const [draggingId, setDraggingId] = useState<string | null>(null)
-  const [dragPreview, setDragPreview] = useState<{ id: string; x: number; y: number } | null>(
-    null,
-  )
-  const dragPreviewRef = useRef<{ id: string; x: number; y: number } | null>(null)
+  const [dragPreview, setDragPreview] = useState<DragPreview | null>(null)
+  const dragPreviewRef = useRef<DragPreview | null>(null)
   const justDraggedRef = useRef(false)
 
   const positions = positionsBySubject[subject.id] ?? layout.positions
-  const paths = useMemo(() => routeEdges(layout, positions), [layout, positions])
+
+  /* Show the post-drop layout while dragging, including any swap. */
+  const previewPositions = useMemo(() => {
+    if (!dragPreview) return positions
+    const next = { ...positions }
+    next[dragPreview.id] = dragPreview.target
+    if (dragPreview.occupantId) {
+      next[dragPreview.occupantId] = dragPreview.origin
+    }
+    return next
+  }, [positions, dragPreview])
+
+  const paths = useMemo(
+    () => routeEdges(layout, previewPositions),
+    [layout, previewPositions],
+  )
 
   const handleNodePointerDown = (
     event: ReactPointerEvent<HTMLButtonElement>,
@@ -78,10 +98,33 @@ export default function SkillCanvas({
       if (!moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return
       moved = true
 
-      const preview = {
+      const desiredX = origin.x + dx / scale
+      const desiredY = origin.y + dy / scale
+
+      let target = origin
+      let closest = Infinity
+      for (const anchor of layout.anchors) {
+        const distance = (anchor.x - desiredX) ** 2 + (anchor.y - desiredY) ** 2
+        if (distance < closest) {
+          closest = distance
+          target = anchor
+        }
+      }
+
+      const occupant = Object.entries(positions).find(
+        ([id, point]) => id !== node.id && point.u === target.u && point.v === target.v,
+      )
+
+      const previous = dragPreviewRef.current
+      if (previous && previous.target.u === target.u && previous.target.v === target.v) {
+        return
+      }
+
+      const preview: DragPreview = {
         id: node.id,
-        x: origin.x + dx / scale,
-        y: origin.y + dy / scale,
+        origin,
+        target,
+        occupantId: occupant ? occupant[0] : null,
       }
       dragPreviewRef.current = preview
       setDragPreview(preview)
@@ -99,27 +142,15 @@ export default function SkillCanvas({
 
       if (!moved || !preview) return
 
-      let closest = Infinity
-      let target = origin
-      for (const anchor of layout.anchors) {
-        const distance = (anchor.x - preview.x) ** 2 + (anchor.y - preview.y) ** 2
-        if (distance < closest) {
-          closest = distance
-          target = anchor
-        }
+      const { target, occupantId } = preview
+      if (target.u !== origin.u || target.v !== origin.v) {
+        setPositionsBySubject((current) => {
+          const base = current[subject.id] ?? layout.positions
+          const next = { ...base, [node.id]: target }
+          if (occupantId) next[occupantId] = origin
+          return { ...current, [subject.id]: next }
+        })
       }
-
-      const occupant = Object.entries(positions).find(
-        ([id, point]) =>
-          id !== node.id && point.u === target.u && point.v === target.v,
-      )
-
-      setPositionsBySubject((current) => {
-        const base = current[subject.id] ?? layout.positions
-        const next = { ...base, [node.id]: target }
-        if (occupant) next[occupant[0]] = origin
-        return { ...current, [subject.id]: next }
-      })
 
       justDraggedRef.current = true
       window.setTimeout(() => {
@@ -159,14 +190,11 @@ export default function SkillCanvas({
           mastered={mastered}
           selectedId={selectedId}
           branchFilter={branchFilter}
-          hiddenNodeId={draggingId}
         />
 
         {subject.nodes.map((node) => {
-          const anchor = positions[node.id]
-          if (!anchor) return null
-          const preview = dragPreview?.id === node.id ? dragPreview : null
-          const position = preview ? { x: preview.x, y: preview.y } : anchor
+          const position = previewPositions[node.id]
+          if (!position) return null
           const branch = branches[node.branch] ?? subject.branches[0]
           return (
             <SkillNodeView
@@ -177,6 +205,7 @@ export default function SkillCanvas({
               selected={selectedId === node.id}
               dim={branchFilter !== null && node.branch !== branchFilter}
               dragging={draggingId === node.id}
+              swapPreview={dragPreview?.occupantId === node.id}
               color={node.start ? subject.accent : branch.color}
               onClick={() => {
                 if (camera.suppressClickRef.current || justDraggedRef.current) return
