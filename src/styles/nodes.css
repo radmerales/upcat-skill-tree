@@ -65,17 +65,17 @@
   transition: stroke 0.15s ease;
 }
 
+.vnode--mastered .vnode__ring {
+  stroke: color-mix(in srgb, var(--branch) 55%, #2b1c0c);
+  stroke-width: 2;
+}
+
 .vnode:focus-visible .vnode__ring,
 .vnode__ring.is-selected {
   stroke: var(--yellow-strong);
   stroke-width: 2.5;
   stroke-dasharray: 5 4;
   animation: nodeMarch 1.6s linear infinite;
-}
-
-.vnode--mastered:focus-visible .vnode__ring,
-.vnode--mastered .vnode__ring.is-selected {
-  stroke: var(--text);
 }
 
 .vnode.is-dragging .vnode__ring {
@@ -180,17 +180,17 @@
 }
 
 .vnode--mastered .vnode__face {
-  fill: var(--branch);
-  stroke: var(--branch);
+  fill: color-mix(in srgb, var(--branch) 55%, #2b1c0c);
+  stroke: color-mix(in srgb, var(--branch) 55%, #2b1c0c);
 }
 
 .vnode--mastered .vnode__code {
-  color: #33240f;
+  color: #fff6e6;
   font-weight: 700;
 }
 
 .vnode--mastered .vnode__tag {
-  color: rgba(51, 36, 15, 0.7);
+  color: rgba(255, 246, 230, 0.78);
 }
 
 .vnode--mastered .vnode__title {
@@ -232,10 +232,11 @@
 }
 
 .edge--route.edge--locked {
-  stroke: var(--vnode-lock-border);
+  stroke: color-mix(in srgb, var(--edge-color) 30%, var(--line-strong));
   stroke-width: 1.5;
-  stroke-dasharray: 3 5;
-  opacity: 0.85;
+  stroke-dasharray: 4 5;
+  opacity: 0.6;
+  animation: none;
 }
 
 .edge--route.edge--available {
