@@ -2,8 +2,8 @@ import type { CSSProperties } from 'react'
 import { stateLabel } from '../../lib/tree'
 import type { NodeState, Point, SkillNode } from '../../types'
 
-const NODE_W = 92
-const NODE_H = 92
+const NODE_W = 69
+const NODE_H = 69
 const PLATE = '50,5 95,50 50,95 5,50'
 const PLATE_INNER = '50,17 83,50 50,83 17,50'
 const PLATE_RING = '50,1 99,50 50,99 1,50'
@@ -100,7 +100,7 @@ export default function SkillNodeView({
 
 function CheckMark() {
   return (
-    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="7" height="7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
         d="M4 12.5l5.5 5.5L20 6.5"
         stroke="currentColor"
@@ -114,7 +114,7 @@ function CheckMark() {
 
 function LockMark() {
   return (
-    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="6" height="6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <rect x="5" y="10.5" width="14" height="9.5" rx="1.5" stroke="currentColor" strokeWidth="2.4" />
       <path
         d="M8 10.5V7.5a4 4 0 018 0v3"
