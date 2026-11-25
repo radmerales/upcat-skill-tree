@@ -6,12 +6,12 @@
   color: inherit;
   cursor: pointer;
   transform: translate(-50%, -50%);
-  transition: transform 0.18s ease, opacity 0.2s ease;
+  transition: transform 0.15s ease, opacity 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .vnode:hover {
-  transform: translate(-50%, -50%) scale(1.07);
+  transform: translate(-50%, -50%) scale(1.04);
   z-index: 5;
 }
 
@@ -34,16 +34,15 @@
 
 .vnode__face {
   fill: var(--vnode-face);
-  stroke: color-mix(in srgb, var(--branch) 58%, #2d3942);
-  stroke-width: 1.8;
-  transition: stroke 0.2s ease, fill 0.25s ease, opacity 0.2s ease;
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+  transition: fill 0.2s ease, stroke 0.2s ease;
 }
 
 .vnode__inner {
   fill: none;
-  stroke: color-mix(in srgb, var(--branch) 20%, transparent);
-  stroke-width: 1.1;
-  transition: stroke 0.2s ease;
+  stroke: transparent;
+  stroke-width: 1;
 }
 
 .vnode__ring {
@@ -55,12 +54,17 @@
 
 .vnode:focus-visible .vnode__ring,
 .vnode__ring.is-selected {
-  stroke: color-mix(in srgb, var(--branch) 90%, #ffffff 10%);
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-dasharray: 6 5;
-  animation: nodeMarch 1.8s linear infinite;
-  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--branch) 65%, transparent));
+  stroke: var(--amber);
+  stroke-width: 2;
+}
+
+.vnode--mastered:focus-visible .vnode__ring,
+.vnode--mastered .vnode__ring.is-selected {
+  stroke: var(--text);
+}
+
+.vnode--available.is-selected .vnode__face {
+  stroke: var(--line-strong);
 }
 
 .vnode__body {
@@ -70,30 +74,27 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  padding: 12px;
+  gap: 2px;
+  padding: 10px;
   pointer-events: none;
 }
 
 .vnode__tag {
-  font-family: var(--font-mono);
-  font-size: 6px;
-  letter-spacing: 0.2em;
-  color: var(--branch);
+  font-size: 9px;
+  color: var(--muted);
 }
 
 .vnode__code {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   color: var(--vnode-code);
   transition: color 0.2s ease;
 }
 
 .vnode__code.is-long {
   font-size: 10px;
-  letter-spacing: 0;
 }
 
 .vnode__title {
@@ -101,18 +102,16 @@
   top: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
-  width: 156px;
+  width: 152px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
   text-align: center;
-  font-family: var(--font-display);
-  font-size: 10px;
+  font-family: var(--font-body);
+  font-size: 11px;
   font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: 0.035em;
-  text-transform: uppercase;
+  line-height: 1.3;
   color: var(--vnode-title);
   pointer-events: auto;
   text-wrap: balance;
@@ -126,88 +125,59 @@
   right: 12px;
   display: grid;
   place-items: center;
-  width: 11px;
-  height: 11px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  border: 1px solid rgba(8, 13, 18, 0.7);
   pointer-events: none;
 }
 
 .vnode__badge {
-  background: var(--branch);
-  color: #071014;
+  background: #4a4a4a;
+  color: #ffffff;
 }
 
 .vnode__lock {
-  width: 10px;
-  height: 10px;
-  top: 13px;
-  right: 13px;
-  background: #151e25;
-  color: #7f8d97;
+  width: 13px;
+  height: 13px;
+  top: 12px;
+  right: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--muted-2);
 }
 
 .vnode--available .vnode__face {
-  stroke: color-mix(in srgb, var(--branch) 82%, #ffffff 8%);
-  stroke-width: 2;
+  stroke: var(--amber);
 }
 
 .vnode--available .vnode__code {
-  color: color-mix(in srgb, var(--branch) 60%, #ffffff);
+  color: var(--text);
 }
 
 .vnode--available .vnode__title {
-  color: #c8d4dc;
-}
-
-.vnode--available:hover .vnode__face {
-  stroke-width: 2.2;
+  color: var(--text);
 }
 
 .vnode--mastered .vnode__face {
   fill: var(--branch);
-  stroke: color-mix(in srgb, var(--branch) 78%, #ffffff 16%);
-  stroke-width: 2.2;
-}
-
-.vnode--mastered .vnode__inner {
-  stroke: rgba(5, 14, 19, 0.34);
+  stroke: color-mix(in srgb, var(--branch) 70%, var(--text));
 }
 
 .vnode--mastered .vnode__code {
-  color: #08131a;
+  color: #1f1f1f;
   font-weight: 600;
 }
 
 .vnode--mastered .vnode__tag {
-  color: rgba(4, 12, 16, 0.72);
-}
-
-.vnode--mastered .vnode__badge {
-  background: #08131a;
-  color: var(--branch);
-  border-color: rgba(4, 10, 14, 0.55);
-}
-
-.vnode--mastered .vnode__ring.is-selected,
-.vnode--mastered:focus-visible .vnode__ring {
-  stroke: color-mix(in srgb, var(--branch) 12%, #ffffff);
+  color: rgba(31, 31, 31, 0.66);
 }
 
 .vnode--mastered .vnode__title {
-  color: #eef5f8;
-}
-
-.vnode--locked {
-  opacity: 0.72;
+  color: var(--text);
 }
 
 .vnode--locked .vnode__face {
   stroke: var(--vnode-lock-border);
-}
-
-.vnode--locked .vnode__inner {
-  stroke: transparent;
 }
 
 .vnode--locked .vnode__code,
@@ -215,77 +185,52 @@
   color: var(--vnode-lock-text);
 }
 
-.vnode--locked:hover {
-  opacity: 0.92;
-}
-
-.vnode--start .vnode__face {
-  stroke-width: 2.2;
+.vnode--locked:hover .vnode__face {
+  stroke: var(--line-strong);
 }
 
 .vnode.is-dim {
-  opacity: 0.16;
+  opacity: 0.15;
 }
 
 .vnode.is-selected {
   z-index: 6;
 }
 
-/* Routed edges */
+/* Routed edges ------------------------------------------------------------ */
 
 .edge--route {
   fill: none;
-  stroke-width: 2.4;
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: none;
-  animation: none;
 }
 
 .edge--route.edge--locked {
-  stroke-width: 1.8;
-  stroke-dasharray: 3 6;
-  opacity: 0.4;
+  stroke: var(--line-strong);
+  stroke-width: 1.25;
+  stroke-dasharray: 2 4;
+  opacity: 0.65;
 }
 
 .edge--route.edge--available {
-  stroke-width: 2.6;
-  stroke-linecap: round;
-  stroke-dasharray: 7 6;
-  opacity: 0.95;
-  animation: edgeMarch 1.15s linear infinite;
-  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--edge-color) 50%, transparent));
+  stroke: var(--amber);
+  stroke-width: 2;
 }
 
 .edge--route.edge--mastered {
-  stroke-width: 3;
-  stroke-dasharray: none;
-  opacity: 1;
-  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--edge-color) 65%, transparent));
+  stroke: var(--muted-2);
+  stroke-width: 2;
 }
 
 .edge--route.is-selected {
-  stroke-width: 4;
+  stroke: var(--text);
+  stroke-width: 2.25;
   opacity: 1;
-  filter: drop-shadow(0 0 8px var(--edge-color));
-}
-
-.edge--route.edge--available.is-selected {
-  animation-duration: 0.7s;
 }
 
 .edge--route.is-dim {
-  opacity: 0.05;
-}
-
-@keyframes edgeMarch {
-  to {
-    stroke-dashoffset: -26;
-  }
-}
-
-@keyframes nodeMarch {
-  to {
-    stroke-dashoffset: -22;
-  }
+  opacity: 0.08;
 }

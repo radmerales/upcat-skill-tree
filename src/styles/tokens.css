@@ -1,33 +1,77 @@
-:root {
-  --bg: #080b0e;
-  --bg-soft: #0c1115;
-  --panel: #11181e;
-  --panel-2: #151e25;
-  --line: #23303a;
-  --line-soft: #1a242c;
-  --text: #e9f0f4;
-  --muted: #8d9ba5;
-  --muted-2: #5e6c76;
-  --danger: #e06464;
-  --accent: #f6b93b;
-  --accent-raw: #f6b93b;
-  --header-h: 76px;
+/* Design tokens ----------------------------------------------------------- */
 
-  --font-display: 'Chakra Petch', 'Trebuchet MS', sans-serif;
+:root {
+  --bg: #f2f2f2;
+  --surface: #ffffff;
+  --surface-2: #f3f3f3;
+  --surface-3: #ebebeb;
+  --line: #dcdcdc;
+  --line-soft: #e8e8e8;
+  --line-strong: #c6c6c6;
+  --text: #3a3a3a;
+  --muted: #7a7a7a;
+  --muted-2: #a6a6a6;
+  --amber: #f0a500;
+  --amber-strong: #d99400;
+  --amber-soft: #fff3d6;
+  --danger: #c0392b;
+  --accent: var(--amber);
+  --accent-raw: #f0a500;
+  --header-h: 64px;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  --tri-line: rgba(151, 176, 191, 0.11);
-  --tri-fill: rgba(3, 6, 9, 0.45);
+  --tri-line: rgba(0, 0, 0, 0.06);
+  --tri-fill: rgba(0, 0, 0, 0.016);
 
-  --vnode-face: #0a0e12;
-  --vnode-code: #c9d5dd;
-  --vnode-title: #8b99a3;
-  --vnode-lock-border: #303c45;
-  --vnode-lock-text: #65737d;
+  --vnode-face: #ffffff;
+  --vnode-code: #4a4a4a;
+  --vnode-title: #7a7a7a;
+  --vnode-lock-border: #dedede;
+  --vnode-lock-text: #b3b3b3;
+
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
+  --bg: #1c1d1e;
+  --surface: #252627;
+  --surface-2: #2d2e30;
+  --surface-3: #353638;
+  --line: #3a3b3d;
+  --line-soft: #313234;
+  --line-strong: #4c4d50;
+  --text: #ececec;
+  --muted: #a6a6a6;
+  --muted-2: #77787a;
+  --amber: #f0a500;
+  --amber-strong: #ffb318;
+  --amber-soft: #453715;
+  --danger: #e0685c;
+  --accent: var(--amber);
+  --accent-raw: #f0a500;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.45);
+
+  --tri-line: rgba(255, 255, 255, 0.05);
+  --tri-fill: rgba(0, 0, 0, 0.22);
+
+  --vnode-face: #2b2c2e;
+  --vnode-code: #e8e8e8;
+  --vnode-title: #a6a6a6;
+  --vnode-lock-border: #3d3e40;
+  --vnode-lock-text: #77787a;
 
   color-scheme: dark;
 }
+
+/* Base -------------------------------------------------------------------- */
 
 * {
   box-sizing: border-box;
@@ -54,26 +98,23 @@ body {
 button {
   font: inherit;
   color: inherit;
+  border-radius: 0;
 }
 
 button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
+  outline: 2px solid var(--amber);
+  outline-offset: 1px;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--accent) 35%, transparent);
-  color: #fff;
+  background: color-mix(in srgb, var(--amber) 30%, transparent);
+  color: var(--text);
 }
 
 .app {
-  --accent: var(--accent-raw);
   display: flex;
   flex-direction: column;
   height: 100dvh;
-  background:
-    radial-gradient(1100px 600px at 12% -10%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 60%),
-    radial-gradient(900px 700px at 100% 110%, rgba(84, 130, 150, 0.09), transparent 60%),
-    var(--bg);
-  transition: background 0.4s ease;
+  background: var(--bg);
+  transition: background 0.3s ease;
 }
