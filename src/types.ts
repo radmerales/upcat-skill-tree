@@ -39,8 +39,6 @@ export type NodeState = 'mastered' | 'available' | 'locked'
 
 export type NodeType = 'lesson' | 'quiz'
 
-export type Theme = 'light' | 'dark'
-
 export interface Point {
   x: number
   y: number

@@ -1,13 +1,13 @@
 /* Design tokens ----------------------------------------------------------- */
 
 :root {
-  --bg: #f3f1ec;
+  --bg: #ffffff;
   --surface: #ffffff;
-  --surface-2: #f6f4ef;
-  --surface-3: #ece9e1;
-  --line: #e0dcd3;
-  --line-soft: #ebe7df;
-  --line-strong: #c6bfb2;
+  --surface-2: #f6f5f2;
+  --surface-3: #ecebe7;
+  --line: #e4e2dc;
+  --line-soft: #efede8;
+  --line-strong: #cbc7bf;
   --text: #24221e;
   --muted: #6c665d;
   --muted-2: #9c958a;
@@ -19,7 +19,7 @@
   --on-amber: #2b1f06;
   --danger: #b4402f;
   --accent: var(--amber);
-  --accent-raw: #c98a1c;
+  --accent-raw: #dfa01f;
   --header-h: 64px;
 
   --shadow-soft: 0 1px 2px rgba(52, 44, 31, 0.06);
@@ -29,8 +29,8 @@
   --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  --tri-line: rgba(52, 44, 31, 0.065);
-  --tri-fill: rgba(52, 44, 31, 0.018);
+  --tri-line: rgba(52, 44, 31, 0.06);
+  --tri-fill: rgba(52, 44, 31, 0.014);
 
   --vnode-face: #ffffff;
   --vnode-code: #4a453e;
@@ -39,42 +39,6 @@
   --vnode-lock-text: #b0a99d;
 
   color-scheme: light;
-}
-
-html[data-theme='dark'] {
-  --bg: #191918;
-  --surface: #212120;
-  --surface-2: #2a2a28;
-  --surface-3: #33332f;
-  --line: #3a3a36;
-  --line-soft: #31312e;
-  --line-strong: #4d4c46;
-  --text: #ebe8e1;
-  --muted: #a8a49b;
-  --muted-2: #7b776e;
-  --amber: #d9a03a;
-  --amber-strong: #e5ac46;
-  --amber-fill: #d9a03a;
-  --amber-fill-hover: #e7af4b;
-  --amber-soft: #3b2f14;
-  --on-amber: #211808;
-  --danger: #d4756a;
-  --accent: var(--amber);
-  --accent-raw: #d9a03a;
-
-  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-pop: 0 10px 28px rgba(0, 0, 0, 0.5);
-
-  --tri-line: rgba(235, 232, 225, 0.05);
-  --tri-fill: rgba(0, 0, 0, 0.22);
-
-  --vnode-face: #2a2a28;
-  --vnode-code: #e7e4dd;
-  --vnode-title: #a8a49b;
-  --vnode-lock-border: #3c3c38;
-  --vnode-lock-text: #76726a;
-
-  color-scheme: dark;
 }
 
 /* Base -------------------------------------------------------------------- */
@@ -122,5 +86,4 @@ button:focus-visible {
   flex-direction: column;
   height: 100dvh;
   background: var(--bg);
-  transition: background 0.3s ease;
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import BootScreen from './components/BootScreen'
 import DetailPanel from './components/DetailPanel'
 import Header from './components/Header'
@@ -9,7 +9,6 @@ import Toast from './components/Toast'
 import { useCloseOnOutside } from './hooks/useCloseOnOutside'
 import { useProgress } from './hooks/useProgress'
 import { useSubjectSelection } from './hooks/useSubjectSelection'
-import { useTheme } from './hooks/useTheme'
 import { useTreeData } from './hooks/useTreeData'
 import {
   collectSubtree,
@@ -27,7 +26,6 @@ interface ToastState {
 export default function App() {
   const { data, error } = useTreeData()
   const { subjectId, setSubjectId } = useSubjectSelection(data)
-  const { theme, toggleTheme } = useTheme()
   const { progress, updateProgress } = useProgress(data)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [branchFilter, setBranchFilter] = useState<string | null>(null)
@@ -163,7 +161,7 @@ export default function App() {
   if (!data || !subject || !layout) return <BootScreen error={null} />
 
   return (
-    <div className="app" style={{ '--accent-raw': subject.accent } as CSSProperties}>
+    <div className="app">
       <Header
         data={data}
         subject={subject}
@@ -171,8 +169,6 @@ export default function App() {
         onSelectSubject={handleSelectSubject}
         onShare={handleShare}
         onReset={() => setResetOpen(true)}
-        theme={theme}
-        onToggleTheme={toggleTheme}
       />
 
       <main className="stage">

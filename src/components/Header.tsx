@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import type { ProgressMap } from '../lib/storage'
 import type { Subject, TreeData } from '../types'
-import { Check, ChevronDown, Moon, Reset, Share, Sun } from './Icons'
-import type { Theme } from '../types'
+import { Check, ChevronDown, Reset, Share } from './Icons'
 
 interface HeaderProps {
   data: TreeData
@@ -11,8 +10,6 @@ interface HeaderProps {
   onSelectSubject: (subjectId: string) => void
   onShare: () => void
   onReset: () => void
-  theme: Theme
-  onToggleTheme: () => void
 }
 
 function masteredCount(subject: Subject, progress: ProgressMap): number {
@@ -20,7 +17,7 @@ function masteredCount(subject: Subject, progress: ProgressMap): number {
   return subject.nodes.filter((node) => ids.has(node.id)).length
 }
 
-export default function Header({ data, subject, progress, onSelectSubject, onShare, onReset, theme, onToggleTheme }: HeaderProps) {
+export default function Header({ data, subject, progress, onSelectSubject, onShare, onReset }: HeaderProps) {
   const [open, setOpen] = useState(false)
   const wrapRef = useRef<HTMLDivElement>(null)
 
@@ -147,16 +144,6 @@ export default function Header({ data, subject, progress, onSelectSubject, onSha
           </div>
         </div>
 
-        <button
-          type="button"
-          className="icon-button"
-          onClick={onToggleTheme}
-          title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? <Moon size={15} /> : <Sun size={15} />}
-          <span className="icon-button__label">{theme === 'light' ? 'Dark' : 'Light'}</span>
-        </button>
         <button
           type="button"
           className="icon-button"
