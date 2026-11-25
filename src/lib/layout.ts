@@ -1,6 +1,5 @@
-import type { Point, RoutedEdge, Subject, SubjectLayout, TriangleCell } from '../types'
+import type { LayoutEdge, Point, Subject, SubjectLayout, TriangleCell } from '../types'
 import { vertexPoint } from './geometry'
-import { buildGraph, routeEdge, simplify } from './routing'
 
 const PAD = 84
 const NODE_HALF_W = 84
@@ -62,33 +61,17 @@ export function layoutSubject(subject: Subject): SubjectLayout {
     }
   }
 
-  /* Route prerequisites along triangle edges ----------------------------- */
-  const graph = buildGraph(minU - 10, maxU + 11, minV - 10, maxV + 10)
-  const blocked = new Set(subject.nodes.map((node) => `${node.u},${node.v}`))
-  const edgePaths: RoutedEdge[] = []
+  /* Prerequisite links ----------------------------------------------------- */
+  const nodeIds = new Set(subject.nodes.map((node) => node.id))
+  const edges: LayoutEdge[] = []
 
   for (const node of subject.nodes) {
     for (const requirementId of node.requires) {
-      const requirement = subject.nodes.find((entry) => entry.id === requirementId)
-      if (!requirement) continue
-      const fromKey = `${requirement.u},${requirement.v}`
-      const toKey = `${node.u},${node.v}`
-      let route = routeEdge(graph, fromKey, toKey, blocked)
-      if (!route) route = routeEdge(graph, fromKey, toKey, new Set())
-
-      const points = (route ?? [[requirement.u, requirement.v], [node.u, node.v]]).map(([u, v]) => {
-        const point = vertexPoint(u, v)
-        return { x: point.x + offsetX, y: point.y + offsetY }
-      })
-      const simplified = simplify(points.map((point) => [point.x, point.y] as [number, number])).map(
-        ([x, y]) => ({ x, y }),
-      )
-
-      edgePaths.push({
+      if (!nodeIds.has(requirementId)) continue
+      edges.push({
         key: `${requirementId}->${node.id}`,
         from: requirementId,
         to: node.id,
-        points: simplified,
       })
     }
   }
@@ -98,7 +81,7 @@ export function layoutSubject(subject: Subject): SubjectLayout {
     width: maxX - minX + PAD * 2,
     height: maxY - minY + PAD * 2,
     triangles,
-    edgePaths,
+    edges,
   }
 }
 

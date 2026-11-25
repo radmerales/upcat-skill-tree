@@ -4,7 +4,9 @@
   border: 0;
   background: none;
   color: inherit;
-  cursor: pointer;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
   transform: translate(-50%, -50%);
   transition: transform 0.15s ease, opacity 0.2s ease;
   -webkit-tap-highlight-color: transparent;
@@ -13,6 +15,15 @@
 .vnode:hover {
   transform: translate(-50%, -50%) scale(1.05);
   z-index: 5;
+}
+
+.vnode.is-dragging {
+  cursor: grabbing;
+  z-index: 8;
+}
+
+.vnode.is-dragging:hover {
+  transform: translate(-50%, -50%) scale(1.05);
 }
 
 .vnode:focus-visible {
@@ -56,6 +67,8 @@
 .vnode__ring.is-selected {
   stroke: var(--yellow-strong);
   stroke-width: 2.5;
+  stroke-dasharray: 5 4;
+  animation: nodeMarch 1.6s linear infinite;
 }
 
 .vnode--mastered:focus-visible .vnode__ring,
@@ -220,6 +233,8 @@
 .edge--route.edge--available {
   stroke: var(--yellow-strong);
   stroke-width: 2.25;
+  stroke-dasharray: 7 6;
+  animation: edgeMarch 1.1s linear infinite;
 }
 
 .edge--route.edge--mastered {

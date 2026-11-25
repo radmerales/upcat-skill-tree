@@ -48,11 +48,10 @@ export interface TriangleCell {
   points: Point[]
 }
 
-export interface RoutedEdge {
+export interface LayoutEdge {
   key: string
   from: string
   to: string
-  points: Point[]
 }
 
 export interface SubjectLayout {
@@ -60,5 +59,5 @@ export interface SubjectLayout {
   width: number
   height: number
   triangles: TriangleCell[]
-  edgePaths: RoutedEdge[]
+  edges: LayoutEdge[]
 }

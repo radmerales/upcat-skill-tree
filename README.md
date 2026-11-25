@@ -2,7 +2,7 @@
 
 An interactive flowchart-style study map for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown and work from the start node through skills placed on the corners of a triangular lattice.
 
-A warm, Primary-inspired study map: cream paper surfaces, rounded cards and pill chips, soft warm borders, green completion checks, and playful yellow, red, and blue accents. Every node sits on a triangle corner — lessons are circles, quizzes are diamonds — and thin prerequisite lines are routed along the triangle edges like a flowchart.
+A warm, Primary-inspired study map: cream paper surfaces, rounded cards and pill chips, soft warm borders, green completion checks, and playful yellow, red, and blue accents. Every node starts on a triangle corner — lessons are circles, quizzes are diamonds — and warm curved connectors link each node to its prerequisites, following live as you drag things around.
 
 ## Stack
 
@@ -71,11 +71,11 @@ Everything is in [`public/data/upcat-skill-tree.json`](public/data/upcat-skill-t
 }
 ```
 
-### Triangle corners and routed prerequisites
+### Triangle corners and connectors
 
-The background is an equilateral **triangle mesh**. Nodes live on its **corners**, not inside the triangles or beside each other. `u` and `v` are corner-lattice coordinates: `u` moves horizontally and `v` moves down one triangle row. The start node uses `0,0`. Every integer `u,v` pair is a valid triangle corner.
+The background is an equilateral **triangle mesh**. Nodes start on its **corners**, not inside the triangles or beside each other. `u` and `v` are corner-lattice coordinates: `u` moves horizontally and `v` moves down one triangle row. The start node uses `0,0`. Every integer `u,v` pair is a valid triangle corner. Positions are only the starting layout — drag any node to rearrange the map.
 
-Each node is a small shape with its label underneath, like a flowchart node: lesson nodes are circles and quiz nodes (`"type": "quiz"`) are diamonds. Nodes without a `type` default to `"lesson"`. Connector lines are path-found across the triangle graph between a node and each of its prerequisites, so lines only ever run along background triangle edges. The router also prefers fewer bends, which keeps paths clean.
+Each node is a small shape with its label underneath, like a flowchart node: lesson nodes are circles and quiz nodes (`"type": "quiz"`) are diamonds. Nodes without a `type` default to `"lesson"`. Curved connectors link a node to each of its prerequisites and are recomputed on every drag, so they always follow the current node positions.
 
 For easy editing, copy a node's `u,v` and move by one triangle edge:
 
@@ -85,17 +85,17 @@ For easy editing, copy a node's `u,v` and move by one triangle edge:
 | Down-right / up-left | 0 | ±1 |
 | Up-right / down-left | ±1 | ∓1 |
 
-`requires` can point at any node — it does not have to be the nearest one. The router finds a path through empty triangle edges. Validation requires every corner to be unique and every prerequisite chain to be reachable.
+`requires` can point at any node — it does not have to be the nearest one. Connectors are drawn directly between nodes, so they may cross other nodes once you rearrange the map. Validation requires every corner to be unique and every prerequisite chain to be reachable.
 
 The current maps use three arms that start from the start node and converge on a final capstone, but the geometry is free-form: add, branch, or reconnect nodes wherever there is a free corner.
 
 ### Add a branch
 
-Add `{ "id": "...", "name": "...", "color": "#rrggbb" }` to the subject's `branches`. The colour drives the node border, mastered fill, routed connector, and legend chip.
+Add `{ "id": "...", "name": "...", "color": "#rrggbb" }` to the subject's `branches`. The colour drives the node border, mastered fill, connector, and legend chip.
 
 ### Add a subject
 
-Copy a subject object, give it a unique `id`, and fill in branches and a set of corner nodes with exactly one `"start": true` node. The header dropdown, legend, routed lines, and progress counter build themselves from this array.
+Copy a subject object, give it a unique `id`, and fill in branches and a set of corner nodes with exactly one `"start": true` node. The header dropdown, legend, connector lines, and progress counter build themselves from this array.
 
 ### Rules enforced by `npm run validate`
 
@@ -115,20 +115,21 @@ The app runs the same checks on load and shows a readable error screen if the JS
 
 | Action | Result |
 | --- | --- |
-| Drag | Pan the tree |
+| Drag canvas | Pan the tree |
+| Drag a node | Move it freely; its connectors follow live |
 | Scroll / pinch | Zoom toward the cursor |
 | Click a node | Open the detail panel |
 | Click outside the panel | Close the detail panel |
 | Double-click a node | Master / unmaster a node |
-| Select a node | Amber outline around its shape |
-| Next available edges | Connector lines to the next unmastered nodes are highlighted in yellow |
+| Select a node | Marching-ants outline around its shape |
+| Next available edges | Marching dashes animate from mastered nodes to the next unmastered nodes |
 | Right-click a mastered node | Remove it and every node that depends on it |
 | Start node | Master it to open the three connected arms |
 | Branch chip | Dim everything outside that branch |
 | Subject dropdown | Switch subjects (progress is kept per subject) |
 | Reset | Clear mastered skills for the current subject |
 
-Flowchart lines travel along the triangle edges. Master a node to open every node that requires it, and the next available edges are highlighted in yellow. Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
+Connectors link each node to its prerequisites and follow as you drag nodes. Master a node to open every node that requires it, and the next available edges march in yellow. Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
 
 ## Deployment
 

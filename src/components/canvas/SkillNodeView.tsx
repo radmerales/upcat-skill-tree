@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
 import { stateLabel } from '../../lib/tree'
 import type { NodeState, Point, SkillNode } from '../../types'
 
@@ -14,8 +14,10 @@ interface SkillNodeViewProps {
   state: NodeState
   selected: boolean
   dim: boolean
+  dragging: boolean
   color: string
   onClick: () => void
+  onPointerDown: (event: ReactPointerEvent<HTMLButtonElement>) => void
   onToggle: (node: SkillNode) => void
 }
 
@@ -25,8 +27,10 @@ export default function SkillNodeView({
   state,
   selected,
   dim,
+  dragging,
   color,
   onClick,
+  onPointerDown,
   onToggle,
 }: SkillNodeViewProps) {
   const classes = [
@@ -36,6 +40,7 @@ export default function SkillNodeView({
     node.start ? 'vnode--start' : '',
     selected ? 'is-selected' : '',
     dim ? 'is-dim' : '',
+    dragging ? 'is-dragging' : '',
   ]
     .filter(Boolean)
     .join(' ')
@@ -56,6 +61,7 @@ export default function SkillNodeView({
       aria-label={`${node.title} — ${node.type} — ${stateLabel(state)}`}
       aria-pressed={state === 'mastered'}
       onClick={onClick}
+      onPointerDown={onPointerDown}
       onDoubleClick={() => onToggle(node)}
       onContextMenu={(event) => {
         event.preventDefault()
@@ -83,11 +89,6 @@ export default function SkillNodeView({
         {node.start && <span className="vnode__tag">Start</span>}
         <span className={`vnode__code${node.code.length > 3 ? ' is-long' : ''}`}>{node.code}</span>
       </span>
-      {state === 'mastered' && (
-        <span className="vnode__badge" aria-hidden="true">
-          <CheckMark />
-        </span>
-      )}
       {state === 'locked' && (
         <span className="vnode__lock" aria-hidden="true">
           <LockMark />
@@ -95,20 +96,6 @@ export default function SkillNodeView({
       )}
       <span className="vnode__title">{node.title}</span>
     </button>
-  )
-}
-
-function CheckMark() {
-  return (
-    <svg width="7" height="7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M4 12.5l5.5 5.5L20 6.5"
-        stroke="currentColor"
-        strokeWidth="3.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   )
 }
 

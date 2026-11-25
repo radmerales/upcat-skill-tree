@@ -193,7 +193,8 @@ export default function App() {
         />
 
         <div className="hints" aria-hidden="true">
-          <span>Drag to pan</span>
+          <span>Drag canvas to pan</span>
+          <span>Drag nodes to move</span>
           <span>Scroll to zoom</span>
           <span>Click to inspect</span>
           <span>Double-click to master</span>

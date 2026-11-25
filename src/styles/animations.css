@@ -67,3 +67,15 @@
     transform: rotate(360deg);
   }
 }
+
+@keyframes nodeMarch {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+@keyframes edgeMarch {
+  to {
+    stroke-dashoffset: -26;
+  }
+}

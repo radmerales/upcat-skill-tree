@@ -130,8 +130,8 @@ export default function DetailPanel({
         </section>
 
         <p className="panel__hint">
-          Prerequisite lines are routed along the triangle edges. Master connected nodes to open the
-          next skills, and follow the mesh to the final capstone.
+          Connectors link each skill to its prerequisites and follow as you drag nodes. Master
+          connected nodes to open the next skills, and follow the paths to the final capstone.
         </p>
       </div>
 
