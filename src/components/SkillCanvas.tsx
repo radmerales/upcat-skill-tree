@@ -75,6 +75,12 @@ export default function SkillCanvas({
     [layout, previewPositions],
   )
 
+  const draggedNode = dragPreview
+    ? subject.nodes.find((node) => node.id === dragPreview.id) ?? null
+    : null
+  const nodeColor = (node: SkillNode) =>
+    node.start ? subject.accent : (branches[node.branch] ?? subject.branches[0]).color
+
   const handleNodePointerDown = (
     event: ReactPointerEvent<HTMLButtonElement>,
     node: SkillNode,
@@ -192,10 +198,32 @@ export default function SkillCanvas({
           branchFilter={branchFilter}
         />
 
+        {dragPreview &&
+          draggedNode &&
+          !dragPreview.occupantId &&
+          (dragPreview.target.u !== dragPreview.origin.u ||
+            dragPreview.target.v !== dragPreview.origin.v) && (
+            <SkillNodeView
+              key="drag-origin-ghost"
+              node={draggedNode}
+              position={dragPreview.origin}
+              state={nodeState(draggedNode, mastered)}
+              selected={false}
+              dim={branchFilter !== null && draggedNode.branch !== branchFilter}
+              dragging={false}
+              swapPreview={false}
+              preview
+              ghost
+              interactive={false}
+              color={nodeColor(draggedNode)}
+            />
+          )}
+
         {subject.nodes.map((node) => {
           const position = previewPositions[node.id]
           if (!position) return null
-          const branch = branches[node.branch] ?? subject.branches[0]
+          const isPreview =
+            dragPreview?.id === node.id || dragPreview?.occupantId === node.id
           return (
             <SkillNodeView
               key={node.id}
@@ -206,7 +234,8 @@ export default function SkillCanvas({
               dim={branchFilter !== null && node.branch !== branchFilter}
               dragging={draggingId === node.id}
               swapPreview={dragPreview?.occupantId === node.id}
-              color={node.start ? subject.accent : branch.color}
+              preview={Boolean(isPreview)}
+              color={nodeColor(node)}
               onClick={() => {
                 if (camera.suppressClickRef.current || justDraggedRef.current) return
                 onSelect(node.id)

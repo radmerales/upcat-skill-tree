@@ -16,10 +16,13 @@ interface SkillNodeViewProps {
   dim: boolean
   dragging: boolean
   swapPreview: boolean
+  preview?: boolean
+  ghost?: boolean
+  interactive?: boolean
   color: string
-  onClick: () => void
-  onPointerDown: (event: ReactPointerEvent<HTMLButtonElement>) => void
-  onToggle: (node: SkillNode) => void
+  onClick?: () => void
+  onPointerDown?: (event: ReactPointerEvent<HTMLButtonElement>) => void
+  onToggle?: (node: SkillNode) => void
 }
 
 export default function SkillNodeView({
@@ -30,6 +33,9 @@ export default function SkillNodeView({
   dim,
   dragging,
   swapPreview,
+  preview = false,
+  ghost = false,
+  interactive = true,
   color,
   onClick,
   onPointerDown,
@@ -44,33 +50,22 @@ export default function SkillNodeView({
     dim ? 'is-dim' : '',
     dragging ? 'is-dragging' : '',
     swapPreview ? 'is-swap-preview' : '',
+    preview ? 'is-preview' : '',
+    ghost ? 'is-ghost' : '',
   ]
     .filter(Boolean)
     .join(' ')
 
-  return (
-    <button
-      type="button"
-      className={classes}
-      style={
-        {
-          left: position.x,
-          top: position.y,
-          width: NODE_W,
-          height: NODE_H,
-          '--branch': color,
-        } as CSSProperties
-      }
-      aria-label={`${node.title} — ${node.type} — ${stateLabel(state)}`}
-      aria-pressed={state === 'mastered'}
-      onClick={onClick}
-      onPointerDown={onPointerDown}
-      onDoubleClick={() => onToggle(node)}
-      onContextMenu={(event) => {
-        event.preventDefault()
-        if (state === 'mastered') onToggle(node)
-      }}
-    >
+  const style = {
+    left: position.x,
+    top: position.y,
+    width: NODE_W,
+    height: NODE_H,
+    '--branch': color,
+  } as CSSProperties
+
+  const content = (
+    <>
       <span className="vnode__shape" aria-hidden="true">
         <svg viewBox="0 0 100 100" preserveAspectRatio="none">
           {node.type === 'quiz' ? (
@@ -98,6 +93,33 @@ export default function SkillNodeView({
         </span>
       )}
       <span className="vnode__title">{node.title}</span>
+    </>
+  )
+
+  if (!interactive) {
+    return (
+      <div className={classes} style={style} aria-hidden="true">
+        {content}
+      </div>
+    )
+  }
+
+  return (
+    <button
+      type="button"
+      className={classes}
+      style={style}
+      aria-label={`${node.title} — ${node.type} — ${stateLabel(state)}`}
+      aria-pressed={state === 'mastered'}
+      onClick={onClick}
+      onPointerDown={onPointerDown}
+      onDoubleClick={() => onToggle?.(node)}
+      onContextMenu={(event) => {
+        event.preventDefault()
+        if (state === 'mastered') onToggle?.(node)
+      }}
+    >
+      {content}
     </button>
   )
 }

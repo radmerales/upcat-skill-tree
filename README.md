@@ -75,7 +75,7 @@ Everything is in [`public/data/upcat-skill-tree.json`](public/data/upcat-skill-t
 
 The background is an equilateral **triangle mesh**. Nodes are only allowed on **hex centres** — alternating corners of the mesh, where six triangles meet to form a hexagon. In practice a node's `u` and `v` coordinates are both **even**, so the nearest another node can sit is two mesh edges away, with at least one corner between them. `u` moves horizontally and `v` moves down one triangle row. The start node uses `0,0`. Positions are only the starting layout — drag any node to snap it live to another anchor, swapping places with any node already there.
 
-Each node is a small shape with its label underneath, like a flowchart node: lesson nodes are circles and quiz nodes (`"type": "quiz"`) are diamonds. Nodes without a `type` default to `"lesson"`. Connectors are routed along the triangle edges between each node and its prerequisites, and are recomputed whenever a node changes anchor.
+Each node is a small shape with its label underneath, like a flowchart node: lesson nodes are circles and quiz nodes (`"type": "quiz"`) are diamonds. Nodes without a `type` default to `"lesson"`. Idle nodes use a faded tint of their branch colour for the fill with a matching solid border; mastered nodes flip to the solid branch colour for both. Connectors are routed along the triangle edges between each node and its prerequisites, and are recomputed whenever a node changes anchor.
 
 For easy editing, copy a node's `u,v` and move by one anchor step (two mesh edges):
 
@@ -116,7 +116,7 @@ The app runs the same checks on load and shows a readable error screen if the JS
 | Action | Result |
 | --- | --- |
 | Drag canvas | Pan the tree |
-| Drag a node | Snaps live to the nearest hex anchor and previews the result — including a swap if the anchor is taken — then commits on drop |
+| Drag a node | Snaps live to the nearest hex anchor and previews the move with translucent ghosts at both anchors — swapping if the target is taken — then commits on drop |
 | Scroll / pinch | Zoom toward the cursor |
 | Click a node | Open the detail panel |
 | Click outside the panel | Close the detail panel |
