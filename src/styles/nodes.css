@@ -20,10 +20,12 @@
 .vnode.is-dragging {
   cursor: grabbing;
   z-index: 8;
+  transform: translate(-50%, -50%) scale(1.08);
+  transition: none;
 }
 
 .vnode.is-dragging:hover {
-  transform: translate(-50%, -50%) scale(1.05);
+  transform: translate(-50%, -50%) scale(1.08);
 }
 
 .vnode:focus-visible {

@@ -98,6 +98,11 @@ export function normalizeData(raw: unknown): TreeData {
 
       const u = readInt(node.u, `${where}.${nodeId}.u`)
       const v = readInt(node.v, `${where}.${nodeId}.v`)
+      if (u % 2 !== 0 || v % 2 !== 0) {
+        fail(
+          `${where}.${nodeId}: nodes must sit on hex-centre corners (even u and v), got ${u},${v}.`,
+        )
+      }
       const cell = `${u}:${v}`
       if (seenVertices.has(cell)) {
         fail(`${where}.${nodeId} shares corner ${cell} with "${seenVertices.get(cell)}".`)

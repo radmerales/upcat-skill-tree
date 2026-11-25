@@ -1,8 +1,8 @@
 # UPCAT Skill Tree
 
-An interactive flowchart-style study map for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown and work from the start node through skills placed on the corners of a triangular lattice.
+An interactive flowchart-style study map for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown and work from the start node through skills placed on hex anchors of a triangular lattice.
 
-A warm, Primary-inspired study map: cream paper surfaces, rounded cards and pill chips, soft warm borders, green completion checks, and playful yellow, red, and blue accents. Every node starts on a triangle corner — lessons are circles, quizzes are diamonds — and warm curved connectors link each node to its prerequisites, following live as you drag things around.
+A warm, Primary-inspired study map: cream paper surfaces, rounded cards and pill chips, soft warm borders, green completion checks, and playful yellow, red, and blue accents. Every node starts on a hex anchor — lessons are circles, quizzes are diamonds — and warm connectors run along the triangle mesh, re-routing as you drag nodes between anchors.
 
 ## Stack
 
@@ -47,7 +47,7 @@ Everything is in [`public/data/upcat-skill-tree.json`](public/data/upcat-skill-t
           "code": "GO",
           "branch": "arithmetic",
           "type": "quiz",             // "lesson" (circle, default) or "quiz" (diamond)
-          "u": 0,                     // triangle corner coordinates (see below)
+          "u": 0,                     // hex anchor coordinates (see below)
           "v": 0,
           "start": true,              // exactly one node per subject
           "description": "…",
@@ -71,23 +71,23 @@ Everything is in [`public/data/upcat-skill-tree.json`](public/data/upcat-skill-t
 }
 ```
 
-### Triangle corners and connectors
+### Hex anchors and connectors
 
-The background is an equilateral **triangle mesh**. Nodes start on its **corners**, not inside the triangles or beside each other. `u` and `v` are corner-lattice coordinates: `u` moves horizontally and `v` moves down one triangle row. The start node uses `0,0`. Every integer `u,v` pair is a valid triangle corner. Positions are only the starting layout — drag any node to rearrange the map.
+The background is an equilateral **triangle mesh**. Nodes are only allowed on **hex centres** — alternating corners of the mesh, where six triangles meet to form a hexagon. In practice a node's `u` and `v` coordinates are both **even**, so the nearest another node can sit is two mesh edges away, with at least one corner between them. `u` moves horizontally and `v` moves down one triangle row. The start node uses `0,0`. Positions are only the starting layout — drag any node to snap it to another free anchor.
 
-Each node is a small shape with its label underneath, like a flowchart node: lesson nodes are circles and quiz nodes (`"type": "quiz"`) are diamonds. Nodes without a `type` default to `"lesson"`. Curved connectors link a node to each of its prerequisites and are recomputed on every drag, so they always follow the current node positions.
+Each node is a small shape with its label underneath, like a flowchart node: lesson nodes are circles and quiz nodes (`"type": "quiz"`) are diamonds. Nodes without a `type` default to `"lesson"`. Connectors are routed along the triangle edges between each node and its prerequisites, and are recomputed whenever a node changes anchor.
 
-For easy editing, copy a node's `u,v` and move by one triangle edge:
+For easy editing, copy a node's `u,v` and move by one anchor step (two mesh edges):
 
 | Direction | `u` change | `v` change |
 | --- | --- | --- |
-| Right / left | ±1 | 0 |
-| Down-right / up-left | 0 | ±1 |
-| Up-right / down-left | ±1 | ∓1 |
+| Right / left | ±2 | 0 |
+| Down-right / up-left | 0 | ±2 |
+| Up-right / down-left | ±2 | ∓2 |
 
-`requires` can point at any node — it does not have to be the nearest one. Connectors are drawn directly between nodes, so they may cross other nodes once you rearrange the map. Validation requires every corner to be unique and every prerequisite chain to be reachable.
+`requires` can point at any node — it does not have to be the nearest one. Connectors route around the mesh and bend at triangle corners rather than cutting across the background. Validation requires every anchor to be unique, every `u` and `v` to be even, and every prerequisite chain to be reachable.
 
-The current maps use three arms that start from the start node and converge on a final capstone, but the geometry is free-form: add, branch, or reconnect nodes wherever there is a free corner.
+The current maps use three arms that start from the start node and converge on a final capstone, but the geometry is free-form: add, branch, or reconnect nodes wherever there is a free anchor.
 
 ### Add a branch
 
@@ -95,7 +95,7 @@ Add `{ "id": "...", "name": "...", "color": "#rrggbb" }` to the subject's `branc
 
 ### Add a subject
 
-Copy a subject object, give it a unique `id`, and fill in branches and a set of corner nodes with exactly one `"start": true` node. The header dropdown, legend, connector lines, and progress counter build themselves from this array.
+Copy a subject object, give it a unique `id`, and fill in branches and a set of hex-anchor nodes with exactly one `"start": true` node. The header dropdown, legend, connector lines, and progress counter build themselves from this array.
 
 ### Rules enforced by `npm run validate`
 
@@ -103,9 +103,9 @@ Copy a subject object, give it a unique `id`, and fill in branches and a set of 
 - Exactly one start node, with no prerequisites.
 - Every non-start node has at least one prerequisite.
 - Every prerequisite exists and is not the node itself.
-- Every `u,v` pair is a real triangle corner.
+- Every `u,v` pair is an even-even hex anchor.
 - `type`, when present, is either `"lesson"` or `"quiz"`.
-- No two nodes share the same corner.
+- No two nodes share the same anchor.
 - Every node can eventually be unlocked from the start.
 - Legacy `role`, `stage`, `tier`, and `lane` fields are reported so old data can be cleaned up.
 
@@ -116,7 +116,7 @@ The app runs the same checks on load and shows a readable error screen if the JS
 | Action | Result |
 | --- | --- |
 | Drag canvas | Pan the tree |
-| Drag a node | Move it freely; its connectors follow live |
+| Drag a node | Snap it to the nearest hex anchor; swaps places if that anchor is taken, and connectors re-route along the mesh |
 | Scroll / pinch | Zoom toward the cursor |
 | Click a node | Open the detail panel |
 | Click outside the panel | Close the detail panel |
@@ -129,7 +129,7 @@ The app runs the same checks on load and shows a readable error screen if the JS
 | Subject dropdown | Switch subjects (progress is kept per subject) |
 | Reset | Clear mastered skills for the current subject |
 
-Connectors link each node to its prerequisites and follow as you drag nodes. Master a node to open every node that requires it, and the next available edges march in yellow. Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
+Connectors route along the triangle mesh between node anchors and are recomputed whenever a node is moved. Master a node to open every node that requires it, and the next available edges march in yellow. Progress is saved in `localStorage` under `upcat-skill-tree:progress:v1`. A shareable URL is written as `?subject=<id>`, so `?subject=science` opens Science directly.
 
 ## Deployment
 

@@ -91,6 +91,9 @@ subjects.forEach((subject, subjectIndex) => {
     }
     if (!isInt(node.u)) fail(`${label}.u must be a whole number.`)
     if (!isInt(node.v)) fail(`${label}.v must be a whole number.`)
+    if (isInt(node.u) && isInt(node.v) && (node.u % 2 !== 0 || node.v % 2 !== 0)) {
+      fail(`${label} must sit on a hex-centre corner (even u and v), got ${node.u},${node.v}.`)
+    }
     if (node.start !== undefined && typeof node.start !== 'boolean') {
       fail(`${label}.start must be true when present.`)
     }
@@ -155,7 +158,7 @@ subjects.forEach((subject, subjectIndex) => {
   const vs = nodes.filter(isObject).map((node) => node.v)
   const links = nodes.reduce((sum, node) => sum + (Array.isArray(node.requires) ? node.requires.length : 0), 0)
   console.log(
-    `  ${subject.name.padEnd(22)} ${String(nodes.length).padStart(2)} corners · ` +
+    `  ${subject.name.padEnd(22)} ${String(nodes.length).padStart(2)} anchors · ` +
       `u ${Math.min(...us)}..${Math.max(...us)} · v ${Math.min(...vs)}..${Math.max(...vs)} · ${links} routed links`,
   )
 })
@@ -173,4 +176,4 @@ if (errors.length) {
   process.exit(1)
 }
 
-console.log(`✓ Triangle flowchart valid — ${subjects.length} subjects, ${totalNodes} corner nodes.`)
+console.log(`✓ Triangle flowchart valid — ${subjects.length} subjects, ${totalNodes} hex anchors.`)

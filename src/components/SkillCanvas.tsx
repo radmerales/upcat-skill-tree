@@ -1,11 +1,16 @@
-import { useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
+import {
+  useMemo,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from 'react'
 import RoutedEdges from './canvas/RoutedEdges'
 import SkillNodeView from './canvas/SkillNodeView'
 import TriangleLattice from './canvas/TriangleLattice'
 import ZoomControls from './canvas/ZoomControls'
 import { useCanvasCamera } from '../hooks/useCanvasCamera'
-import { branchMap, nodeState } from '../lib/tree'
-import type { Point, SkillNode, Subject, SubjectLayout } from '../types'
+import { branchMap, nodeState, routeEdges } from '../lib/tree'
+import type { AnchorPoint, SkillNode, Subject, SubjectLayout } from '../types'
 
 interface SkillCanvasProps {
   subject: Subject
@@ -38,12 +43,17 @@ export default function SkillCanvas({
   })
 
   const [positionsBySubject, setPositionsBySubject] = useState<
-    Record<string, Record<string, Point>>
+    Record<string, Record<string, AnchorPoint>>
   >({})
   const [draggingId, setDraggingId] = useState<string | null>(null)
+  const [dragPreview, setDragPreview] = useState<{ id: string; x: number; y: number } | null>(
+    null,
+  )
+  const dragPreviewRef = useRef<{ id: string; x: number; y: number } | null>(null)
   const justDraggedRef = useRef(false)
 
   const positions = positionsBySubject[subject.id] ?? layout.positions
+  const paths = useMemo(() => routeEdges(layout, positions), [layout, positions])
 
   const handleNodePointerDown = (
     event: ReactPointerEvent<HTMLButtonElement>,
@@ -67,29 +77,54 @@ export default function SkillCanvas({
       const dy = moveEvent.clientY - startY
       if (!moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return
       moved = true
-      setPositionsBySubject((current) => {
-        const base = current[subject.id] ?? layout.positions
-        return {
-          ...current,
-          [subject.id]: {
-            ...base,
-            [node.id]: { x: origin.x + dx / scale, y: origin.y + dy / scale },
-          },
-        }
-      })
+
+      const preview = {
+        id: node.id,
+        x: origin.x + dx / scale,
+        y: origin.y + dy / scale,
+      }
+      dragPreviewRef.current = preview
+      setDragPreview(preview)
     }
 
     const finish = () => {
       window.removeEventListener('pointermove', onMove)
       window.removeEventListener('pointerup', finish)
       window.removeEventListener('pointercancel', finish)
+
+      const preview = dragPreviewRef.current
+      dragPreviewRef.current = null
+      setDragPreview(null)
       setDraggingId(null)
-      if (moved) {
-        justDraggedRef.current = true
-        window.setTimeout(() => {
-          justDraggedRef.current = false
-        }, 80)
+
+      if (!moved || !preview) return
+
+      let closest = Infinity
+      let target = origin
+      for (const anchor of layout.anchors) {
+        const distance = (anchor.x - preview.x) ** 2 + (anchor.y - preview.y) ** 2
+        if (distance < closest) {
+          closest = distance
+          target = anchor
+        }
       }
+
+      const occupant = Object.entries(positions).find(
+        ([id, point]) =>
+          id !== node.id && point.u === target.u && point.v === target.v,
+      )
+
+      setPositionsBySubject((current) => {
+        const base = current[subject.id] ?? layout.positions
+        const next = { ...base, [node.id]: target }
+        if (occupant) next[occupant[0]] = origin
+        return { ...current, [subject.id]: next }
+      })
+
+      justDraggedRef.current = true
+      window.setTimeout(() => {
+        justDraggedRef.current = false
+      }, 80)
     }
 
     window.addEventListener('pointermove', onMove)
@@ -120,15 +155,18 @@ export default function SkillCanvas({
         <RoutedEdges
           subject={subject}
           layout={layout}
-          positions={positions}
+          paths={paths}
           mastered={mastered}
           selectedId={selectedId}
           branchFilter={branchFilter}
+          hiddenNodeId={draggingId}
         />
 
         {subject.nodes.map((node) => {
-          const position = positions[node.id]
-          if (!position) return null
+          const anchor = positions[node.id]
+          if (!anchor) return null
+          const preview = dragPreview?.id === node.id ? dragPreview : null
+          const position = preview ? { x: preview.x, y: preview.y } : anchor
           const branch = branches[node.branch] ?? subject.branches[0]
           return (
             <SkillNodeView

@@ -48,14 +48,25 @@ export interface TriangleCell {
   points: Point[]
 }
 
+export interface AnchorPoint extends Point {
+  u: number
+  v: number
+}
+
 export interface LayoutEdge {
   key: string
   from: string
   to: string
 }
 
+export interface RoutedPath extends LayoutEdge {
+  points: Point[]
+}
+
 export interface SubjectLayout {
-  positions: Record<string, Point>
+  positions: Record<string, AnchorPoint>
+  anchors: AnchorPoint[]
+  offset: Point
   width: number
   height: number
   triangles: TriangleCell[]
