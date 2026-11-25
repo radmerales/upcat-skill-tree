@@ -211,10 +211,10 @@
 }
 
 .edge--route.edge--locked {
-  stroke: var(--line-strong);
+  stroke: var(--vnode-lock-border);
   stroke-width: 1.5;
   stroke-dasharray: 3 5;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .edge--route.edge--available {
@@ -223,13 +223,13 @@
 }
 
 .edge--route.edge--mastered {
-  stroke: color-mix(in srgb, var(--muted) 70%, var(--line-strong));
+  stroke: color-mix(in srgb, var(--edge-color) 55%, var(--text));
   stroke-width: 2.25;
 }
 
 .edge--route.is-selected {
-  stroke: var(--text);
-  stroke-width: 2.5;
+  stroke: var(--yellow-strong);
+  stroke-width: 2.75;
   opacity: 1;
 }
 
