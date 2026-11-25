@@ -1,6 +1,4 @@
-/* ========================================================================== */
-/*  Responsive                                                                 */
-/* ========================================================================== */
+/* Responsive -------------------------------------------------------------- */
 
 @media (max-width: 1240px) {
   .hints {
@@ -14,7 +12,7 @@
   }
 
   .icon-button {
-    width: 38px;
+    width: 34px;
     padding: 0;
   }
 
@@ -56,14 +54,11 @@
     left: 0;
     transform: none;
     width: 100%;
-  }
-
-  .subject-menu {
     animation: none;
   }
 
   .progress {
-    padding: 2px 8px 2px 2px;
+    padding: 2px 6px;
   }
 
   .panel {
@@ -74,21 +69,9 @@
     height: 64dvh;
     border-left: 0;
     border-top: 1px solid var(--line);
-    animation: panelUp 0.24s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .panel::before {
-    top: -1px;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      color-mix(in srgb, var(--accent) 55%, transparent) 30%,
-      color-mix(in srgb, var(--accent) 25%, transparent) 75%,
-      transparent
-    );
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: 0 -12px 32px rgba(0, 0, 0, 0.1);
+    animation: panelUp 0.2s ease;
   }
 
   .legend {
@@ -112,11 +95,6 @@
   .zoom-controls {
     top: 12px;
     right: 12px;
-    width: 36px;
-  }
-
-  .zoom-controls button {
-    height: 34px;
   }
 
   .toast {
@@ -126,37 +104,36 @@
 
 @media (max-width: 560px) {
   .brand__title {
-    font-size: 12px;
-    letter-spacing: 0.12em;
+    font-size: 14px;
   }
 
   .brand__mark {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
 
   .brand__mark-core {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
   }
 
   .subject-switch {
-    height: 48px;
+    height: 44px;
     gap: 9px;
-    padding: 6px 10px;
+    padding: 5px 10px;
   }
 
   .subject-switch__badge {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
   }
 
   .subject-switch__badge span {
-    font-size: 8.5px;
+    font-size: 10px;
   }
 
   .subject-switch__name {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .subject-switch__count {
@@ -167,27 +144,14 @@
     display: none;
   }
 
-  .progress__ring {
-    width: 30px;
-    height: 30px;
-  }
-
-  .progress__label {
-    display: none;
-  }
-
-  .progress__value {
-    font-size: 11px;
-  }
-
   .icon-button {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
   }
 
   .legend__chip {
-    font-size: 8.5px;
-    padding: 5px 6px;
+    font-size: 11px;
+    padding: 5px 7px;
   }
 
   .legend__count {
@@ -203,11 +167,11 @@
   }
 
   .panel__title {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .panel__scroll {
-    padding: 15px 16px 8px;
+    padding: 16px;
   }
 
   .panel__foot {
@@ -233,15 +197,3 @@
     scroll-behavior: auto !important;
   }
 }
-
-@keyframes panelUp {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-

@@ -3,6 +3,7 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  background: var(--bg);
 }
 
 .canvas {
@@ -11,17 +12,7 @@
   overflow: hidden;
   cursor: grab;
   touch-action: none;
-  background-color: #070a0d;
-}
-
-.canvas::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(900px 520px at 15% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 65%),
-    radial-gradient(700px 500px at 95% 100%, rgba(86, 140, 160, 0.08), transparent 65%);
+  background-color: var(--bg);
 }
 
 .canvas.is-panning {
@@ -34,7 +25,7 @@
   left: 0;
   transform-origin: 0 0;
   will-change: transform;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.2s ease;
 }
 
 .triangle-grid {
@@ -63,50 +54,47 @@
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: stroke-width 0.2s ease, opacity 0.2s ease;
+  transition: stroke-width 0.15s ease, opacity 0.15s ease;
 }
 
 .edge.is-selected {
   opacity: 1;
-  stroke-width: 4;
-  filter: drop-shadow(0 0 8px var(--edge-color));
+  stroke-width: 2.5;
 }
 
 .edge.is-dim {
-  opacity: 0.05;
+  opacity: 0.1;
 }
 
 .stage__vignette {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(6, 9, 12, 0.42), transparent 14%),
-    radial-gradient(130% 105% at 50% 50%, transparent 58%, rgba(3, 5, 7, 0.55) 100%);
+  display: none;
 }
+
+/* Zoom controls ----------------------------------------------------------- */
 
 .zoom-controls {
   position: absolute;
-  top: 16px;
-  right: 18px;
+  top: 14px;
+  right: 16px;
   z-index: 15;
   display: flex;
   flex-direction: column;
-  width: 40px;
-  background: rgba(10, 14, 18, 0.82);
+  width: 34px;
+  background: var(--surface);
   border: 1px solid var(--line);
-  backdrop-filter: blur(14px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
 }
 
 .zoom-controls button {
   display: grid;
   place-items: center;
-  height: 36px;
+  height: 32px;
   padding: 0;
   background: transparent;
   border: 0;
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line);
   color: var(--muted);
   cursor: pointer;
   transition: color 0.15s ease, background 0.15s ease;
@@ -118,41 +106,40 @@
 
 .zoom-controls button:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.045);
+  background: var(--surface-2);
 }
 
 .zoom-controls__value {
   padding: 5px 0;
   text-align: center;
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  color: var(--accent);
-  border-bottom: 1px solid var(--line-soft);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted-2);
+  border-bottom: 1px solid var(--line);
 }
+
+/* Legend ------------------------------------------------------------------ */
 
 .legend {
   position: absolute;
-  left: 18px;
+  left: 16px;
   bottom: 16px;
   z-index: 15;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 3px;
-  max-width: calc(100% - 36px);
-  padding: 7px 8px;
-  background: rgba(10, 14, 18, 0.84);
+  gap: 2px;
+  max-width: calc(100% - 32px);
+  padding: 4px 6px;
+  background: var(--surface);
   border: 1px solid var(--line);
-  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(16px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
 }
 
 .legend__label {
-  margin: 0 5px 0 2px;
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  margin: 0 6px 0 4px;
+  font-size: 11px;
   color: var(--muted-2);
 }
 
@@ -160,29 +147,26 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 7px;
+  padding: 5px 8px;
   cursor: pointer;
   background: transparent;
   border: 1px solid transparent;
-  font-family: var(--font-display);
-  font-size: 9.5px;
-  font-weight: 500;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
   color: var(--muted);
   white-space: nowrap;
   transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
 
 .legend__chip:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: #d5e0e7;
+  background: var(--surface-2);
+  color: var(--text);
 }
 
 .legend__chip.is-active {
-  color: #edf4f8;
-  border-color: color-mix(in srgb, var(--chip-color, var(--accent)) 45%, transparent);
-  background: color-mix(in srgb, var(--chip-color, var(--accent)) 10%, transparent);
+  color: var(--text);
+  border-color: var(--line);
+  background: var(--surface-2);
 }
 
 .legend__dot,
@@ -190,36 +174,33 @@
   width: 6px;
   height: 6px;
   flex: none;
-  transform: rotate(45deg);
+  border-radius: 50%;
   background: var(--chip-color);
 }
 
 .legend__all-dot {
-  background: var(--accent);
+  background: var(--text);
 }
 
 .legend__count {
-  font-family: var(--font-mono);
-  font-size: 8px;
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
   color: var(--muted-2);
 }
 
 .legend__chip.is-active .legend__count {
-  color: #b9c6ce;
+  color: var(--muted);
 }
 
 .hints {
   position: absolute;
-  right: 18px;
+  right: 16px;
   bottom: 20px;
   z-index: 12;
   display: flex;
   gap: 14px;
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: #51606a;
+  font-size: 10.5px;
+  color: var(--muted-2);
   pointer-events: none;
 }
 
@@ -231,5 +212,5 @@
   content: '·';
   position: absolute;
   left: -9px;
-  color: #34414a;
+  color: var(--line-strong);
 }

@@ -80,7 +80,7 @@ export default function SkillNodeView({
         </svg>
       </span>
       <span className="vnode__body">
-        {node.start && <span className="vnode__tag">START</span>}
+        {node.start && <span className="vnode__tag">Start</span>}
         <span className={`vnode__code${node.code.length > 3 ? ' is-long' : ''}`}>{node.code}</span>
       </span>
       {state === 'mastered' && (

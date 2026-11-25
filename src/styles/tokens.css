@@ -1,33 +1,70 @@
-:root {
-  --bg: #080b0e;
-  --bg-soft: #0c1115;
-  --panel: #11181e;
-  --panel-2: #151e25;
-  --line: #23303a;
-  --line-soft: #1a242c;
-  --text: #e9f0f4;
-  --muted: #8d9ba5;
-  --muted-2: #5e6c76;
-  --danger: #e06464;
-  --accent: #f6b93b;
-  --accent-raw: #f6b93b;
-  --header-h: 76px;
+/* Design tokens ----------------------------------------------------------- */
 
-  --font-display: 'Chakra Petch', 'Trebuchet MS', sans-serif;
+:root {
+  --bg: #0f1011;
+  --surface: #17181a;
+  --surface-2: #202123;
+  --line: #2a2b2e;
+  --line-strong: #3a3c3f;
+  --text: #ededec;
+  --muted: #a3a5a8;
+  --muted-2: #74767a;
+  --danger: #e2837b;
+  --accent: #ededec;
+  --accent-raw: #f6b93b;
+  --header-h: 64px;
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.28);
+  --shadow-pop: 0 18px 44px rgba(0, 0, 0, 0.44);
+
+  --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  --tri-line: rgba(151, 176, 191, 0.11);
-  --tri-fill: rgba(3, 6, 9, 0.45);
+  --tri-line: rgba(255, 255, 255, 0.05);
+  --tri-fill: rgba(0, 0, 0, 0.22);
 
-  --vnode-face: #0a0e12;
-  --vnode-code: #c9d5dd;
-  --vnode-title: #8b99a3;
-  --vnode-lock-border: #303c45;
-  --vnode-lock-text: #65737d;
+  --vnode-face: var(--surface);
+  --vnode-code: #ececeb;
+  --vnode-title: #a3a5a8;
+  --vnode-lock-border: #323436;
+  --vnode-lock-text: #7c7e82;
 
   color-scheme: dark;
 }
+
+html[data-theme='light'] {
+  --bg: #f6f6f3;
+  --surface: #ffffff;
+  --surface-2: #f0f0ec;
+  --line: #e4e4de;
+  --line-strong: #cecec6;
+  --text: #17181a;
+  --muted: #5f6266;
+  --muted-2: #8f9296;
+  --danger: #b3403a;
+  --accent: #17181a;
+  --accent-raw: #f6b93b;
+
+  --shadow-soft: 0 6px 20px rgba(24, 24, 20, 0.07);
+  --shadow-pop: 0 18px 44px rgba(24, 24, 20, 0.14);
+
+  --tri-line: rgba(23, 24, 26, 0.06);
+  --tri-fill: rgba(23, 24, 26, 0.022);
+
+  --vnode-face: #ffffff;
+  --vnode-code: #26272a;
+  --vnode-title: #62656a;
+  --vnode-lock-border: #e1e1da;
+  --vnode-lock-text: #a0a3a7;
+
+  color-scheme: light;
+}
+
+/* Base -------------------------------------------------------------------- */
 
 * {
   box-sizing: border-box;
@@ -57,23 +94,20 @@ button {
 }
 
 button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--accent) 35%, transparent);
-  color: #fff;
+  background: color-mix(in srgb, var(--text) 18%, transparent);
+  color: var(--text);
 }
 
 .app {
-  --accent: var(--accent-raw);
+  --accent: var(--text);
   display: flex;
   flex-direction: column;
   height: 100dvh;
-  background:
-    radial-gradient(1100px 600px at 12% -10%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 60%),
-    radial-gradient(900px 700px at 100% 110%, rgba(84, 130, 150, 0.09), transparent 60%),
-    var(--bg);
-  transition: background 0.4s ease;
+  background: var(--bg);
+  transition: background 0.3s ease;
 }
