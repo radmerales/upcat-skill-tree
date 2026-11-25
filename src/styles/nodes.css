@@ -132,7 +132,7 @@
 }
 
 .vnode__badge {
-  background: #4a4a4a;
+  background: #403c35;
   color: #ffffff;
 }
 
@@ -147,7 +147,7 @@
 }
 
 .vnode--available .vnode__face {
-  stroke: var(--amber);
+  stroke: color-mix(in srgb, var(--amber) 82%, var(--line-strong));
 }
 
 .vnode--available .vnode__code {
@@ -159,17 +159,17 @@
 }
 
 .vnode--mastered .vnode__face {
-  fill: var(--branch);
-  stroke: color-mix(in srgb, var(--branch) 70%, var(--text));
+  fill: color-mix(in srgb, var(--branch) 85%, var(--surface));
+  stroke: color-mix(in srgb, var(--branch) 60%, var(--text));
 }
 
 .vnode--mastered .vnode__code {
-  color: #1f1f1f;
+  color: #221d14;
   font-weight: 600;
 }
 
 .vnode--mastered .vnode__tag {
-  color: rgba(31, 31, 31, 0.66);
+  color: rgba(34, 29, 20, 0.66);
 }
 
 .vnode--mastered .vnode__title {
@@ -216,13 +216,13 @@
 }
 
 .edge--route.edge--available {
-  stroke: var(--amber);
-  stroke-width: 2;
+  stroke: color-mix(in srgb, var(--amber) 88%, var(--muted));
+  stroke-width: 1.75;
 }
 
 .edge--route.edge--mastered {
   stroke: var(--muted-2);
-  stroke-width: 2;
+  stroke-width: 1.75;
 }
 
 .edge--route.is-selected {

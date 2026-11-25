@@ -43,9 +43,9 @@
 }
 
 .state-pill--mastered {
-  color: #ffffff;
-  border-color: var(--amber);
-  background: var(--amber);
+  color: var(--on-amber);
+  border-color: var(--amber-fill);
+  background: var(--amber-fill);
 }
 
 .state-pill--available {
@@ -83,12 +83,12 @@
 }
 
 .action--primary {
-  background: var(--amber);
-  color: #ffffff;
+  background: var(--amber-fill);
+  color: var(--on-amber);
 }
 
 .action--primary:hover {
-  background: var(--amber-strong);
+  background: var(--amber-fill-hover);
 }
 
 .action--ghost {

@@ -168,8 +168,8 @@
 }
 
 .legend__chip.is-active {
-  background: var(--amber);
-  color: #ffffff;
+  background: var(--amber-fill);
+  color: var(--on-amber);
 }
 
 .legend__dot,
@@ -187,7 +187,7 @@
 
 .legend__chip.is-active .legend__dot,
 .legend__chip.is-active .legend__all-dot {
-  background: #ffffff;
+  background: var(--on-amber);
 }
 
 .legend__count {
@@ -197,7 +197,7 @@
 }
 
 .legend__chip.is-active .legend__count {
-  color: rgba(255, 255, 255, 0.8);
+  color: color-mix(in srgb, var(--on-amber) 70%, transparent);
 }
 
 .hints {

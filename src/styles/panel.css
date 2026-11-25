@@ -168,9 +168,9 @@
 }
 
 .link-row__status.is-done {
-  color: #ffffff;
-  border-color: var(--amber);
-  background: var(--amber);
+  color: var(--on-amber);
+  border-color: var(--amber-fill);
+  background: var(--amber-fill);
 }
 
 .link-row__status.is-next {

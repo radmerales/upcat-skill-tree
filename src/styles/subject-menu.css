@@ -55,9 +55,9 @@
 }
 
 .subject-option.is-active {
-  background: var(--amber);
-  border-color: var(--amber);
-  color: #ffffff;
+  background: var(--amber-fill);
+  border-color: var(--amber-fill);
+  color: var(--on-amber);
 }
 
 .subject-option__dot {
@@ -68,7 +68,7 @@
 }
 
 .subject-option.is-active .subject-option__dot {
-  background: #ffffff;
+  background: var(--on-amber);
 }
 
 .subject-option__copy {
@@ -98,7 +98,7 @@
 .subject-option.is-active .subject-option__name,
 .subject-option.is-active .subject-option__count,
 .subject-option.is-active .subject-option__check {
-  color: #ffffff;
+  color: var(--on-amber);
 }
 
 .subject-option__check {
