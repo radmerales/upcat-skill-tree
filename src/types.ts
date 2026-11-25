@@ -9,6 +9,7 @@ export interface SkillNode {
   title: string
   code: string
   branch: string
+  type: NodeType
   u: number
   v: number
   start?: boolean
@@ -36,6 +37,8 @@ export interface TreeData {
 
 export type NodeState = 'mastered' | 'available' | 'locked'
 
+export type NodeType = 'lesson' | 'quiz'
+
 export type Theme = 'light' | 'dark'
 
 export interface Point {
@@ -45,7 +48,6 @@ export interface Point {
 
 export interface TriangleCell {
   points: Point[]
-  alt: boolean
 }
 
 export interface RoutedEdge {

@@ -38,19 +38,36 @@ html[data-theme='light'] .vnode--available .vnode__title {
 }
 
 html[data-theme='light'] .vnode--mastered .vnode__face {
-  stroke: color-mix(in srgb, var(--branch) 64%, #455761);
+  fill: var(--branch);
+  stroke: color-mix(in srgb, var(--branch) 72%, #35474f);
 }
 
 html[data-theme='light'] .vnode--mastered .vnode__inner {
-  stroke: rgba(255, 255, 255, 0.5);
+  stroke: rgba(255, 255, 255, 0.42);
 }
 
 html[data-theme='light'] .vnode--mastered .vnode__code {
-  color: #15242d;
+  color: #10202a;
+  font-weight: 600;
+}
+
+html[data-theme='light'] .vnode--mastered .vnode__tag {
+  color: rgba(16, 32, 42, 0.72);
+}
+
+html[data-theme='light'] .vnode--mastered .vnode__badge {
+  background: #10202a;
+  color: var(--branch);
+  border-color: #ffffff;
 }
 
 html[data-theme='light'] .vnode--mastered .vnode__title {
   color: #1c2c36;
+}
+
+html[data-theme='light'] .vnode--mastered .vnode__ring.is-selected,
+html[data-theme='light'] .vnode--mastered:focus-visible .vnode__ring {
+  stroke: #10202a;
 }
 
 html[data-theme='light'] .vnode--locked {

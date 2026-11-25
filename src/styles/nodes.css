@@ -36,7 +36,7 @@
   fill: var(--vnode-face);
   stroke: color-mix(in srgb, var(--branch) 58%, #2d3942);
   stroke-width: 1.8;
-  transition: stroke 0.2s ease, opacity 0.2s ease;
+  transition: stroke 0.2s ease, fill 0.25s ease, opacity 0.2s ease;
 }
 
 .vnode__inner {
@@ -165,16 +165,33 @@
 }
 
 .vnode--mastered .vnode__face {
-  stroke: color-mix(in srgb, var(--branch) 88%, #ffffff 8%);
+  fill: var(--branch);
+  stroke: color-mix(in srgb, var(--branch) 78%, #ffffff 16%);
   stroke-width: 2.2;
 }
 
 .vnode--mastered .vnode__inner {
-  stroke: color-mix(in srgb, var(--branch) 42%, transparent);
+  stroke: rgba(5, 14, 19, 0.34);
 }
 
 .vnode--mastered .vnode__code {
-  color: color-mix(in srgb, var(--branch) 62%, #ffffff);
+  color: #08131a;
+  font-weight: 600;
+}
+
+.vnode--mastered .vnode__tag {
+  color: rgba(4, 12, 16, 0.72);
+}
+
+.vnode--mastered .vnode__badge {
+  background: #08131a;
+  color: var(--branch);
+  border-color: rgba(4, 10, 14, 0.55);
+}
+
+.vnode--mastered .vnode__ring.is-selected,
+.vnode--mastered:focus-visible .vnode__ring {
+  stroke: color-mix(in srgb, var(--branch) 12%, #ffffff);
 }
 
 .vnode--mastered .vnode__title {

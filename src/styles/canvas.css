@@ -46,13 +46,9 @@
 }
 
 .tri-cell {
-  fill: transparent;
+  fill: var(--tri-fill);
   stroke: var(--tri-line);
   stroke-width: 1;
-}
-
-.tri-cell.is-alt {
-  fill: var(--tri-fill);
 }
 
 .edges {

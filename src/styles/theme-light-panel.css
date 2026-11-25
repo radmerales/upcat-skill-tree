@@ -117,16 +117,6 @@ html[data-theme='light'] .boot__card h1 {color: #17242d;}
 
 html[data-theme='light'] .boot__hint code {background: rgba(20, 46, 62, 0.06);}
 
-:root {--tri-line: rgba(151, 176, 191, 0.11);
-  --tri-fill: rgba(255, 255, 255, 0.016);}
-
-.triangle-grid {position: absolute;
-  top: 0;
-  left: 0;
-  overflow: visible;
-  pointer-events: none;}
-
-
 html[data-theme='light'] .role-chip {
   color: #5d6c76;
 }

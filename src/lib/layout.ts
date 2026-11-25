@@ -53,13 +53,12 @@ export function layoutSubject(subject: Subject): SubjectLayout {
 
   for (let v = vStart; v <= vEnd; v += 1) {
     for (let u = uStart; u <= uEnd; u += 1) {
-      const alt = (u + v) % 2 === 0
       const tl = at(u, v)
       const tr = at(u + 1, v)
       const ml = at(u, v + 1)
       const mr = at(u + 1, v + 1)
-      triangles.push({ points: [tl, tr, ml], alt })
-      triangles.push({ points: [tr, mr, ml], alt: !alt })
+      triangles.push({ points: [tl, tr, ml] })
+      triangles.push({ points: [tr, mr, ml] })
     }
   }
 

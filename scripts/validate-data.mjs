@@ -94,6 +94,9 @@ subjects.forEach((subject, subjectIndex) => {
     if (node.start !== undefined && typeof node.start !== 'boolean') {
       fail(`${label}.start must be true when present.`)
     }
+    if (node.type !== undefined && node.type !== 'lesson' && node.type !== 'quiz') {
+      fail(`${label}.type must be "lesson" or "quiz" when provided.`)
+    }
     if (!Array.isArray(node.requires) || node.requires.some((id) => !isText(id))) {
       fail(`${label}.requires must be an array of node ids.`)
       return

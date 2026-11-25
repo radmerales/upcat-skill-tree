@@ -32,6 +32,7 @@ export default function SkillNodeView({
   const classes = [
     'vnode',
     `vnode--${state}`,
+    `vnode--${node.type}`,
     node.start ? 'vnode--start' : '',
     selected ? 'is-selected' : '',
     dim ? 'is-dim' : '',
@@ -52,7 +53,7 @@ export default function SkillNodeView({
           '--branch': color,
         } as CSSProperties
       }
-      aria-label={`${node.title} — ${stateLabel(state)}`}
+      aria-label={`${node.title} — ${node.type} — ${stateLabel(state)}`}
       aria-pressed={state === 'mastered'}
       onClick={onClick}
       onDoubleClick={() => onToggle(node)}
@@ -63,9 +64,19 @@ export default function SkillNodeView({
     >
       <span className="vnode__shape" aria-hidden="true">
         <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-          <polygon points={PLATE} className="vnode__face" />
-          <polygon points={PLATE_INNER} className="vnode__inner" />
-          <polygon points={PLATE_RING} className={`vnode__ring${selected ? ' is-selected' : ''}`} />
+          {node.type === 'quiz' ? (
+            <>
+              <polygon points={PLATE} className="vnode__face" />
+              <polygon points={PLATE_INNER} className="vnode__inner" />
+              <polygon points={PLATE_RING} className={`vnode__ring${selected ? ' is-selected' : ''}`} />
+            </>
+          ) : (
+            <>
+              <circle cx="50" cy="50" r="45" className="vnode__face" />
+              <circle cx="50" cy="50" r="32" className="vnode__inner" />
+              <circle cx="50" cy="50" r="49" className={`vnode__ring${selected ? ' is-selected' : ''}`} />
+            </>
+          )}
         </svg>
       </span>
       <span className="vnode__body">

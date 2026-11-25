@@ -11,7 +11,7 @@ html[data-theme='light'] {
   --muted-2: #84929b;
   --danger: #c94747;
   --tri-line: rgba(34, 62, 80, 0.15);
-  --tri-fill: transparent;
+  --tri-fill: rgba(176, 191, 199, 0.38);
   --vnode-face: #eef3f5;
   --vnode-code: #243740;
   --vnode-title: #4a5c67;

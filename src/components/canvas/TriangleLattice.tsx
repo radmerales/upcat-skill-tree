@@ -17,7 +17,7 @@ export default function TriangleLattice({ layout }: TriangleLatticeProps) {
         <polygon
           key={`tri-${index}`}
           points={triangle.points.map((point) => `${point.x},${point.y}`).join(' ')}
-          className={`tri-cell${triangle.alt ? ' is-alt' : ''}`}
+          className="tri-cell"
         />
       ))}
     </svg>

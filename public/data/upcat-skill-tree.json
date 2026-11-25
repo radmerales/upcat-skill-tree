@@ -16,7 +16,7 @@
         {"id":"data","name":"Data & Probability","color":"#c084fc"}
       ],
       "nodes": [
-        {"id":"math-start","title":"Start Here","code":"GO","branch":"arithmetic","u":0,"v":0,"start":true,"description":"Take a short diagnostic across arithmetic, algebra, and geometry. Clear this node to open the arithmetic, algebra, and geometry branches.","tip":"Log each miss by topic; your weakest three topics become the first subskills you study.","requires":[]},
+        {"id":"math-start","type":"quiz","title":"Start Here","code":"GO","branch":"arithmetic","u":0,"v":0,"start":true,"description":"Take a short diagnostic across arithmetic, algebra, and geometry. Clear this node to open the arithmetic, algebra, and geometry branches.","tip":"Log each miss by topic; your weakest three topics become the first subskills you study.","requires":[]},
         {"id":"math-expressions","title":"Algebraic Expressions","code":"ALG","branch":"algebra","u":4,"v":-2,"description":"Simplify expressions, combine like terms, expand, and translate words into algebra.","tip":"Underline the unknown and write a 'let x =' line before touching the equation.","requires":["math-start"]},
         {"id":"math-linear","title":"Linear Equations & Inequalities","code":"LIN","branch":"algebra","u":6,"v":-2,"description":"Solve one- and two-variable linear equations, work with inequalities, and interpret slope.","tip":"Whatever you do to one side, do to the other. Flip the inequality sign when multiplying by a negative.","requires":["math-expressions"]},
         {"id":"math-poly","title":"Polynomials & Factoring","code":"POL","branch":"algebra","u":8,"v":-2,"description":"Expand, factor, and simplify polynomials including difference of squares and trinomials.","tip":"Always check for a greatest common factor before trying any other factoring pattern.","requires":["math-linear"]},
@@ -37,7 +37,7 @@
         {"id":"math-prob","title":"Counting & Probability","code":"PRB","branch":"data","u":10,"v":2,"description":"Permutations, combinations, and single- and multi-event probability.","tip":"Ask whether order matters: order matters → permutation, order does not → combination.","requires":["math-averages"]},
         {"id":"math-data","title":"Data Interpretation","code":"DAT","branch":"data","u":12,"v":2,"description":"Read tables, bar graphs, and pie charts; compute rates and compare proportions.","tip":"Read the axis labels and units before the question; most traps live in 'percent of what?'.","requires":["math-prob"]},
         {"id":"math-geomaster","title":"Similarity & Right Triangles","code":"GEO","branch":"geometry","u":14,"v":2,"description":"Similar figures, Pythagorean triples, and basic right-triangle trigonometry.","tip":"Memorize 3-4-5, 5-12-13, and 8-15-17 so you can skip the Pythagorean theorem on test day.","requires":["math-data"]},
-        {"id":"math-sim","title":"Timed Math Simulation","code":"SIM","branch":"data","u":16,"v":0,"description":"Full mixed math sets under the official time limit, followed by an error-log review.","tip":"Simulate the real clock, then tag every miss by topic. Retake only your two weakest topics first.","requires":["math-functions","math-wordadv","math-geomaster"]}
+        {"id":"math-sim","type":"quiz","title":"Timed Math Simulation","code":"SIM","branch":"data","u":16,"v":0,"description":"Full mixed math sets under the official time limit, followed by an error-log review.","tip":"Simulate the real clock, then tag every miss by topic. Retake only your two weakest topics first.","requires":["math-functions","math-wordadv","math-geomaster"]}
       ]
     },
     {
@@ -54,7 +54,7 @@
         {"id":"earth","name":"Earth & Space","color":"#c4b5fd"}
       ],
       "nodes": [
-        {"id":"science-start","title":"Start Here","code":"GO","branch":"inquiry","u":0,"v":0,"start":true,"description":"Take a short mixed-science diagnostic covering biology, chemistry, physics, and earth science. Clear this node to open the biology, chemistry, and earth/physics branches.","tip":"Sort every miss by branch, then start with the branch that has the most misses.","requires":[]},
+        {"id":"science-start","type":"quiz","title":"Start Here","code":"GO","branch":"inquiry","u":0,"v":0,"start":true,"description":"Take a short mixed-science diagnostic covering biology, chemistry, physics, and earth science. Clear this node to open the biology, chemistry, and earth/physics branches.","tip":"Sort every miss by branch, then start with the branch that has the most misses.","requires":[]},
         {"id":"sci-inquiry","title":"Scientific Method & Measurement","code":"INQ","branch":"inquiry","u":4,"v":-2,"description":"Hypotheses, variables, controlled experiments, and SI units with significant figures.","tip":"For any experiment question, identify the independent variable first — it anchors everything else.","requires":["science-start"]},
         {"id":"sci-cells","title":"Cell Structure & Function","code":"CEL","branch":"biology","u":6,"v":-2,"description":"Prokaryotic and eukaryotic cells, organelles, membranes, and transport.","tip":"Link each organelle to a factory job; function questions outnumber structure questions.","requires":["sci-inquiry"]},
         {"id":"sci-genetics","title":"Genetics & Heredity","code":"GEN","branch":"biology","u":8,"v":-2,"description":"DNA, Mendelian crosses, Punnett squares, and pedigree analysis.","tip":"For dihybrid crosses, split the problem into two monohybrid crosses and multiply.","requires":["sci-cells"]},
@@ -72,7 +72,7 @@
         {"id":"sci-motion","title":"Motion & Newton's Laws","code":"MOT","branch":"physics","u":8,"v":2,"description":"Kinematics graphs, acceleration, and Newton's three laws applied to real systems.","tip":"In a velocity–time graph, slope is acceleration and area under the line is displacement.","requires":["sci-forces"]},
         {"id":"sci-waves","title":"Waves, Light & Electricity","code":"WAV","branch":"physics","u":10,"v":2,"description":"Wave properties, reflection and refraction, circuits, and Ohm's law.","tip":"For circuits, find total resistance first, then total current, then branch values.","requires":["sci-motion"]},
         {"id":"sci-space","title":"Solar System & the Universe","code":"SPC","branch":"earth","u":12,"v":2,"description":"Planets, seasons, tides, stars, and the Big Bang.","tip":"Seasons come from axial tilt, not distance from the Sun — a classic UPCAT trap.","requires":["sci-waves"]},
-        {"id":"sci-sim","title":"Science Simulation","code":"SIM","branch":"inquiry","u":14,"v":0,"description":"Mixed science sets under time pressure with error-log review.","tip":"Log every miss by topic; revisit the weakest branch before the next simulation.","requires":["sci-weather","sci-energy","sci-space"]}
+        {"id":"sci-sim","type":"quiz","title":"Science Simulation","code":"SIM","branch":"inquiry","u":14,"v":0,"description":"Mixed science sets under time pressure with error-log review.","tip":"Log every miss by topic; revisit the weakest branch before the next simulation.","requires":["sci-weather","sci-energy","sci-space"]}
       ]
     },
     {
@@ -88,7 +88,7 @@
         {"id":"rhetoric","name":"Rhetoric","color":"#fbbf24"}
       ],
       "nodes": [
-        {"id":"language-start","title":"Start Here","code":"GO","branch":"grammar","u":0,"v":0,"start":true,"description":"Take a short language diagnostic on grammar, vocabulary, and usage. Clear this node to open the grammar, mechanics, and vocabulary branches.","tip":"Mark the rule behind every error, not just the answer you missed.","requires":[]},
+        {"id":"language-start","type":"quiz","title":"Start Here","code":"GO","branch":"grammar","u":0,"v":0,"start":true,"description":"Take a short language diagnostic on grammar, vocabulary, and usage. Clear this node to open the grammar, mechanics, and vocabulary branches.","tip":"Mark the rule behind every error, not just the answer you missed.","requires":[]},
         {"id":"lang-parts","title":"Parts of Speech","code":"POS","branch":"grammar","u":4,"v":-2,"description":"Nouns, verbs, adjectives, adverbs, prepositions, and how a word's role shifts by sentence.","tip":"Identify the word's job, not its dictionary category; the same word can be noun or verb.","requires":["language-start"]},
         {"id":"lang-agreement","title":"Subject–Verb Agreement","code":"SVA","branch":"grammar","u":6,"v":-2,"description":"Singular and plural agreement with tricky subjects, collective nouns, and inverted sentences.","tip":"Cross out prepositional phrases between the subject and verb; they hide the real subject.","requires":["lang-parts"]},
         {"id":"lang-tenses","title":"Verb Tenses & Forms","code":"TNS","branch":"grammar","u":8,"v":-2,"description":"Perfect tenses, active vs passive voice, and consistency across a passage.","tip":"Look for time markers (since, by the time, already); they identify the perfect tense almost every time.","requires":["lang-agreement"]},
@@ -104,7 +104,7 @@
         {"id":"lang-figures","title":"Figures of Speech","code":"FIG","branch":"rhetoric","u":8,"v":2,"description":"Simile, metaphor, personification, hyperbole, irony, and rhetorical devices.","tip":"Label the comparison first; if it uses like or as it is a simile, otherwise test for direct substitution.","requires":["lang-idioms"]},
         {"id":"lang-tone","title":"Rhetoric & Tone","code":"TONE","branch":"rhetoric","u":10,"v":2,"description":"Author's attitude, persuasion techniques, and register shifts in nonfiction.","tip":"Tone lives in adjectives and adverbs; circle them before choosing an answer.","requires":["lang-figures"]},
         {"id":"lang-context","title":"Vocabulary in Context","code":"CTX","branch":"vocabulary","u":5,"v":4,"description":"Choose the meaning that fits the passage, including figurative and technical uses.","tip":"Substitute each choice into the sentence and read it aloud in your head; awkwardness eliminates options.","requires":["lang-idioms"]},
-        {"id":"lang-sim","title":"Language Simulation","code":"SIM","branch":"usage","u":12,"v":0,"description":"Full language section under time with targeted error review.","tip":"Keep an error log by rule type; most students lose the same three points repeatedly.","requires":["lang-modifiers","lang-register","lang-tone"]}
+        {"id":"lang-sim","type":"quiz","title":"Language Simulation","code":"SIM","branch":"usage","u":12,"v":0,"description":"Full language section under time with targeted error review.","tip":"Keep an error log by rule type; most students lose the same three points repeatedly.","requires":["lang-modifiers","lang-register","lang-tone"]}
       ]
     },
     {
@@ -120,7 +120,7 @@
         {"id":"speed","name":"Speed & Timing","color":"#ff9ecb"}
       ],
       "nodes": [
-        {"id":"reading-start","title":"Start Here","code":"GO","branch":"comprehension","u":0,"v":0,"start":true,"description":"Take one timed short passage and note where you lose time or accuracy. Clear this node to open the comprehension, analysis, and strategy branches.","tip":"Time the passage, then classify each miss as a detail, inference, or trap answer.","requires":[]},
+        {"id":"reading-start","type":"quiz","title":"Start Here","code":"GO","branch":"comprehension","u":0,"v":0,"start":true,"description":"Take one timed short passage and note where you lose time or accuracy. Clear this node to open the comprehension, analysis, and strategy branches.","tip":"Time the passage, then classify each miss as a detail, inference, or trap answer.","requires":[]},
         {"id":"read-vocab","title":"Vocabulary in Context","code":"VOC","branch":"analysis","u":4,"v":-2,"description":"Infer word meaning from syntax, contrast, and examples inside the passage.","tip":"Cover the word and predict a substitute from the sentence, then match your prediction to the options.","requires":["reading-start"]},
         {"id":"read-inference","title":"Inference & Implication","code":"INF","branch":"analysis","u":6,"v":-2,"description":"Draw only the conclusions the text forces, not ones that are merely possible.","tip":"Ask 'does the passage have to mean this?' If not, eliminate the choice.","requires":["read-vocab"]},
         {"id":"read-structure","title":"Text Structure & Organization","code":"STR","branch":"analysis","u":8,"v":-2,"description":"Chronology, cause and effect, comparison, problem-solution, and their signposts.","tip":"Map the passage's skeleton (each paragraph's purpose) rather than its content.","requires":["read-inference"]},
@@ -133,7 +133,7 @@
         {"id":"read-elim","title":"Elimination Tactics","code":"ELIM","branch":"strategy","u":6,"v":2,"description":"Recognize extreme, out-of-scope, and true-but-irrelevant distractors.","tip":"Cross out choices with absolutes (always, never, all) unless the passage states them plainly.","requires":["read-question"]},
         {"id":"read-timing","title":"Passage Mapping & Timing","code":"TIM","branch":"speed","u":8,"v":2,"description":"Budget minutes per passage and decide when to move on.","tip":"Cap each passage at its budget; flag one hard question and return only if time remains.","requires":["read-elim"]},
         {"id":"read-critical","title":"Critical Reading & Bias","code":"CRT","branch":"analysis","u":7,"v":-4,"description":"Evaluate evidence, assumptions, and persuasive framing in an argument.","tip":"Find the unstated assumption: it is the bridge between evidence and conclusion.","requires":["read-inference"]},
-        {"id":"read-sim","title":"Reading Simulation","code":"SIM","branch":"comprehension","u":10,"v":0,"description":"Timed multi-passage practice with error analysis.","tip":"Review wrong answers by naming the trap type, not just the correct letter.","requires":["read-purpose","read-compare","read-timing"]}
+        {"id":"read-sim","type":"quiz","title":"Reading Simulation","code":"SIM","branch":"comprehension","u":10,"v":0,"description":"Timed multi-passage practice with error analysis.","tip":"Review wrong answers by naming the trap type, not just the correct letter.","requires":["read-purpose","read-compare","read-timing"]}
       ]
     },
     {
@@ -149,7 +149,7 @@
         {"id":"practice","name":"Practice","color":"#6ee7f9"}
       ],
       "nodes": [
-        {"id":"essay-start","title":"Start Here","code":"GO","branch":"planning","u":0,"v":0,"start":true,"description":"Read three essay prompts and write a five-minute outline for one without notes. Clear this node to open the planning, structure, and expression branches.","tip":"Plan before you write; a five-minute outline is the cheapest score you can buy.","requires":[]},
+        {"id":"essay-start","type":"quiz","title":"Start Here","code":"GO","branch":"planning","u":0,"v":0,"start":true,"description":"Read three essay prompts and write a five-minute outline for one without notes. Clear this node to open the planning, structure, and expression branches.","tip":"Plan before you write; a five-minute outline is the cheapest score you can buy.","requires":[]},
         {"id":"essay-prompt","title":"Decode the Prompt","code":"PRM","branch":"planning","u":4,"v":-2,"description":"Identify the task, scope, and key terms before planning a response.","tip":"Underline the instruction verb and the limits; a response that ignores scope is capped early.","requires":["essay-start"]},
         {"id":"essay-thesis","title":"Thesis & Position","code":"THS","branch":"structure","u":6,"v":-2,"description":"Write a specific, arguable thesis that answers the prompt directly.","tip":"Put the thesis in the last sentence of your introduction and echo it in the conclusion.","requires":["essay-prompt"]},
         {"id":"essay-evidence","title":"Evidence & Examples","code":"EVD","branch":"structure","u":8,"v":-2,"description":"Use concrete, relevant examples, including Philippine and personal contexts.","tip":"One well-explained example beats three name-drops; analysis earns the points.","requires":["essay-thesis"]},
@@ -162,7 +162,7 @@
         {"id":"essay-practice","title":"Timed Essay Practice","code":"PRA","branch":"practice","u":6,"v":2,"description":"Plan, draft, and review a complete essay in the official time limit.","tip":"Reserve the last five minutes for a read-through; fix agreement and tense errors first.","requires":["essay-style"]},
         {"id":"essay-conclusion","title":"Conclusion & Final Impression","code":"END","branch":"structure","u":8,"v":2,"description":"Close the argument by answering 'so what?' and linking back to the thesis without repeating it.","tip":"End on the implication, not a summary; the last line is what the reader remembers.","requires":["essay-practice"]},
         {"id":"essay-mode","title":"Choose Your Mode","code":"MODE","branch":"planning","u":5,"v":-4,"description":"Decide quickly between a personal narrative and an argumentative response, then commit to one structure.","tip":"Pick the mode that fits the prompt's verb; switching halfway wastes the most time.","requires":["essay-prompt"]},
-        {"id":"essay-sim","title":"Essay Simulation","code":"SIM","branch":"practice","u":10,"v":0,"description":"Full-length timed essay with a self-scoring rubric.","tip":"Score with the same rubric every time so improvements are actually comparable.","requires":["essay-counter","essay-transitions","essay-conclusion"]}
+        {"id":"essay-sim","type":"quiz","title":"Essay Simulation","code":"SIM","branch":"practice","u":10,"v":0,"description":"Full-length timed essay with a self-scoring rubric.","tip":"Score with the same rubric every time so improvements are actually comparable.","requires":["essay-counter","essay-transitions","essay-conclusion"]}
       ]
     }
   ]

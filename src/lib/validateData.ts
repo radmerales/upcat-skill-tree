@@ -1,4 +1,4 @@
-import type { Branch, SkillNode, Subject, TreeData } from '../types'
+import type { Branch, NodeType, SkillNode, Subject, TreeData } from '../types'
 
 /*  Data validation                                                            */
 /* -------------------------------------------------------------------------- */
@@ -32,6 +32,12 @@ function readStringArray(value: unknown, where: string): string[] {
     fail(`${where} must be an array of node ids.`)
   }
   return value as string[]
+}
+
+function readNodeType(value: unknown, where: string): NodeType {
+  if (value === undefined) return 'lesson'
+  if (value === 'lesson' || value === 'quiz') return value
+  fail(`${where} must be "lesson" or "quiz".`)
 }
 
 export function normalizeData(raw: unknown): TreeData {
@@ -109,6 +115,7 @@ export function normalizeData(raw: unknown): TreeData {
         title: readString(node.title, `${where}.${nodeId}.title`),
         code: readString(node.code, `${where}.${nodeId}.code`),
         branch,
+        type: readNodeType(node.type, `${where}.${nodeId}.type`),
         u,
         v,
         start: node.start === true ? true : undefined,

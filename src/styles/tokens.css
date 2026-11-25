@@ -18,7 +18,7 @@
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
   --tri-line: rgba(151, 176, 191, 0.11);
-  --tri-fill: transparent;
+  --tri-fill: rgba(3, 6, 9, 0.45);
 
   --vnode-face: #0a0e12;
   --vnode-code: #c9d5dd;

@@ -39,8 +39,8 @@ export default function DetailPanel({
       <div className="panel__head">
         <div className="panel__head-copy">
           <span className="panel__eyebrow">
-            {node.start ? 'Entry node' : 'Skill node'} {String(nodeIndex).padStart(2, '0')} /{' '}
-            {String(subject.nodes.length).padStart(2, '0')}
+            {node.start ? 'Entry node' : node.type === 'quiz' ? 'Quiz node' : 'Lesson node'}{' '}
+            {String(nodeIndex).padStart(2, '0')} / {String(subject.nodes.length).padStart(2, '0')}
           </span>
           <span className="panel__head-subject">{subject.name}</span>
         </div>
