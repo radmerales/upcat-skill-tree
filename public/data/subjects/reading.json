@@ -5,11 +5,31 @@
   "blurb": "Read faster, map arguments, and recognize trap types, with checkpoint exams that confirm each group before you move on.",
   "accent": "#5ee6a8",
   "branches": [
-    { "id": "comprehension", "name": "Comprehension", "color": "#5ee6a8" },
-    { "id": "analysis", "name": "Analysis", "color": "#63b3ff" },
-    { "id": "strategy", "name": "Test Strategy", "color": "#fbbf24" },
-    { "id": "speed", "name": "Speed & Timing", "color": "#ff9ecb" },
-    { "id": "checkpoints", "name": "Checkpoints", "color": "#5f8f86" }
+    {
+      "id": "comprehension",
+      "name": "Comprehension",
+      "color": "#5ee6a8"
+    },
+    {
+      "id": "analysis",
+      "name": "Analysis",
+      "color": "#63b3ff"
+    },
+    {
+      "id": "strategy",
+      "name": "Test Strategy",
+      "color": "#fbbf24"
+    },
+    {
+      "id": "speed",
+      "name": "Speed & Timing",
+      "color": "#ff9ecb"
+    },
+    {
+      "id": "checkpoints",
+      "name": "Checkpoints",
+      "color": "#5f8f86"
+    }
   ],
   "nodes": [
     {
@@ -31,10 +51,12 @@
       "code": "MAIN",
       "branch": "comprehension",
       "u": 3,
-      "v": -4,
+      "v": -2,
       "description": "Distinguish topic, main idea, and theme across paragraphs and whole passages.",
       "tip": "State the passage's point in one sentence before looking at the choices.",
-      "requires": ["reading-start"]
+      "requires": [
+        "reading-start"
+      ]
     },
     {
       "id": "read-details",
@@ -42,10 +64,12 @@
       "code": "DET",
       "branch": "comprehension",
       "u": 5,
-      "v": -4,
+      "v": -2,
       "description": "Locate explicit evidence and distinguish it from plausible but unsupported claims.",
       "tip": "Every detail answer must be provable by a specific line; no line, no selection.",
-      "requires": ["read-main"]
+      "requires": [
+        "read-main"
+      ]
     },
     {
       "id": "read-vocab",
@@ -53,10 +77,12 @@
       "code": "VOC",
       "branch": "analysis",
       "u": 3,
-      "v": -2,
+      "v": 0,
       "description": "Infer word meaning from syntax, contrast, and examples inside the passage.",
       "tip": "Cover the word and predict a substitute from the sentence, then match your prediction to the options.",
-      "requires": ["reading-start"]
+      "requires": [
+        "reading-start"
+      ]
     },
     {
       "id": "read-inference",
@@ -64,10 +90,12 @@
       "code": "INF",
       "branch": "analysis",
       "u": 5,
-      "v": -2,
+      "v": 0,
       "description": "Draw only the conclusions the text forces, not ones that are merely possible.",
       "tip": "Ask 'does the passage have to mean this?' If not, eliminate the choice.",
-      "requires": ["read-vocab"]
+      "requires": [
+        "read-vocab"
+      ]
     },
     {
       "id": "read-structure",
@@ -75,10 +103,12 @@
       "code": "STR",
       "branch": "analysis",
       "u": 7,
-      "v": -2,
+      "v": 0,
       "description": "Chronology, cause and effect, comparison, problem-solution, and their signposts.",
       "tip": "Map the passage's skeleton (each paragraph's purpose) rather than its content.",
-      "requires": ["read-inference"]
+      "requires": [
+        "read-inference"
+      ]
     },
     {
       "id": "read-active",
@@ -89,7 +119,9 @@
       "v": 2,
       "description": "Read with purpose: mark claims, turns, and names instead of highlighting everything.",
       "tip": "Annotate the margin with two or three words per paragraph; it makes questions locatable.",
-      "requires": ["reading-start"]
+      "requires": [
+        "reading-start"
+      ]
     },
     {
       "id": "read-question",
@@ -100,18 +132,22 @@
       "v": 2,
       "description": "Match question stems to the right reading approach and predicted answer.",
       "tip": "Read the question stem before the answer choices; predicting first prevents trap answers.",
-      "requires": ["read-active"]
+      "requires": [
+        "read-active"
+      ]
     },
     {
       "id": "read-skimming",
       "title": "Skimming for Gist",
       "code": "SKM",
       "branch": "speed",
-      "u": 3,
-      "v": 4,
+      "u": 7,
+      "v": 2,
       "description": "Preview a passage quickly by reading the first and last sentences of each paragraph.",
       "tip": "Spend 20 seconds previewing the structure before you read closely; it reduces re-reading.",
-      "requires": ["reading-start"]
+      "requires": [
+        "read-question"
+      ]
     },
     {
       "id": "read-exam-1",
@@ -123,37 +159,66 @@
       "v": 0,
       "description": "Checkpoint covering main idea, supporting details, vocabulary in context, inference, text structure, active reading, question types, and skimming.",
       "tip": "Score 80% or higher to master this checkpoint and unlock the next group.",
-      "requires": ["read-details", "read-structure", "read-question", "read-skimming"],
+      "requires": [
+        "read-details",
+        "read-structure",
+        "read-skimming"
+      ],
       "exam": {
         "passScore": 80,
         "questions": [
           {
             "prompt": "Passage: Urban gardens turn empty lots into shared green spaces. They grow food, cool the surrounding streets, and give neighbours a place to meet.\n\nWhich sentence best states the main idea?",
-            "choices": ["Urban gardens provide food, cooling, and community benefits.", "Empty lots are always better as gardens.", "Neighbourhoods should ban all construction.", "Urban gardens are mainly a source of profit."],
+            "choices": [
+              "Urban gardens provide food, cooling, and community benefits.",
+              "Empty lots are always better as gardens.",
+              "Neighbourhoods should ban all construction.",
+              "Urban gardens are mainly a source of profit."
+            ],
             "answer": 0,
             "explanation": "The passage lists several benefits of urban gardens: food, cooling, and community space. The other choices are either extreme or unsupported."
           },
           {
             "prompt": "Using the same passage, which detail is explicitly stated?",
-            "choices": ["Urban gardens cool the surrounding streets.", "Urban gardens increase property taxes.", "Urban gardens require volunteers.", "Urban gardens exist only in Manila."],
+            "choices": [
+              "Urban gardens cool the surrounding streets.",
+              "Urban gardens increase property taxes.",
+              "Urban gardens require volunteers.",
+              "Urban gardens exist only in Manila."
+            ],
             "answer": 0,
             "explanation": "The passage directly says gardens 'cool the surrounding streets.' The other details are not stated."
           },
           {
             "prompt": "The garden's harvest was sparse, yielding only a few baskets of vegetables.\n\nWhat does 'sparse' most nearly mean?",
-            "choices": ["Abundant", "Scarce", "Delayed", "Expensive"],
+            "choices": [
+              "Abundant",
+              "Scarce",
+              "Delayed",
+              "Expensive"
+            ],
             "answer": 1,
             "explanation": "The clue 'only a few baskets' shows that sparse means scanty or scarce."
           },
           {
             "prompt": "Passage: The library extended its hours during exam week, and students filled every table until closing.\n\nWhat can be inferred?",
-            "choices": ["Students needed more study time.", "The library hired more staff.", "Exams were cancelled.", "The library closed early."],
+            "choices": [
+              "Students needed more study time.",
+              "The library hired more staff.",
+              "Exams were cancelled.",
+              "The library closed early."
+            ],
             "answer": 0,
             "explanation": "The extended hours and full tables support the inference that students wanted more study time. The other choices contradict or go beyond the text."
           },
           {
             "prompt": "A passage first describes a problem, then lists three possible solutions and their costs. How is the passage organized?",
-            "choices": ["Problem–solution", "Chronological order", "Comparison of two people", "Cause only"],
+            "choices": [
+              "Problem–solution",
+              "Chronological order",
+              "Comparison of two people",
+              "Cause only"
+            ],
             "answer": 0,
             "explanation": "The passage presents a problem and then discusses solutions, which is problem–solution organization."
           }
@@ -166,10 +231,12 @@
       "code": "CMP",
       "branch": "comprehension",
       "u": 11,
-      "v": -4,
+      "v": -2,
       "description": "Handle paired passages by mapping agreements and disagreements first.",
       "tip": "Build a two-column table for paired passages before answering; shared claims are common answers.",
-      "requires": ["read-exam-1"]
+      "requires": [
+        "read-exam-1"
+      ]
     },
     {
       "id": "read-literary",
@@ -177,10 +244,12 @@
       "code": "LIT",
       "branch": "comprehension",
       "u": 13,
-      "v": -4,
+      "v": -2,
       "description": "Read short stories and poems for character, conflict, imagery, and theme.",
       "tip": "Track what changes between the beginning and end; that change usually carries the theme.",
-      "requires": ["read-compare"]
+      "requires": [
+        "read-compare"
+      ]
     },
     {
       "id": "read-purpose",
@@ -188,10 +257,12 @@
       "code": "PUR",
       "branch": "analysis",
       "u": 11,
-      "v": -2,
+      "v": 0,
       "description": "Identify why the author writes and how attitude shapes word choice.",
       "tip": "Separate purpose (why) from tone (how it sounds); they are usually two different questions.",
-      "requires": ["read-exam-1"]
+      "requires": [
+        "read-exam-1"
+      ]
     },
     {
       "id": "read-critical",
@@ -199,10 +270,12 @@
       "code": "CRT",
       "branch": "analysis",
       "u": 13,
-      "v": -2,
+      "v": 0,
       "description": "Evaluate evidence, assumptions, and persuasive framing in an argument.",
       "tip": "Find the unstated assumption: it is the bridge between evidence and conclusion.",
-      "requires": ["read-purpose"]
+      "requires": [
+        "read-purpose"
+      ]
     },
     {
       "id": "read-elim",
@@ -213,18 +286,22 @@
       "v": 2,
       "description": "Recognize extreme, out-of-scope, and true-but-irrelevant distractors.",
       "tip": "Cross out choices with absolutes (always, never, all) unless the passage states them plainly.",
-      "requires": ["read-exam-1"]
+      "requires": [
+        "read-exam-1"
+      ]
     },
     {
       "id": "read-timing",
       "title": "Passage Mapping & Timing",
       "code": "TIM",
       "branch": "speed",
-      "u": 11,
-      "v": 4,
+      "u": 13,
+      "v": 2,
       "description": "Budget minutes per passage and decide when to move on.",
       "tip": "Cap each passage at its budget; flag one hard question and return only if time remains.",
-      "requires": ["read-exam-1"]
+      "requires": [
+        "read-elim"
+      ]
     },
     {
       "id": "read-exam-2",
@@ -232,41 +309,70 @@
       "title": "Analysis Exam",
       "code": "EX2",
       "branch": "checkpoints",
-      "u": 17,
+      "u": 15,
       "v": 0,
       "description": "Checkpoint covering paired passages, literary passages, author's purpose, critical reading, elimination, and timing.",
       "tip": "Score 80% or higher to master this checkpoint and unlock the advanced group.",
-      "requires": ["read-literary", "read-critical", "read-elim", "read-timing"],
+      "requires": [
+        "read-literary",
+        "read-critical",
+        "read-timing"
+      ],
       "exam": {
         "passScore": 80,
         "questions": [
           {
             "prompt": "Passage A argues that school uniforms reduce distractions. Passage B argues that uniforms limit self-expression.\n\nWhat do both passages agree on?",
-            "choices": ["Uniforms affect the school experience.", "Uniforms improve grades.", "Uniforms should be banned.", "Uniforms are cheaper."],
+            "choices": [
+              "Uniforms affect the school experience.",
+              "Uniforms improve grades.",
+              "Uniforms should be banned.",
+              "Uniforms are cheaper."
+            ],
             "answer": 0,
             "explanation": "Both authors believe uniforms have a meaningful effect on students; they disagree about whether that effect is positive."
           },
           {
             "prompt": "'The classroom was a zoo after the bell rang.'\n\nWhich figure of speech is used?",
-            "choices": ["Simile", "Metaphor", "Personification", "Hyperbole"],
+            "choices": [
+              "Simile",
+              "Metaphor",
+              "Personification",
+              "Hyperbole"
+            ],
             "answer": 1,
             "explanation": "The sentence calls the classroom a zoo directly, without using 'like' or 'as,' so it is a metaphor."
           },
           {
             "prompt": "A passage explains how volcanoes form at convergent plate boundaries. What is the author's main purpose?",
-            "choices": ["To inform", "To persuade", "To entertain", "To criticize"],
+            "choices": [
+              "To inform",
+              "To persuade",
+              "To entertain",
+              "To criticize"
+            ],
             "answer": 0,
             "explanation": "The passage explains a scientific process, so its main purpose is to inform."
           },
           {
             "prompt": "A columnist writes: 'Students who read daily score higher, so daily reading raises scores.' Which assumption does the argument rely on?",
-            "choices": ["Reading frequency causes higher scores rather than merely correlating with them.", "All students enjoy reading.", "Test scores measure nothing.", "Students who read daily never watch television."],
+            "choices": [
+              "Reading frequency causes higher scores rather than merely correlating with them.",
+              "All students enjoy reading.",
+              "Test scores measure nothing.",
+              "Students who read daily never watch television."
+            ],
             "answer": 0,
             "explanation": "The argument moves from a correlation to a causal claim. It assumes that reading is the cause of the higher scores."
           },
           {
             "prompt": "With two minutes left and one passage unchecked, what is the best strategy?",
-            "choices": ["Answer the questions you can and flag the rest instead of reading every line.", "Read the passage twice from the beginning.", "Leave every answer blank.", "Spend the remaining time on a finished passage."],
+            "choices": [
+              "Answer the questions you can and flag the rest instead of reading every line.",
+              "Read the passage twice from the beginning.",
+              "Leave every answer blank.",
+              "Spend the remaining time on a finished passage."
+            ],
             "answer": 0,
             "explanation": "When time is short, secure the answers you can get and flag the rest. Re-reading everything or leaving blanks wastes available points."
           }
@@ -278,66 +384,78 @@
       "title": "Synthesizing Passages",
       "code": "SYN",
       "branch": "comprehension",
-      "u": 19,
-      "v": -4,
+      "u": 17,
+      "v": -2,
       "description": "Combine ideas from multiple passages into one accurate, balanced conclusion.",
       "tip": "A synthesis answer must include both passages; an option that mentions only one is usually wrong.",
-      "requires": ["read-exam-2"]
+      "requires": [
+        "read-exam-2"
+      ]
     },
     {
       "id": "read-argument",
       "title": "Author's Argument",
       "code": "ARG",
       "branch": "analysis",
-      "u": 19,
-      "v": -2,
+      "u": 17,
+      "v": 0,
       "description": "Identify claims, reasons, evidence, and the logical links that hold an argument together.",
       "tip": "Separate the claim from the evidence; incorrect answers often confuse the two.",
-      "requires": ["read-exam-2"]
+      "requires": [
+        "read-exam-2"
+      ]
     },
     {
       "id": "read-evidence",
       "title": "Evidence & Support",
       "code": "EVD",
       "branch": "analysis",
-      "u": 21,
-      "v": -2,
+      "u": 19,
+      "v": 0,
       "description": "Judge whether evidence is relevant, sufficient, and actually supports the claim.",
       "tip": "The strongest evidence is specific, relevant, and drawn from a reliable source.",
-      "requires": ["read-argument"]
+      "requires": [
+        "read-argument"
+      ]
     },
     {
       "id": "read-prediction",
       "title": "Predicting Answers",
       "code": "PRD",
       "branch": "strategy",
-      "u": 19,
+      "u": 17,
       "v": 2,
       "description": "Form your own answer before looking at the choices to resist attractive distractors.",
       "tip": "Cover the choices, answer in your own words, then choose the closest match.",
-      "requires": ["read-exam-2"]
+      "requires": [
+        "read-exam-2"
+      ]
     },
     {
       "id": "read-questionorder",
       "title": "Question Order Strategy",
       "code": "ORD",
       "branch": "strategy",
-      "u": 21,
+      "u": 19,
       "v": 2,
       "description": "Sequence questions from detail to global so earlier answers help with later ones.",
       "tip": "Answer line-reference questions first; they build the map you need for main-idea questions.",
-      "requires": ["read-prediction"]
+      "requires": [
+        "read-prediction"
+      ]
     },
     {
       "id": "read-scanning",
       "title": "Scanning for Details",
       "code": "SCN",
       "branch": "speed",
-      "u": 19,
-      "v": 4,
+      "u": 21,
+      "v": 2,
       "description": "Find names, dates, numbers, and keywords quickly without re-reading the whole passage.",
       "tip": "Scan with your eyes in a zigzag for the exact keyword, then read the sentence around it.",
-      "requires": ["read-exam-2"]
+      "requires": [
+        "read-questionorder"
+      ]
     },
     {
       "id": "read-exam-3",
@@ -345,41 +463,70 @@
       "title": "Strategy & Synthesis Exam",
       "code": "EX3",
       "branch": "checkpoints",
-      "u": 25,
+      "u": 23,
       "v": 0,
       "description": "Checkpoint covering synthesis, argument, evidence, prediction, question order, and scanning.",
       "tip": "Score 80% or higher to master this checkpoint and unlock the final simulation.",
-      "requires": ["read-synthesis", "read-evidence", "read-questionorder", "read-scanning"],
+      "requires": [
+        "read-synthesis",
+        "read-evidence",
+        "read-scanning"
+      ],
       "exam": {
         "passScore": 80,
         "questions": [
           {
             "prompt": "Passage A says remote work raises individual productivity. Passage B says remote work weakens collaboration.\n\nWhich statement best synthesizes the two passages?",
-            "choices": ["Remote work can increase individual productivity while weakening collaboration.", "Remote work is always better for everyone.", "Remote work has no measurable effects.", "Both passages reject remote work completely."],
+            "choices": [
+              "Remote work can increase individual productivity while weakening collaboration.",
+              "Remote work is always better for everyone.",
+              "Remote work has no measurable effects.",
+              "Both passages reject remote work completely."
+            ],
             "answer": 0,
             "explanation": "A synthesis combines the main points of both passages without dropping one side. Only the first choice includes both the productivity gain and the collaboration cost."
           },
           {
             "prompt": "Which evidence best supports the claim that exercise improves mood?",
-            "choices": ["A controlled study finding lower stress scores after regular exercise.", "A friend who feels happy after running.", "A popular slogan about fitness.", "An advertisement for running shoes."],
+            "choices": [
+              "A controlled study finding lower stress scores after regular exercise.",
+              "A friend who feels happy after running.",
+              "A popular slogan about fitness.",
+              "An advertisement for running shoes."
+            ],
             "answer": 0,
             "explanation": "A controlled study provides systematic, relevant evidence. An anecdote, slogan, or advertisement is much weaker support."
           },
           {
             "prompt": "Why should line-reference questions usually be answered before global questions?",
-            "choices": ["They help you locate details that support broader conclusions.", "They are always worth more points.", "They require no reading at all.", "They are usually the last questions in the section."],
+            "choices": [
+              "They help you locate details that support broader conclusions.",
+              "They are always worth more points.",
+              "They require no reading at all.",
+              "They are usually the last questions in the section."
+            ],
             "answer": 0,
             "explanation": "Detail questions force you back into the passage and build a mental map that makes main-idea and inference questions easier."
           },
           {
             "prompt": "To find the year a law was passed in a long passage, what is the fastest approach?",
-            "choices": ["Scan for numerals and the keyword 'law.'", "Read every sentence aloud.", "Memorize the first paragraph.", "Skip the passage entirely."],
+            "choices": [
+              "Scan for numerals and the keyword 'law.'",
+              "Read every sentence aloud.",
+              "Memorize the first paragraph.",
+              "Skip the passage entirely."
+            ],
             "answer": 0,
             "explanation": "Scanning targets the exact information you need. Reading every sentence or skipping the passage wastes time or loses accuracy."
           },
           {
             "prompt": "Before reading the answer choices, why predict your own answer?",
-            "choices": ["It reduces the pull of attractive but wrong choices.", "It guarantees a perfect score.", "It makes the passage shorter.", "It replaces the need to read the passage."],
+            "choices": [
+              "It reduces the pull of attractive but wrong choices.",
+              "It guarantees a perfect score.",
+              "It makes the passage shorter.",
+              "It replaces the need to read the passage."
+            ],
             "answer": 0,
             "explanation": "Predicting first keeps you anchored to the passage's meaning so that a plausible-sounding distractor is easier to reject."
           }
@@ -392,11 +539,13 @@
       "title": "Reading Simulation",
       "code": "SIM",
       "branch": "checkpoints",
-      "u": 27,
+      "u": 25,
       "v": 0,
       "description": "Timed multi-passage practice with error analysis.",
       "tip": "Review wrong answers by naming the trap type, not just the correct letter.",
-      "requires": ["read-exam-3"]
+      "requires": [
+        "read-exam-3"
+      ]
     }
   ]
 }

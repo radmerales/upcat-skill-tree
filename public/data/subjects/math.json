@@ -5,11 +5,31 @@
   "blurb": "Arithmetic, algebra, geometry, and data rebuilt from the ground up, with checkpoint exams that gate each group of topics.",
   "accent": "#f6b93b",
   "branches": [
-    { "id": "arithmetic", "name": "Arithmetic", "color": "#f6b93b" },
-    { "id": "algebra", "name": "Algebra", "color": "#ff8f4d" },
-    { "id": "geometry", "name": "Geometry", "color": "#4fd1c5" },
-    { "id": "data", "name": "Data & Probability", "color": "#c084fc" },
-    { "id": "checkpoints", "name": "Checkpoints", "color": "#9c6b3f" }
+    {
+      "id": "arithmetic",
+      "name": "Arithmetic",
+      "color": "#f6b93b"
+    },
+    {
+      "id": "algebra",
+      "name": "Algebra",
+      "color": "#ff8f4d"
+    },
+    {
+      "id": "geometry",
+      "name": "Geometry",
+      "color": "#4fd1c5"
+    },
+    {
+      "id": "data",
+      "name": "Data & Probability",
+      "color": "#c084fc"
+    },
+    {
+      "id": "checkpoints",
+      "name": "Checkpoints",
+      "color": "#9c6b3f"
+    }
   ],
   "nodes": [
     {
@@ -31,10 +51,12 @@
       "code": "OPS",
       "branch": "arithmetic",
       "u": 3,
-      "v": -2,
+      "v": 0,
       "description": "Integer rules, order of operations, divisibility, primes, and the number properties UPCAT leans on.",
       "tip": "Drill 20 order-of-operations items daily; write each step instead of computing in your head.",
-      "requires": ["math-start"]
+      "requires": [
+        "math-start"
+      ]
     },
     {
       "id": "math-fractions",
@@ -42,10 +64,12 @@
       "code": "FRC",
       "branch": "arithmetic",
       "u": 5,
-      "v": -2,
+      "v": 0,
       "description": "Convert fluently between forms and handle percent change, discounts, and fractional parts.",
       "tip": "Memorize the fraction–percent table (1/8 = 12.5%, 1/6 ≈ 16.7%) so you can skip long division.",
-      "requires": ["math-ops"]
+      "requires": [
+        "math-ops"
+      ]
     },
     {
       "id": "math-ratios",
@@ -53,10 +77,12 @@
       "code": "RAT",
       "branch": "arithmetic",
       "u": 7,
-      "v": -2,
+      "v": 0,
       "description": "Part-to-part and part-to-whole ratios, direct and inverse proportion, and scaling.",
       "tip": "When a problem gives a ratio, assign a multiplier x and express every quantity in terms of x.",
-      "requires": ["math-fractions"]
+      "requires": [
+        "math-fractions"
+      ]
     },
     {
       "id": "math-expressions",
@@ -64,10 +90,12 @@
       "code": "ALG",
       "branch": "algebra",
       "u": 3,
-      "v": -4,
+      "v": -2,
       "description": "Simplify expressions, combine like terms, expand, and translate words into algebra.",
       "tip": "Underline the unknown and write a 'let x =' line before touching the equation.",
-      "requires": ["math-start"]
+      "requires": [
+        "math-start"
+      ]
     },
     {
       "id": "math-linear",
@@ -75,10 +103,12 @@
       "code": "LIN",
       "branch": "algebra",
       "u": 5,
-      "v": -4,
+      "v": -2,
       "description": "Solve one- and two-variable linear equations, interpret slope, and check solutions.",
       "tip": "Whatever you do to one side, do to the other, then substitute your answer back in.",
-      "requires": ["math-expressions"]
+      "requires": [
+        "math-expressions"
+      ]
     },
     {
       "id": "math-inequalities",
@@ -86,10 +116,12 @@
       "code": "INEQ",
       "branch": "algebra",
       "u": 7,
-      "v": -4,
+      "v": -2,
       "description": "Solve linear inequalities, compound inequalities, and simple absolute-value equations.",
       "tip": "Flip the inequality sign when multiplying or dividing by a negative number.",
-      "requires": ["math-linear"]
+      "requires": [
+        "math-linear"
+      ]
     },
     {
       "id": "math-angles",
@@ -100,7 +132,9 @@
       "v": 2,
       "description": "Angle relationships, triangle properties, congruence, and the exterior angle theorem.",
       "tip": "Draw the figure even when one is provided, and mark every given value on it.",
-      "requires": ["math-start"]
+      "requires": [
+        "math-start"
+      ]
     },
     {
       "id": "math-coord",
@@ -111,18 +145,22 @@
       "v": 2,
       "description": "Distance, midpoint, slope, and equations of lines on the Cartesian plane.",
       "tip": "Sketch the points; most coordinate problems become obvious once the segment or triangle is drawn.",
-      "requires": ["math-angles"]
+      "requires": [
+        "math-angles"
+      ]
     },
     {
       "id": "math-displays",
       "title": "Tables, Graphs & Charts",
       "code": "TAB",
       "branch": "data",
-      "u": 3,
-      "v": 4,
+      "u": 7,
+      "v": 2,
       "description": "Read tables, bar graphs, line graphs, and pie charts without misreading labels or units.",
       "tip": "Read the axis labels and units before the question; most traps live in 'percent of what?'.",
-      "requires": ["math-start"]
+      "requires": [
+        "math-coord"
+      ]
     },
     {
       "id": "math-exam-1",
@@ -134,37 +172,66 @@
       "v": 0,
       "description": "Checkpoint covering number operations, fractions, ratios, expressions, linear relationships, inequalities, angles, coordinates, and data displays.",
       "tip": "Score 80% or higher to master this checkpoint and unlock the next group. Review every explanation before retrying.",
-      "requires": ["math-ratios", "math-inequalities", "math-coord", "math-displays"],
+      "requires": [
+        "math-ratios",
+        "math-inequalities",
+        "math-displays"
+      ],
       "exam": {
         "passScore": 80,
         "questions": [
           {
             "prompt": "Simplify: 8 + 2 × (5 − 3)²",
-            "choices": ["16", "20", "40", "12"],
+            "choices": [
+              "16",
+              "20",
+              "40",
+              "12"
+            ],
             "answer": 0,
             "explanation": "Inside the parentheses: 5 − 3 = 2. Square it to get 4, then multiply by 2 to get 8, and finally add 8. The result is 16."
           },
           {
             "prompt": "Simplify: 3(2x − 4) + 5x",
-            "choices": ["11x − 12", "11x + 12", "6x − 7", "11x − 4"],
+            "choices": [
+              "11x − 12",
+              "11x + 12",
+              "6x − 7",
+              "11x − 4"
+            ],
             "answer": 0,
             "explanation": "Distribute the 3 to get 6x − 12, then combine like terms: 6x + 5x = 11x. The simplified expression is 11x − 12."
           },
           {
             "prompt": "Solve the inequality: 2x + 5 > 13",
-            "choices": ["x > 4", "x < 4", "x > 9", "x < 9"],
+            "choices": [
+              "x > 4",
+              "x < 4",
+              "x > 9",
+              "x < 9"
+            ],
             "answer": 0,
             "explanation": "Subtract 5 from both sides to get 2x > 8, then divide by the positive 2. The inequality sign stays the same: x > 4."
           },
           {
             "prompt": "A recipe uses flour and sugar in a 3:2 ratio. If you use 18 cups of flour, how many cups of sugar do you need?",
-            "choices": ["9", "12", "15", "27"],
+            "choices": [
+              "9",
+              "12",
+              "15",
+              "27"
+            ],
             "answer": 1,
             "explanation": "The ratio 3:2 means sugar = (2/3) × flour. So sugar = (2/3) × 18 = 12 cups."
           },
           {
             "prompt": "The angles of a triangle are 2x, 3x, and 4x. What is the value of x?",
-            "choices": ["10", "20", "30", "40"],
+            "choices": [
+              "10",
+              "20",
+              "30",
+              "40"
+            ],
             "answer": 1,
             "explanation": "The angles of a triangle sum to 180°, so 2x + 3x + 4x = 9x = 180. Dividing gives x = 20."
           }
@@ -177,10 +244,12 @@
       "code": "EST",
       "branch": "arithmetic",
       "u": 11,
-      "v": -2,
+      "v": 0,
       "description": "Approximate before you compute, sanity-check answer choices, and use friendly benchmarks.",
       "tip": "Round first. UPCAT choices are often far enough apart that an estimate eliminates three options.",
-      "requires": ["math-exam-1"]
+      "requires": [
+        "math-exam-1"
+      ]
     },
     {
       "id": "math-rates",
@@ -188,10 +257,12 @@
       "code": "RTE",
       "branch": "arithmetic",
       "u": 13,
-      "v": -2,
+      "v": 0,
       "description": "Speed–distance–time, combined work, and mixture problems solved with clean tables.",
       "tip": "Use the units to decide the operation: 'of the job per hour' means your rates add.",
-      "requires": ["math-estimation"]
+      "requires": [
+        "math-estimation"
+      ]
     },
     {
       "id": "math-wordadv",
@@ -199,10 +270,12 @@
       "code": "ADV",
       "branch": "arithmetic",
       "u": 15,
-      "v": -2,
+      "v": 0,
       "description": "Translate multi-step age, digit, investment, and geometry word problems into equations.",
       "tip": "Write the final question as a sentence with a blank; it tells you exactly what to solve for.",
-      "requires": ["math-rates"]
+      "requires": [
+        "math-rates"
+      ]
     },
     {
       "id": "math-poly",
@@ -210,10 +283,12 @@
       "code": "POL",
       "branch": "algebra",
       "u": 11,
-      "v": -4,
+      "v": -2,
       "description": "Expand, factor, and simplify polynomials including difference of squares and trinomials.",
       "tip": "Always check for a greatest common factor before trying any other factoring pattern.",
-      "requires": ["math-exam-1"]
+      "requires": [
+        "math-exam-1"
+      ]
     },
     {
       "id": "math-systems",
@@ -221,10 +296,12 @@
       "code": "SYS",
       "branch": "algebra",
       "u": 13,
-      "v": -4,
+      "v": -2,
       "description": "Solve two-variable systems by substitution and elimination; recognize no-solution cases.",
       "tip": "Elimination is faster when coefficients line up — multiply to create opposites, then add.",
-      "requires": ["math-poly"]
+      "requires": [
+        "math-poly"
+      ]
     },
     {
       "id": "math-sequence",
@@ -232,10 +309,12 @@
       "code": "SEQ",
       "branch": "algebra",
       "u": 15,
-      "v": -4,
+      "v": -2,
       "description": "Arithmetic and geometric sequences, nth terms, and simple series sums.",
       "tip": "List the first four terms before hunting for a formula — the pattern is usually visible.",
-      "requires": ["math-systems"]
+      "requires": [
+        "math-systems"
+      ]
     },
     {
       "id": "math-circles",
@@ -246,7 +325,9 @@
       "v": 2,
       "description": "Circle measures plus perimeter, area, surface area, and volume of solids.",
       "tip": "Keep a one-page formula sheet and re-derive it weekly so the formulas actually stick.",
-      "requires": ["math-exam-1"]
+      "requires": [
+        "math-exam-1"
+      ]
     },
     {
       "id": "math-polygons",
@@ -257,29 +338,35 @@
       "v": 2,
       "description": "Interior and exterior angles of polygons, parallelogram properties, and trapezoid area.",
       "tip": "The interior angles of an n-sided polygon sum to (n − 2) × 180°.",
-      "requires": ["math-circles"]
+      "requires": [
+        "math-circles"
+      ]
     },
     {
       "id": "math-averages",
       "title": "Averages & Weighted Mean",
       "code": "AVG",
       "branch": "data",
-      "u": 11,
-      "v": 4,
+      "u": 15,
+      "v": 2,
       "description": "Mean, median, mode, range, and weighted averages in mixed data sets.",
       "tip": "For weighted mean, convert each weight into a fraction of the total before multiplying.",
-      "requires": ["math-exam-1"]
+      "requires": [
+        "math-polygons"
+      ]
     },
     {
       "id": "math-prob",
       "title": "Counting & Probability",
       "code": "PRB",
       "branch": "data",
-      "u": 13,
-      "v": 4,
+      "u": 17,
+      "v": 2,
       "description": "Permutations, combinations, and single- and multi-event probability.",
       "tip": "Ask whether order matters: order matters → permutation, order does not → combination.",
-      "requires": ["math-averages"]
+      "requires": [
+        "math-averages"
+      ]
     },
     {
       "id": "math-exam-2",
@@ -287,41 +374,70 @@
       "title": "Core Skills Exam",
       "code": "EX2",
       "branch": "checkpoints",
-      "u": 17,
+      "u": 19,
       "v": 0,
       "description": "Checkpoint covering estimation, rates, advanced word problems, polynomials, systems, sequences, circles, polygons, averages, and probability.",
       "tip": "Score 80% or higher to master this checkpoint and unlock the advanced group.",
-      "requires": ["math-wordadv", "math-sequence", "math-polygons", "math-prob"],
+      "requires": [
+        "math-wordadv",
+        "math-sequence",
+        "math-prob"
+      ],
       "exam": {
         "passScore": 80,
         "questions": [
           {
             "prompt": "Estimate: 49.6 × 19.8 ÷ 10.1",
-            "choices": ["10", "100", "1,000", "50"],
+            "choices": [
+              "10",
+              "100",
+              "1,000",
+              "50"
+            ],
             "answer": 1,
             "explanation": "Round each value: 50 × 20 ÷ 10 = 100. The exact answer is close to 100."
           },
           {
             "prompt": "Factor: x² − 9",
-            "choices": ["(x − 3)(x + 3)", "(x − 9)(x + 1)", "(x − 3)²", "(x + 9)(x − 1)"],
+            "choices": [
+              "(x − 3)(x + 3)",
+              "(x − 9)(x + 1)",
+              "(x − 3)²",
+              "(x + 9)(x − 1)"
+            ],
             "answer": 0,
             "explanation": "This is a difference of squares: a² − b² = (a − b)(a + b). Here a = x and b = 3."
           },
           {
             "prompt": "Solve the system: x + y = 7 and x − y = 1",
-            "choices": ["(4, 3)", "(3, 4)", "(5, 2)", "(6, 1)"],
+            "choices": [
+              "(4, 3)",
+              "(3, 4)",
+              "(5, 2)",
+              "(6, 1)"
+            ],
             "answer": 0,
             "explanation": "Adding the equations eliminates y: 2x = 8, so x = 4. Then 4 + y = 7 gives y = 3."
           },
           {
             "prompt": "What is the next term in the sequence 3, 7, 11, 15, …?",
-            "choices": ["18", "19", "20", "21"],
+            "choices": [
+              "18",
+              "19",
+              "20",
+              "21"
+            ],
             "answer": 1,
             "explanation": "The sequence increases by 4 each time, so the next term is 15 + 4 = 19."
           },
           {
             "prompt": "A circle has radius 5. What is its area?",
-            "choices": ["10π", "25π", "50π", "5π"],
+            "choices": [
+              "10π",
+              "25π",
+              "50π",
+              "5π"
+            ],
             "answer": 1,
             "explanation": "Area of a circle is πr². With r = 5, the area is π × 25 = 25π."
           }
@@ -333,99 +449,117 @@
       "title": "Percent, Interest & Growth",
       "code": "PCT",
       "branch": "arithmetic",
-      "u": 19,
-      "v": -2,
+      "u": 21,
+      "v": 0,
       "description": "Percent increase and decrease, simple and compound interest, and successive percentage changes.",
       "tip": "A 20% increase followed by a 20% decrease does not return to the original value; multiply the factors.",
-      "requires": ["math-exam-2"]
+      "requires": [
+        "math-exam-2"
+      ]
     },
     {
       "id": "math-numbertheory",
       "title": "Number Theory & Sets",
       "code": "NUM",
       "branch": "arithmetic",
-      "u": 21,
-      "v": -2,
+      "u": 23,
+      "v": 0,
       "description": "LCM, GCF, remainders, prime factorisation, and basic set counting with Venn diagrams.",
       "tip": "Use prime factorisation for LCM and GCF; it makes the relationship between them obvious.",
-      "requires": ["math-percent"]
+      "requires": [
+        "math-percent"
+      ]
     },
     {
       "id": "math-quadratics",
       "title": "Quadratic Equations",
       "code": "QUA",
       "branch": "algebra",
-      "u": 19,
-      "v": -4,
+      "u": 21,
+      "v": -2,
       "description": "Solve by factoring, completing the square, and the quadratic formula; read parabolas.",
       "tip": "Check the discriminant first; it tells you how many real roots to expect before you solve.",
-      "requires": ["math-exam-2"]
+      "requires": [
+        "math-exam-2"
+      ]
     },
     {
       "id": "math-functions",
       "title": "Functions & Graphs",
       "code": "FNX",
       "branch": "algebra",
-      "u": 21,
-      "v": -4,
+      "u": 23,
+      "v": -2,
       "description": "Function notation, domain and range, transformations, and graph interpretation.",
       "tip": "Test one input value to match a graph to an equation — faster than analyzing the whole shape.",
-      "requires": ["math-quadratics"]
+      "requires": [
+        "math-quadratics"
+      ]
     },
     {
       "id": "math-radicals",
       "title": "Exponents & Radicals",
       "code": "RAD",
       "branch": "algebra",
-      "u": 23,
-      "v": -4,
+      "u": 25,
+      "v": -2,
       "description": "Laws of exponents, scientific notation, simplifying radicals, and rationalising denominators.",
       "tip": "Convert radicals to fractional exponents when you need to combine or simplify them.",
-      "requires": ["math-functions"]
+      "requires": [
+        "math-functions"
+      ]
     },
     {
       "id": "math-geomaster",
       "title": "Similarity & Right Triangles",
       "code": "GEO",
       "branch": "geometry",
-      "u": 19,
+      "u": 21,
       "v": 2,
       "description": "Similar figures, Pythagorean triples, and basic right-triangle trigonometry.",
       "tip": "Memorize 3-4-5, 5-12-13, and 8-15-17 so you can skip the Pythagorean theorem on test day.",
-      "requires": ["math-exam-2"]
+      "requires": [
+        "math-exam-2"
+      ]
     },
     {
       "id": "math-transformations",
       "title": "Transformations & Symmetry",
       "code": "TRN",
       "branch": "geometry",
-      "u": 21,
+      "u": 23,
       "v": 2,
       "description": "Translations, rotations, reflections, dilations, and symmetry in the coordinate plane.",
       "tip": "Track one vertex through the transformation; the rest of the figure follows the same rule.",
-      "requires": ["math-geomaster"]
+      "requires": [
+        "math-geomaster"
+      ]
     },
     {
       "id": "math-data",
       "title": "Data Interpretation",
       "code": "DAT",
       "branch": "data",
-      "u": 19,
-      "v": 4,
+      "u": 25,
+      "v": 2,
       "description": "Compare data sets, compute rates from tables, and spot misleading scales or missing baselines.",
       "tip": "Before answering, identify the denominator behind every percentage in the chart.",
-      "requires": ["math-exam-2"]
+      "requires": [
+        "math-transformations"
+      ]
     },
     {
       "id": "math-spread",
       "title": "Statistics & Spread",
       "code": "SPR",
       "branch": "data",
-      "u": 21,
-      "v": 4,
+      "u": 27,
+      "v": 2,
       "description": "Range, quartiles, standard deviation concepts, and how outliers move the mean and median.",
       "tip": "An outlier pulls the mean toward itself but barely moves the median.",
-      "requires": ["math-data"]
+      "requires": [
+        "math-data"
+      ]
     },
     {
       "id": "math-exam-3",
@@ -433,41 +567,70 @@
       "title": "Advanced Math Exam",
       "code": "EX3",
       "branch": "checkpoints",
-      "u": 25,
+      "u": 29,
       "v": 0,
       "description": "Checkpoint covering percent growth, number theory, quadratics, functions, exponents and radicals, similarity, transformations, data interpretation, and statistics.",
       "tip": "Score 80% or higher to master this checkpoint and unlock the final simulation.",
-      "requires": ["math-numbertheory", "math-radicals", "math-transformations", "math-spread"],
+      "requires": [
+        "math-numbertheory",
+        "math-radicals",
+        "math-spread"
+      ],
       "exam": {
         "passScore": 80,
         "questions": [
           {
             "prompt": "What is 15% of 240?",
-            "choices": ["24", "36", "42", "48"],
+            "choices": [
+              "24",
+              "36",
+              "42",
+              "48"
+            ],
             "answer": 1,
             "explanation": "15% = 0.15, and 0.15 × 240 = 36."
           },
           {
             "prompt": "What are the roots of x² − 5x + 6 = 0?",
-            "choices": ["x = 2 and x = 3", "x = −2 and x = −3", "x = 1 and x = 6", "x = −1 and x = 6"],
+            "choices": [
+              "x = 2 and x = 3",
+              "x = −2 and x = −3",
+              "x = 1 and x = 6",
+              "x = −1 and x = 6"
+            ],
             "answer": 0,
             "explanation": "Factor the quadratic as (x − 2)(x − 3) = 0. Setting each factor equal to zero gives x = 2 or x = 3."
           },
           {
             "prompt": "If f(x) = 2x² − 3, what is f(−2)?",
-            "choices": ["5", "−11", "1", "8"],
+            "choices": [
+              "5",
+              "−11",
+              "1",
+              "8"
+            ],
             "answer": 0,
             "explanation": "Substitute x = −2: f(−2) = 2(−2)² − 3 = 2(4) − 3 = 8 − 3 = 5."
           },
           {
             "prompt": "Simplify √50.",
-            "choices": ["5√2", "2√5", "25√2", "10√5"],
+            "choices": [
+              "5√2",
+              "2√5",
+              "25√2",
+              "10√5"
+            ],
             "answer": 0,
             "explanation": "Factor 50 as 25 × 2. Since √25 = 5, we get √50 = 5√2."
           },
           {
             "prompt": "A right triangle has legs 6 and 8. What is the length of the hypotenuse?",
-            "choices": ["9", "10", "12", "14"],
+            "choices": [
+              "9",
+              "10",
+              "12",
+              "14"
+            ],
             "answer": 1,
             "explanation": "Use the Pythagorean theorem: 6² + 8² = 36 + 64 = 100, so the hypotenuse is √100 = 10."
           }
@@ -480,11 +643,13 @@
       "title": "Timed Math Simulation",
       "code": "SIM",
       "branch": "checkpoints",
-      "u": 27,
+      "u": 31,
       "v": 0,
       "description": "Full mixed math sets under the official time limit, followed by an error-log review.",
       "tip": "Simulate the real clock, then tag every miss by topic. Retake only your two weakest topics first.",
-      "requires": ["math-exam-3"]
+      "requires": [
+        "math-exam-3"
+      ]
     }
   ]
 }
