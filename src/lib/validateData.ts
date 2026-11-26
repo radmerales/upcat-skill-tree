@@ -158,7 +158,7 @@ export function normalizeSubject(raw: unknown, where = 'subject'): Subject {
     const v = readInt(node.v, `${where}.${nodeId}.v`)
     if (u % 2 !== 1 || v % 2 !== 0) {
       fail(
-        `${where}.${nodeId}: nodes must sit on a hex corner (odd u, even v), got ${u},${v}.`,
+        `${where}.${nodeId}: nodes must sit on a triangle corner (odd u, even v), got ${u},${v}.`,
       )
     }
     const cell = `${u}:${v}`

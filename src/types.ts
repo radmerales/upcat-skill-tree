@@ -92,6 +92,5 @@ export interface SubjectLayout {
   width: number
   height: number
   triangles: TriangleCell[]
-  hexagons: TriangleCell[]
   edges: LayoutEdge[]
 }
