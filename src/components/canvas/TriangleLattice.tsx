@@ -20,6 +20,13 @@ export default function TriangleLattice({ layout }: TriangleLatticeProps) {
           className="tri-cell"
         />
       ))}
+      {layout.hexagons.map((hexagon, index) => (
+        <polygon
+          key={`hex-${index}`}
+          points={hexagon.points.map((point) => `${point.x},${point.y}`).join(' ')}
+          className="hex-cell"
+        />
+      ))}
     </svg>
   )
 }

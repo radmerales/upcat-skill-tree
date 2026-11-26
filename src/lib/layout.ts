@@ -16,12 +16,12 @@ const NODE_TOP = 58
 const NODE_BOTTOM = 102
 
 /**
- * Nodes are only allowed on "hex centres" — alternating corners of the
- * triangle mesh, so every neighbouring anchor has at least one corner
- * between it and the next.
+ * Anchors live on hex corners: the east corner of each hexagon whose centre
+ * is an even/even triangle-mesh point. This keeps every node on a visible
+ * hex corner and guarantees an empty corner between neighbouring anchors.
  */
 export function isAnchorCorner(u: number, v: number): boolean {
-  return u % 2 === 0 && v % 2 === 0
+  return u % 2 === 1 && v % 2 === 0
 }
 
 export function layoutSubject(subject: Subject): SubjectLayout {
@@ -84,16 +84,38 @@ export function layoutSubject(subject: Subject): SubjectLayout {
     }
   }
 
-  /* Hex-centre anchors ---------------------------------------------------- */
+  /* Hex anchors ------------------------------------------------------------ */
   const anchors: AnchorPoint[] = []
-  const anchorUStart = Math.ceil(uStart / 2) * 2
-  const anchorUEnd = Math.floor(uEnd / 2) * 2
+  const anchorUStart = Math.ceil((uStart - 1) / 2) * 2 + 1
+  const anchorUEnd = Math.floor((uEnd - 1) / 2) * 2 + 1
   const anchorVStart = Math.ceil(vStart / 2) * 2
   const anchorVEnd = Math.floor(vEnd / 2) * 2
   for (let v = anchorVStart; v <= anchorVEnd; v += 2) {
     for (let u = anchorUStart; u <= anchorUEnd; u += 2) {
       const point = at(u, v)
       anchors.push({ u, v, x: point.x, y: point.y })
+    }
+  }
+
+  /* Hexagon outlines around each even/even triangle-mesh centre ----------- */
+  const hexagons: TriangleCell[] = []
+  const hexUStart = Math.ceil(uStart / 2) * 2
+  const hexUEnd = Math.floor(uEnd / 2) * 2
+  const hexVStart = Math.ceil(vStart / 2) * 2
+  const hexVEnd = Math.floor(vEnd / 2) * 2
+  const corners: Array<[number, number]> = [
+    [1, 0],
+    [1, -1],
+    [0, -1],
+    [-1, 0],
+    [-1, 1],
+    [0, 1],
+  ]
+  for (let v = hexVStart; v <= hexVEnd; v += 2) {
+    for (let u = hexUStart; u <= hexUEnd; u += 2) {
+      hexagons.push({
+        points: corners.map(([du, dv]) => at(u + du, v + dv)),
+      })
     }
   }
 
@@ -119,13 +141,14 @@ export function layoutSubject(subject: Subject): SubjectLayout {
     width: maxX - minX + PAD * 2,
     height: maxY - minY + PAD * 2,
     triangles,
+    hexagons,
     edges,
   }
 }
 
 /* Connectors -------------------------------------------------------------- */
 
-/** Route every prerequisite link along the triangle mesh between its anchors. */
+/** Route every prerequisite link along the hexagon boundary edges. */
 export function routeEdges(
   layout: SubjectLayout,
   positions: Record<string, AnchorPoint>,
@@ -140,6 +163,7 @@ export function routeEdges(
     Math.max(...us) + 10,
     Math.min(...vs) - 10,
     Math.max(...vs) + 10,
+    (u, v) => !(u % 2 === 0 && v % 2 === 0),
   )
 
   const toPoint = (u: number, v: number): Point => {

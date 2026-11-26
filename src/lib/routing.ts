@@ -7,10 +7,18 @@ const TRI_NEIGHBORS: Array<[number, number]> = [
   [-1, 1],
 ]
 
-export function buildGraph(minU: number, maxU: number, minV: number, maxV: number) {
+export function buildGraph(
+  minU: number,
+  maxU: number,
+  minV: number,
+  maxV: number,
+  allow: (u: number, v: number) => boolean = () => true,
+) {
   const verts = new Set<string>()
   for (let v = minV; v <= maxV; v += 1) {
-    for (let u = minU; u <= maxU; u += 1) verts.add(`${u},${v}`)
+    for (let u = minU; u <= maxU; u += 1) {
+      if (allow(u, v)) verts.add(`${u},${v}`)
+    }
   }
 
   const neighbors = new Map<string, string[]>()

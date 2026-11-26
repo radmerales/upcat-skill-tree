@@ -109,8 +109,8 @@ for (const [fileIndex, file] of subjectFiles.entries()) {
     }
     if (!isInt(node.u)) fail(`${label}.u must be a whole number.`)
     if (!isInt(node.v)) fail(`${label}.v must be a whole number.`)
-    if (isInt(node.u) && isInt(node.v) && (node.u % 2 !== 0 || node.v % 2 !== 0)) {
-      fail(`${label} must sit on a hex-centre corner (even u and v), got ${node.u},${node.v}.`)
+    if (isInt(node.u) && isInt(node.v) && (node.u % 2 !== 1 || node.v % 2 !== 0)) {
+      fail(`${label} must sit on a hex corner (odd u, even v), got ${node.u},${node.v}.`)
     }
     if (node.start !== undefined && typeof node.start !== 'boolean') {
       fail(`${label}.start must be true when present.`)
@@ -244,6 +244,6 @@ if (errors.length) {
 }
 
 console.log(
-  `✓ Triangle flowchart valid — ${seenSubjects.size} subjects, ${totalNodes} hex anchors, ` +
+  `✓ Hex-corner flowchart valid — ${seenSubjects.size} subjects, ${totalNodes} hex-corner anchors, ` +
     `${totalExams} checkpoint exams, ${totalQuestions} exam questions.`,
 )

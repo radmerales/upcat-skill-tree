@@ -41,8 +41,9 @@
   --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  --tri-line: rgba(96, 74, 43, 0.075);
-  --tri-fill: rgba(96, 74, 43, 0.02);
+  --tri-line: rgba(96, 74, 43, 0.035);
+  --tri-fill: rgba(96, 74, 43, 0.008);
+  --hex-line: rgba(96, 74, 43, 0.24);
 
   --vnode-code: #4a3a26;
   --vnode-title: #8a7559;
