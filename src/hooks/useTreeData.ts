@@ -1,8 +1,22 @@
 import { useEffect, useState } from 'react'
-import { normalizeData } from '../lib/tree'
+import { assembleTreeData, normalizeManifest } from '../lib/tree'
 import type { TreeData } from '../types'
 
-const DATA_URL = `${import.meta.env.BASE_URL}data/upcat-skill-tree.json`
+const DATA_DIR = new URL(`${import.meta.env.BASE_URL}data/`, document.baseURI)
+
+async function fetchJson(url: URL): Promise<unknown> {
+  const response = await fetch(url, { cache: 'no-cache' })
+  if (!response.ok) throw new Error(`HTTP ${response.status} while loading ${url.pathname}`)
+  return response.json() as Promise<unknown>
+}
+
+async function loadTreeData(): Promise<TreeData> {
+  const manifest = normalizeManifest(await fetchJson(new URL('upcat-skill-tree.json', DATA_DIR)))
+  const subjectRaws = await Promise.all(
+    manifest.subjectFiles.map((file) => fetchJson(new URL(file, DATA_DIR))),
+  )
+  return assembleTreeData(manifest, subjectRaws)
+}
 
 export function useTreeData() {
   const [data, setData] = useState<TreeData | null>(null)
@@ -10,14 +24,10 @@ export function useTreeData() {
 
   useEffect(() => {
     let cancelled = false
-    fetch(DATA_URL, { cache: 'no-cache' })
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP ${response.status} while loading ${DATA_URL}`)
-        return response.json() as Promise<unknown>
-      })
-      .then((raw) => {
+    loadTreeData()
+      .then((tree) => {
         if (cancelled) return
-        setData(normalizeData(raw))
+        setData(tree)
       })
       .catch((cause: unknown) => {
         if (cancelled) return

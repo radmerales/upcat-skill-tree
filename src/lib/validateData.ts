@@ -1,4 +1,13 @@
-import type { Branch, NodeType, SkillNode, Subject, TreeData } from '../types'
+import type {
+  Branch,
+  ExamQuestion,
+  NodeExam,
+  NodeType,
+  SkillNode,
+  Subject,
+  SubjectManifest,
+  TreeData,
+} from '../types'
 
 /*  Data validation                                                            */
 /* -------------------------------------------------------------------------- */
@@ -36,150 +45,230 @@ function readStringArray(value: unknown, where: string): string[] {
 
 function readNodeType(value: unknown, where: string): NodeType {
   if (value === undefined) return 'lesson'
-  if (value === 'lesson' || value === 'quiz') return value
-  fail(`${where} must be "lesson" or "quiz".`)
+  if (value === 'lesson' || value === 'quiz' || value === 'exam') return value
+  fail(`${where} must be "lesson", "quiz", or "exam".`)
 }
 
-export function normalizeData(raw: unknown): TreeData {
-  if (!isRecord(raw)) fail('The data file must contain a JSON object.')
+function readExam(value: unknown, where: string): NodeExam {
+  if (!isRecord(value)) fail(`${where} must be an object.`)
 
-  const title = readString(raw.title, 'title')
-  const subtitle = readString(raw.subtitle, 'subtitle')
-  const version = readInt(raw.version ?? 4, 'version')
-
-  if (!Array.isArray(raw.subjects) || raw.subjects.length === 0) {
-    fail('subjects must be a non-empty array.')
+  const passScore = readInt(value.passScore, `${where}.passScore`)
+  if (passScore < 1 || passScore > 100) {
+    fail(`${where}.passScore must be between 1 and 100.`)
   }
 
-  const seenSubjects = new Set<string>()
-  const subjects: Subject[] = raw.subjects.map((entry, subjectIndex) => {
-    const where = `subjects[${subjectIndex}]`
-    if (!isRecord(entry)) fail(`${where} must be an object.`)
+  if (!Array.isArray(value.questions) || value.questions.length === 0) {
+    fail(`${where}.questions must be a non-empty array.`)
+  }
 
-    const id = readString(entry.id, `${where}.id`)
-    if (seenSubjects.has(id)) fail(`Duplicate subject id "${id}".`)
-    seenSubjects.add(id)
+  const questions: ExamQuestion[] = value.questions.map((question, questionIndex) => {
+    const questionWhere = `${where}.questions[${questionIndex}]`
+    if (!isRecord(question)) fail(`${questionWhere} must be an object.`)
 
-    if (!Array.isArray(entry.branches) || entry.branches.length === 0) {
-      fail(`${where}.branches must be a non-empty array.`)
+    if (!Array.isArray(question.choices) || question.choices.length < 2) {
+      fail(`${questionWhere}.choices must contain at least two options.`)
     }
-    const seenBranches = new Set<string>()
-    const branches: Branch[] = entry.branches.map((branch, branchIndex) => {
-      const branchWhere = `${where}.branches[${branchIndex}]`
-      if (!isRecord(branch)) fail(`${branchWhere} must be an object.`)
-      const branchId = readString(branch.id, `${branchWhere}.id`)
-      if (seenBranches.has(branchId)) fail(`${where}: duplicate branch id "${branchId}".`)
-      seenBranches.add(branchId)
-      return {
-        id: branchId,
-        name: readString(branch.name, `${branchWhere}.name`),
-        color: readString(branch.color, `${branchWhere}.color`),
-      }
-    })
+    const choices = question.choices.map((choice, choiceIndex) =>
+      readString(choice, `${questionWhere}.choices[${choiceIndex}]`),
+    )
 
-    if (!Array.isArray(entry.nodes) || entry.nodes.length === 0) {
-      fail(`${where}.nodes must be a non-empty array.`)
-    }
-
-    const seenNodes = new Set<string>()
-    const seenVertices = new Map<string, string>()
-    const nodes: SkillNode[] = entry.nodes.map((node, nodeIndex) => {
-      const nodeWhere = `${where}.nodes[${nodeIndex}]`
-      if (!isRecord(node)) fail(`${nodeWhere} must be an object.`)
-
-      const nodeId = readString(node.id, `${nodeWhere}.id`)
-      if (seenNodes.has(nodeId)) fail(`${where}: duplicate node id "${nodeId}".`)
-      seenNodes.add(nodeId)
-
-      const branch = readString(node.branch, `${where}.${nodeId}.branch`)
-      if (!seenBranches.has(branch)) {
-        fail(`${where}.${nodeId}: branch "${branch}" is not declared in branches.`)
-      }
-
-      const u = readInt(node.u, `${where}.${nodeId}.u`)
-      const v = readInt(node.v, `${where}.${nodeId}.v`)
-      if (u % 2 !== 0 || v % 2 !== 0) {
-        fail(
-          `${where}.${nodeId}: nodes must sit on hex-centre corners (even u and v), got ${u},${v}.`,
-        )
-      }
-      const cell = `${u}:${v}`
-      if (seenVertices.has(cell)) {
-        fail(`${where}.${nodeId} shares corner ${cell} with "${seenVertices.get(cell)}".`)
-      }
-      seenVertices.set(cell, nodeId)
-
-      for (const legacy of ['role', 'stage', 'tier', 'lane', 'q', 'r']) {
-        if (node[legacy] !== undefined) {
-          console.warn(`${where}.${nodeId}: "${legacy}" is no longer used.`)
-        }
-      }
-
-      return {
-        id: nodeId,
-        title: readString(node.title, `${where}.${nodeId}.title`),
-        code: readString(node.code, `${where}.${nodeId}.code`),
-        branch,
-        type: readNodeType(node.type, `${where}.${nodeId}.type`),
-        u,
-        v,
-        start: node.start === true ? true : undefined,
-        description: readString(node.description, `${where}.${nodeId}.description`),
-        tip: typeof node.tip === 'string' ? node.tip : '',
-        requires: readStringArray(node.requires ?? [], `${where}.${nodeId}.requires`),
-      }
-    })
-
-    const starts = nodes.filter((node) => node.start)
-    if (starts.length !== 1) {
-      fail(`${where}: exactly one node must have "start": true (found ${starts.length}).`)
-    }
-    const startNode = starts[0]
-    if (startNode.requires.length > 0) {
-      fail(`${where}.${startNode.id}: the start node must not require anything.`)
-    }
-
-    const byId = new Map(nodes.map((node) => [node.id, node]))
-    for (const node of nodes) {
-      if (!node.start && node.requires.length === 0) {
-        fail(`${where}.${node.id}: every non-start node needs at least one prerequisite.`)
-      }
-      for (const requirementId of node.requires) {
-        if (requirementId === node.id) fail(`${where}.${node.id} requires itself.`)
-        if (!byId.has(requirementId)) {
-          fail(`${where}.${node.id}: unknown prerequisite "${requirementId}".`)
-        }
-      }
-    }
-
-    const reachable = new Set<string>([startNode.id])
-    let changed = true
-    while (changed) {
-      changed = false
-      for (const node of nodes) {
-        if (reachable.has(node.id)) continue
-        if (node.requires.every((id) => reachable.has(id))) {
-          reachable.add(node.id)
-          changed = true
-        }
-      }
-    }
-    for (const node of nodes) {
-      if (!reachable.has(node.id)) {
-        fail(`${where}.${node.id} can never unlock (cycle or unreachable prerequisite chain).`)
-      }
+    const answer = readInt(question.answer, `${questionWhere}.answer`)
+    if (answer < 0 || answer >= choices.length) {
+      fail(`${questionWhere}.answer must point at one of its choices.`)
     }
 
     return {
-      id,
-      name: readString(entry.name, `${where}.name`),
-      kicker: readString(entry.kicker, `${where}.kicker`),
-      blurb: readString(entry.blurb, `${where}.blurb`),
-      accent: readString(entry.accent, `${where}.accent`),
-      branches,
-      nodes,
+      prompt: readString(question.prompt, `${questionWhere}.prompt`),
+      choices,
+      answer,
+      explanation: readString(question.explanation, `${questionWhere}.explanation`),
     }
   })
 
-  return { version, title, subtitle, subjects }
+  return { passScore, questions }
+}
+
+/*  Root manifest                                                             */
+/* -------------------------------------------------------------------------- */
+
+export function normalizeManifest(raw: unknown): SubjectManifest {
+  if (!isRecord(raw)) fail('The data manifest must contain a JSON object.')
+
+  if (!Array.isArray(raw.subjectFiles) || raw.subjectFiles.length === 0) {
+    fail('subjectFiles must be a non-empty array of file paths.')
+  }
+
+  const subjectFiles = raw.subjectFiles.map((file, index) =>
+    readString(file, `subjectFiles[${index}]`),
+  )
+
+  return {
+    version: readInt(raw.version ?? 6, 'version'),
+    title: readString(raw.title, 'title'),
+    subtitle: readString(raw.subtitle, 'subtitle'),
+    subjectFiles,
+  }
+}
+
+/*  One subject file                                                          */
+/* -------------------------------------------------------------------------- */
+
+export function normalizeSubject(raw: unknown, where = 'subject'): Subject {
+  if (!isRecord(raw)) fail(`${where} must be an object.`)
+
+  const id = readString(raw.id, `${where}.id`)
+
+  if (!Array.isArray(raw.branches) || raw.branches.length === 0) {
+    fail(`${where}.branches must be a non-empty array.`)
+  }
+  const seenBranches = new Set<string>()
+  const branches: Branch[] = raw.branches.map((branch, branchIndex) => {
+    const branchWhere = `${where}.branches[${branchIndex}]`
+    if (!isRecord(branch)) fail(`${branchWhere} must be an object.`)
+    const branchId = readString(branch.id, `${branchWhere}.id`)
+    if (seenBranches.has(branchId)) fail(`${where}: duplicate branch id "${branchId}".`)
+    seenBranches.add(branchId)
+    return {
+      id: branchId,
+      name: readString(branch.name, `${branchWhere}.name`),
+      color: readString(branch.color, `${branchWhere}.color`),
+    }
+  })
+
+  if (!Array.isArray(raw.nodes) || raw.nodes.length === 0) {
+    fail(`${where}.nodes must be a non-empty array.`)
+  }
+
+  const seenNodes = new Set<string>()
+  const seenVertices = new Map<string, string>()
+  const nodes: SkillNode[] = raw.nodes.map((node, nodeIndex) => {
+    const nodeWhere = `${where}.nodes[${nodeIndex}]`
+    if (!isRecord(node)) fail(`${nodeWhere} must be an object.`)
+
+    const nodeId = readString(node.id, `${nodeWhere}.id`)
+    if (seenNodes.has(nodeId)) fail(`${where}: duplicate node id "${nodeId}".`)
+    seenNodes.add(nodeId)
+
+    const branch = readString(node.branch, `${where}.${nodeId}.branch`)
+    if (!seenBranches.has(branch)) {
+      fail(`${where}.${nodeId}: branch "${branch}" is not declared in branches.`)
+    }
+
+    const u = readInt(node.u, `${where}.${nodeId}.u`)
+    const v = readInt(node.v, `${where}.${nodeId}.v`)
+    if (u % 2 !== 0 || v % 2 !== 0) {
+      fail(
+        `${where}.${nodeId}: nodes must sit on hex-centre corners (even u and v), got ${u},${v}.`,
+      )
+    }
+    const cell = `${u}:${v}`
+    if (seenVertices.has(cell)) {
+      fail(`${where}.${nodeId} shares corner ${cell} with "${seenVertices.get(cell)}".`)
+    }
+    seenVertices.set(cell, nodeId)
+
+    for (const legacy of ['role', 'stage', 'tier', 'lane', 'q', 'r']) {
+      if (node[legacy] !== undefined) {
+        console.warn(`${where}.${nodeId}: "${legacy}" is no longer used.`)
+      }
+    }
+
+    const type = readNodeType(node.type, `${where}.${nodeId}.type`)
+    const exam = node.exam === undefined ? undefined : readExam(node.exam, `${where}.${nodeId}.exam`)
+    if (type === 'exam' && !exam) {
+      fail(`${where}.${nodeId}: exam nodes must define an "exam" object.`)
+    }
+    if (type !== 'exam' && exam) {
+      fail(`${where}.${nodeId}: only "exam" nodes may define an "exam" object.`)
+    }
+
+    return {
+      id: nodeId,
+      title: readString(node.title, `${where}.${nodeId}.title`),
+      code: readString(node.code, `${where}.${nodeId}.code`),
+      branch,
+      type,
+      u,
+      v,
+      start: node.start === true ? true : undefined,
+      description: readString(node.description, `${where}.${nodeId}.description`),
+      tip: typeof node.tip === 'string' ? node.tip : '',
+      requires: readStringArray(node.requires ?? [], `${where}.${nodeId}.requires`),
+      exam,
+    }
+  })
+
+  const starts = nodes.filter((node) => node.start)
+  if (starts.length !== 1) {
+    fail(`${where}: exactly one node must have "start": true (found ${starts.length}).`)
+  }
+  const startNode = starts[0]
+  if (startNode.requires.length > 0) {
+    fail(`${where}.${startNode.id}: the start node must not require anything.`)
+  }
+
+  const byId = new Map(nodes.map((node) => [node.id, node]))
+  for (const node of nodes) {
+    if (!node.start && node.requires.length === 0) {
+      fail(`${where}.${node.id}: every non-start node needs at least one prerequisite.`)
+    }
+    for (const requirementId of node.requires) {
+      if (requirementId === node.id) fail(`${where}.${node.id} requires itself.`)
+      if (!byId.has(requirementId)) {
+        fail(`${where}.${node.id}: unknown prerequisite "${requirementId}".`)
+      }
+    }
+  }
+
+  const reachable = new Set<string>([startNode.id])
+  let changed = true
+  while (changed) {
+    changed = false
+    for (const node of nodes) {
+      if (reachable.has(node.id)) continue
+      if (node.requires.every((requirementId) => reachable.has(requirementId))) {
+        reachable.add(node.id)
+        changed = true
+      }
+    }
+  }
+  for (const node of nodes) {
+    if (!reachable.has(node.id)) {
+      fail(`${where}.${node.id} can never unlock (cycle or unreachable prerequisite chain).`)
+    }
+  }
+
+  return {
+    id,
+    name: readString(raw.name, `${where}.name`),
+    kicker: readString(raw.kicker, `${where}.kicker`),
+    blurb: readString(raw.blurb, `${where}.blurb`),
+    accent: readString(raw.accent, `${where}.accent`),
+    branches,
+    nodes,
+  }
+}
+
+/*  Manifest + subject files -> app data                                      */
+/* -------------------------------------------------------------------------- */
+
+export function assembleTreeData(manifest: SubjectManifest, subjectRaws: unknown[]): TreeData {
+  if (subjectRaws.length !== manifest.subjectFiles.length) {
+    fail('The number of loaded subject files does not match the manifest.')
+  }
+
+  const seenSubjects = new Set<string>()
+  const subjects = subjectRaws.map((raw, index) => {
+    const subject = normalizeSubject(raw, `subjects[${index}]`)
+    if (seenSubjects.has(subject.id)) fail(`Duplicate subject id "${subject.id}".`)
+    seenSubjects.add(subject.id)
+    return subject
+  })
+
+  return {
+    version: manifest.version,
+    title: manifest.title,
+    subtitle: manifest.subtitle,
+    subjects,
+  }
 }

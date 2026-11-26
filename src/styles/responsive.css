@@ -185,6 +185,51 @@
   .modal__actions .action {
     width: 100%;
   }
+
+  .exam-modal .modal__kicker {
+    padding: 10px 16px;
+  }
+
+  .exam-modal__intro {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 14px 16px 12px;
+  }
+
+  .exam-threshold {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
+    align-self: flex-start;
+    padding: 5px 10px;
+  }
+
+  .exam-threshold strong {
+    font-size: 17px;
+  }
+
+  .exam-modal__body {
+    padding: 14px 16px 6px;
+  }
+
+  .exam-modal__actions {
+    padding: 12px 16px 14px;
+  }
+
+  .exam-result {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .exam-result__score {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
+    padding: 0 0 8px;
+    border-right: 0;
+    border-bottom: 1px dashed var(--line-strong);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

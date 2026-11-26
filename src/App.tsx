@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import BootScreen from './components/BootScreen'
 import DetailPanel from './components/DetailPanel'
+import ExamDialog from './components/ExamDialog'
 import Header from './components/Header'
 import Legend from './components/Legend'
 import ResetDialog from './components/ResetDialog'
@@ -26,17 +27,20 @@ interface ToastState {
 export default function App() {
   const { data, error } = useTreeData()
   const { subjectId, setSubjectId } = useSubjectSelection(data)
-  const { progress, updateProgress } = useProgress(data)
+  const { progress, examScores, updateProgress, recordExamScore, clearExamScores } =
+    useProgress(data)
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [examNodeId, setExamNodeId] = useState<string | null>(null)
   const [branchFilter, setBranchFilter] = useState<string | null>(null)
   const [toast, setToast] = useState<ToastState | null>(null)
   const [resetOpen, setResetOpen] = useState(false)
 
   const closePanel = useCallback(() => setSelectedId(null), [])
-  useCloseOnOutside(Boolean(selectedId), closePanel)
+  useCloseOnOutside(Boolean(selectedId) && !examNodeId, closePanel)
 
   useEffect(() => {
     setSelectedId(null)
+    setExamNodeId(null)
     setBranchFilter(null)
   }, [subjectId])
 
@@ -64,6 +68,16 @@ export default function App() {
     [selectedId, subject],
   )
 
+  const examNode = useMemo(
+    () => subject?.nodes.find((node) => node.id === examNodeId && node.exam) ?? null,
+    [examNodeId, subject],
+  )
+
+  const subjectExamScores = useMemo(
+    () => (subject ? (examScores[subject.id] ?? {}) : {}),
+    [examScores, subject],
+  )
+
   const branchCounts = useMemo(() => {
     if (!subject) return {}
     return subject.nodes.reduce<Record<string, number>>((counts, node) => {
@@ -87,7 +101,9 @@ export default function App() {
         const removedMastered = removed.filter((id) => ids.has(id)).length
         removed.forEach((id) => ids.delete(id))
         updateProgress(subject, [...ids])
+        clearExamScores(subject, removed)
         setSelectedId((current) => (current && removed.includes(current) ? null : current))
+        setExamNodeId((current) => (current && removed.includes(current) ? null : current))
         setToast({
           id: Date.now(),
           message:
@@ -113,6 +129,12 @@ export default function App() {
         return
       }
 
+      if (node.exam) {
+        setSelectedId(node.id)
+        setExamNodeId(node.id)
+        return
+      }
+
       ids.add(node.id)
       updateProgress(subject, [...ids])
       setToast({
@@ -125,8 +147,36 @@ export default function App() {
               : `Mastered: ${node.title}`,
       })
     },
-    [progress, subject, updateProgress],
+    [clearExamScores, progress, subject, updateProgress],
   )
+
+  const handleExamResult = useCallback(
+    (node: SkillNode, score: number, passed: boolean) => {
+      if (!subject) return
+      recordExamScore(subject, node.id, score)
+      if (!passed) return
+
+      const ids = new Set(progress[subject.id] ?? [])
+      const alreadyMastered = ids.has(node.id)
+      const previousBest = subjectExamScores[node.id]
+      ids.add(node.id)
+      updateProgress(subject, [...ids])
+      setToast({
+        id: Date.now(),
+        message: alreadyMastered
+          ? previousBest !== undefined && score <= previousBest
+            ? `${node.title} retaken — best remains ${previousBest}%`
+            : `${node.title} improved to ${score}%`
+          : `${node.title} passed — ${score}%. Next nodes unlocked.`,
+      })
+    },
+    [progress, recordExamScore, subject, subjectExamScores, updateProgress],
+  )
+
+  const handleTakeExam = useCallback((node: SkillNode) => {
+    setSelectedId(node.id)
+    setExamNodeId(node.id)
+  }, [])
 
   const handleSelectSubject = useCallback(
     (nextSubjectId: string) => {
@@ -152,10 +202,15 @@ export default function App() {
   const confirmReset = useCallback(() => {
     if (!subject) return
     updateProgress(subject, [])
+    clearExamScores(
+      subject,
+      subject.nodes.map((node) => node.id),
+    )
     closePanel()
+    setExamNodeId(null)
     setResetOpen(false)
     setToast({ id: Date.now(), message: `${subject.name} progress reset` })
-  }, [closePanel, subject, updateProgress])
+  }, [clearExamScores, closePanel, subject, updateProgress])
 
   if (error) return <BootScreen error={error} />
   if (!data || !subject || !layout) return <BootScreen error={null} />
@@ -197,7 +252,7 @@ export default function App() {
           <span>Drag nodes to re-anchor</span>
           <span>Scroll to zoom</span>
           <span>Click to inspect</span>
-          <span>Double-click to master</span>
+          <span>Checkpoint exams gate each group</span>
         </div>
 
         {selectedNode && (
@@ -206,9 +261,22 @@ export default function App() {
             subject={subject}
             node={selectedNode}
             mastered={mastered}
+            bestScore={subjectExamScores[selectedNode.id]}
             onClose={closePanel}
             onSelect={setSelectedId}
             onToggle={toggleNode}
+            onTakeExam={handleTakeExam}
+          />
+        )}
+
+        {examNode && (
+          <ExamDialog
+            key={examNode.id}
+            subject={subject}
+            node={examNode}
+            bestScore={subjectExamScores[examNode.id]}
+            onClose={() => setExamNodeId(null)}
+            onResult={(score, passed) => handleExamResult(examNode, score, passed)}
           />
         )}
 

@@ -7,6 +7,9 @@ const NODE_H = 69
 const PLATE = '50,5 95,50 50,95 5,50'
 const PLATE_INNER = '50,17 83,50 50,83 17,50'
 const PLATE_RING = '50,1 99,50 50,99 1,50'
+const EXAM = '50,4 90,27 90,73 50,96 10,73 10,27'
+const EXAM_INNER = '50,17 79,33.5 79,66.5 50,83 21,66.5 21,33.5'
+const EXAM_RING = '50,1 94,25.5 94,74.5 50,99 6,74.5 6,25.5'
 
 interface SkillNodeViewProps {
   node: SkillNode
@@ -74,6 +77,12 @@ export default function SkillNodeView({
               <polygon points={PLATE_INNER} className="vnode__inner" />
               <polygon points={PLATE_RING} className={`vnode__ring${selected ? ' is-selected' : ''}`} />
             </>
+          ) : node.type === 'exam' ? (
+            <>
+              <polygon points={EXAM} className="vnode__face" />
+              <polygon points={EXAM_INNER} className="vnode__inner" />
+              <polygon points={EXAM_RING} className={`vnode__ring${selected ? ' is-selected' : ''}`} />
+            </>
           ) : (
             <>
               <circle cx="50" cy="50" r="45" className="vnode__face" />
@@ -109,7 +118,7 @@ export default function SkillNodeView({
       type="button"
       className={classes}
       style={style}
-      aria-label={`${node.title} — ${node.type} — ${stateLabel(state)}`}
+      aria-label={`${node.title} — ${node.type} — ${stateLabel(state, node.type)}`}
       aria-pressed={state === 'mastered'}
       onClick={onClick}
       onPointerDown={onPointerDown}

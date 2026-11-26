@@ -213,6 +213,18 @@
   stroke: color-mix(in srgb, var(--branch) 55%, var(--vnode-lock-border));
 }
 
+.vnode--exam .vnode__face {
+  stroke-width: 2.4;
+}
+
+.vnode--exam .vnode__inner {
+  stroke: color-mix(in srgb, var(--branch) 45%, transparent);
+}
+
+.vnode--mastered.vnode--exam .vnode__inner {
+  stroke: rgba(255, 255, 255, 0.45);
+}
+
 .vnode.is-dim {
   opacity: 0.18;
 }

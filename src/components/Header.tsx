@@ -119,7 +119,7 @@ export default function Header({ data, subject, progress, onSelectSubject, onSha
                 )
               })}
             </div>
-            <div className="subject-menu__foot">Switch subjects any time — progress is saved per subject.</div>
+            <div className="subject-menu__foot">Switch subjects any time — mastery and exam scores are saved per subject.</div>
           </div>
         )}
       </div>

@@ -1,0 +1,422 @@
+/* Checkpoint exams -------------------------------------------------------- */
+
+.role-chip--exam {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--on-yellow);
+  border-color: var(--yellow-strong);
+  background: var(--yellow-soft);
+}
+
+.exam-card {
+  margin: 16px 0 18px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--yellow-soft) 55%, var(--surface));
+  border: 1.5px solid color-mix(in srgb, var(--yellow-strong) 55%, transparent);
+  border-radius: var(--radius);
+}
+
+.exam-card.is-passed {
+  background: var(--green-soft);
+  border-color: color-mix(in srgb, var(--green) 55%, transparent);
+}
+
+.exam-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.exam-card__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--on-yellow);
+}
+
+.exam-card__threshold {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--on-yellow);
+}
+
+.exam-card p {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--on-yellow) 78%, var(--text));
+}
+
+.exam-card.is-passed p,
+.exam-card.is-passed .exam-card__label,
+.exam-card.is-passed .exam-card__threshold,
+.exam-card.is-passed .exam-card__status {
+  color: color-mix(in srgb, var(--green) 65%, var(--text));
+}
+
+.exam-card__bar {
+  height: 6px;
+  margin: 9px 0 7px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--line-strong) 35%, var(--surface));
+  border-radius: 999px;
+}
+
+.exam-card__bar span {
+  display: block;
+  height: 100%;
+  background: var(--yellow-strong);
+  border-radius: inherit;
+  transition: width 0.25s ease;
+}
+
+.exam-card.is-passed .exam-card__bar span {
+  background: var(--green);
+}
+
+.exam-card__status {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--on-yellow) 65%, var(--muted));
+}
+
+/* Exam modal -------------------------------------------------------------- */
+
+.exam-modal {
+  display: flex;
+  flex-direction: column;
+  width: min(620px, calc(100vw - 40px));
+  min-width: 0;
+  max-width: 100%;
+  max-height: min(88dvh, 820px);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  animation: modalIn 0.18s ease-out;
+}
+
+.exam-modal .modal__kicker {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  padding: 11px 26px;
+}
+
+.exam-modal__intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 26px 14px;
+  border-bottom: 1px dashed var(--line);
+}
+
+.exam-modal__intro h2 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.exam-modal__intro > div:first-child {
+  min-width: 0;
+}
+
+.exam-modal__intro p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.exam-threshold {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 82px;
+  padding: 8px 10px;
+  color: var(--on-yellow);
+  background: var(--yellow-soft);
+  border: 1.5px solid var(--yellow-strong);
+  border-radius: var(--radius);
+}
+
+.exam-threshold strong {
+  font-size: 21px;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.exam-threshold span {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.exam-modal__body {
+  flex: 1;
+  min-height: 0;
+  padding: 18px 26px 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+.exam-modal__body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.exam-modal__body::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 999px;
+}
+
+.exam-progress {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.exam-progress__pip {
+  flex: 1;
+  height: 5px;
+  background: var(--surface-3);
+  border-radius: 999px;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.exam-progress__pip.is-answered {
+  background: var(--yellow-strong);
+}
+
+.exam-progress__pip.is-current {
+  background: var(--yellow);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--yellow) 35%, transparent);
+}
+
+.exam-question__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.exam-question__prompt {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.62;
+  color: var(--text);
+  white-space: pre-line;
+}
+
+.exam-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exam-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 13px;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text);
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 13px;
+  line-height: 1.45;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.exam-choice:hover {
+  background: var(--surface-2);
+  border-color: var(--line-strong);
+}
+
+.exam-choice.is-selected {
+  background: var(--yellow-soft);
+  border-color: var(--yellow-strong);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--yellow) 28%, transparent);
+}
+
+.exam-choice__key {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--surface);
+  border: 1.5px solid var(--line-strong);
+  border-radius: 6px;
+}
+
+.exam-choice.is-selected .exam-choice__key {
+  color: var(--on-yellow);
+  background: var(--yellow-strong);
+  border-color: var(--yellow-strong);
+}
+
+.exam-nav {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0 6px;
+}
+
+.exam-nav .action {
+  flex: 1;
+  width: auto;
+}
+
+.exam-nav .action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.exam-result {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  background: var(--surface-2);
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius);
+}
+
+.exam-result.is-passed {
+  background: var(--green-soft);
+  border-color: color-mix(in srgb, var(--green) 60%, transparent);
+}
+
+.exam-result.is-failed {
+  background: color-mix(in srgb, var(--red) 8%, var(--surface));
+  border-color: color-mix(in srgb, var(--red) 45%, transparent);
+}
+
+.exam-result__score {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  min-width: 86px;
+  padding-right: 14px;
+  border-right: 1px dashed var(--line-strong);
+}
+
+.exam-result__score strong {
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.exam-result__score span {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.exam-result__copy h3 {
+  margin: 0 0 3px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.exam-result__copy p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.exam-review {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+}
+
+.exam-review__item {
+  display: flex;
+  gap: 9px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--line);
+}
+
+.exam-review__mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  color: #ffffff;
+  border-radius: 50%;
+}
+
+.exam-review__item.is-correct .exam-review__mark {
+  background: var(--green);
+}
+
+.exam-review__item.is-wrong .exam-review__mark {
+  background: var(--red);
+}
+
+.exam-review__copy {
+  min-width: 0;
+}
+
+.exam-review__prompt {
+  margin: 0 0 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.45;
+  white-space: pre-line;
+}
+
+.exam-review__answer {
+  margin: 0 0 3px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.exam-review__why {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted-2);
+}
+
+.exam-modal__actions {
+  flex: none;
+  margin: 0;
+  padding: 14px 26px 18px;
+  background: var(--surface);
+  border-top: 1px dashed var(--line);
+}
+
+.exam-modal__actions .action {
+  width: auto;
+  min-width: 120px;
+}

@@ -1,0 +1,446 @@
+{
+  "id": "language",
+  "name": "Language Proficiency",
+  "kicker": "SUBTEST 03",
+  "blurb": "Grammar, vocabulary, usage, and rhetoric rules that appear again and again, with checkpoint exams between topic groups.",
+  "accent": "#b39dff",
+  "branches": [
+    { "id": "grammar", "name": "Grammar", "color": "#b39dff" },
+    { "id": "usage", "name": "Usage & Mechanics", "color": "#6ee7f9" },
+    { "id": "vocabulary", "name": "Vocabulary", "color": "#ff9ecb" },
+    { "id": "rhetoric", "name": "Rhetoric", "color": "#fbbf24" },
+    { "id": "checkpoints", "name": "Checkpoints", "color": "#8b6f9e" }
+  ],
+  "nodes": [
+    {
+      "id": "language-start",
+      "type": "quiz",
+      "title": "Start Here",
+      "code": "GO",
+      "branch": "grammar",
+      "u": 0,
+      "v": 0,
+      "start": true,
+      "description": "Take a short language diagnostic on grammar, vocabulary, usage, and rhetoric. Clear this node to open the first group of topics.",
+      "tip": "Mark the rule behind every error, not just the answer you missed.",
+      "requires": []
+    },
+    {
+      "id": "lang-parts",
+      "title": "Parts of Speech",
+      "code": "POS",
+      "branch": "grammar",
+      "u": 2,
+      "v": -4,
+      "description": "Nouns, verbs, adjectives, adverbs, prepositions, and how a word's role shifts by sentence.",
+      "tip": "Identify the word's job, not its dictionary category; the same word can be noun or verb.",
+      "requires": ["language-start"]
+    },
+    {
+      "id": "lang-agreement",
+      "title": "Subject–Verb Agreement",
+      "code": "SVA",
+      "branch": "grammar",
+      "u": 4,
+      "v": -4,
+      "description": "Singular and plural agreement with tricky subjects, collective nouns, and inverted sentences.",
+      "tip": "Cross out prepositional phrases between the subject and verb; they hide the real subject.",
+      "requires": ["lang-parts"]
+    },
+    {
+      "id": "lang-tenses",
+      "title": "Verb Tenses & Forms",
+      "code": "TNS",
+      "branch": "grammar",
+      "u": 6,
+      "v": -4,
+      "description": "Perfect tenses, progressive forms, and consistency across a passage.",
+      "tip": "Look for time markers (since, by the time, already); they identify the perfect tense almost every time.",
+      "requires": ["lang-agreement"]
+    },
+    {
+      "id": "lang-sentence",
+      "title": "Sentence Fundamentals",
+      "code": "SENT",
+      "branch": "usage",
+      "u": 2,
+      "v": -2,
+      "description": "Subjects, predicates, phrases, clauses, and the anatomy of a complete sentence.",
+      "tip": "Find the verb first, then ask who or what is doing it — the subject appears quickly.",
+      "requires": ["language-start"]
+    },
+    {
+      "id": "lang-punct",
+      "title": "Punctuation & Mechanics",
+      "code": "PUN",
+      "branch": "usage",
+      "u": 4,
+      "v": -2,
+      "description": "Commas, semicolons, colons, dashes, and the punctuation rules tested most often.",
+      "tip": "A semicolon joins two complete sentences; if either side cannot stand alone, use a comma instead.",
+      "requires": ["lang-sentence"]
+    },
+    {
+      "id": "lang-roots",
+      "title": "Word Roots & Context Clues",
+      "code": "ROOT",
+      "branch": "vocabulary",
+      "u": 2,
+      "v": 2,
+      "description": "Prefixes, suffixes, common roots, and using surrounding text to infer meaning.",
+      "tip": "Build a 30-root deck (bene, mal, chron, graph, spect) and review it in five-minute bursts.",
+      "requires": ["language-start"]
+    },
+    {
+      "id": "lang-synonym",
+      "title": "Synonyms & Antonyms",
+      "code": "SYN",
+      "branch": "vocabulary",
+      "u": 4,
+      "v": 2,
+      "description": "Shades of meaning, precise word choice, and elimination by connotation.",
+      "tip": "Sort choices from most positive to most negative; the outlier is usually the trap.",
+      "requires": ["lang-roots"]
+    },
+    {
+      "id": "lang-figures",
+      "title": "Figures of Speech",
+      "code": "FIG",
+      "branch": "rhetoric",
+      "u": 2,
+      "v": 4,
+      "description": "Simile, metaphor, personification, hyperbole, irony, and rhetorical devices.",
+      "tip": "Label the comparison first; if it uses like or as it is a simile, otherwise test for direct substitution.",
+      "requires": ["language-start"]
+    },
+    {
+      "id": "lang-exam-1",
+      "type": "exam",
+      "title": "Grammar Foundations Exam",
+      "code": "EX1",
+      "branch": "checkpoints",
+      "u": 8,
+      "v": 0,
+      "description": "Checkpoint covering parts of speech, agreement, tenses, sentence fundamentals, punctuation, roots, synonyms, and figures of speech.",
+      "tip": "Score 80% or higher to master this checkpoint and unlock the next group.",
+      "requires": ["lang-tenses", "lang-punct", "lang-synonym", "lang-figures"],
+      "exam": {
+        "passScore": 80,
+        "questions": [
+          {
+            "prompt": "Choose the correct verb: The box of pens ___ on the desk.",
+            "choices": ["is", "are", "were", "have"],
+            "answer": 0,
+            "explanation": "The subject is 'box,' which is singular. The phrase 'of pens' is a prepositional phrase and does not change the verb."
+          },
+          {
+            "prompt": "Which sentence is punctuated correctly?",
+            "choices": ["I bought apples, bananas, and oranges.", "I bought apples bananas, and oranges.", "I bought apples, bananas and, oranges.", "I bought, apples, bananas, and oranges."],
+            "answer": 0,
+            "explanation": "Items in a series are separated by commas, with no comma between the verb and the first item."
+          },
+          {
+            "prompt": "In the word 'graphology,' the root 'graph' means what?",
+            "choices": ["Write", "Study of", "Earth", "Word"],
+            "answer": 0,
+            "explanation": "'Graph' means write or draw, while '-logy' means the study of. Graphology is the study of handwriting."
+          },
+          {
+            "prompt": "Which word is the best synonym for 'brief'?",
+            "choices": ["Short", "Long", "Loud", "Late"],
+            "answer": 0,
+            "explanation": "'Brief' means lasting a short time, so 'short' is the closest synonym."
+          },
+          {
+            "prompt": "'The wind whispered through the trees' uses which figure of speech?",
+            "choices": ["Simile", "Metaphor", "Personification", "Hyperbole"],
+            "answer": 2,
+            "explanation": "The wind is given the human ability to whisper, which is personification."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lang-pronoun",
+      "title": "Pronoun Reference & Case",
+      "code": "PRO",
+      "branch": "grammar",
+      "u": 10,
+      "v": -4,
+      "description": "Pronoun–antecedent agreement, ambiguous references, and nominative vs objective case.",
+      "tip": "Replace each pronoun with its supposed noun; the sentence will expose ambiguity instantly.",
+      "requires": ["lang-exam-1"]
+    },
+    {
+      "id": "lang-clauses",
+      "title": "Clauses & Sentence Types",
+      "code": "CLA",
+      "branch": "grammar",
+      "u": 12,
+      "v": -4,
+      "description": "Independent and dependent clauses, simple and compound sentences, and complex sentence structure.",
+      "tip": "A dependent clause has a subject and verb but cannot stand alone; look for a subordinating word.",
+      "requires": ["lang-pronoun"]
+    },
+    {
+      "id": "lang-verbals",
+      "title": "Verbals & Phrases",
+      "code": "VRB",
+      "branch": "grammar",
+      "u": 14,
+      "v": -4,
+      "description": "Gerunds, participles, infinitives, and how phrases function inside a sentence.",
+      "tip": "A gerund ends in -ing but acts as a noun; a participle ends in -ing or -ed and acts as an adjective.",
+      "requires": ["lang-clauses"]
+    },
+    {
+      "id": "lang-flow",
+      "title": "Sentence Combining & Flow",
+      "code": "FLOW",
+      "branch": "usage",
+      "u": 10,
+      "v": -2,
+      "description": "Combine choppy sentences and choose the most concise, logical arrangement.",
+      "tip": "Prefer the shortest option that keeps every original idea; extra words are usually wrong.",
+      "requires": ["lang-exam-1"]
+    },
+    {
+      "id": "lang-modifiers",
+      "title": "Modifiers & Parallelism",
+      "code": "MOD",
+      "branch": "usage",
+      "u": 12,
+      "v": -2,
+      "description": "Misplaced and dangling modifiers plus parallel structure in lists and comparisons.",
+      "tip": "Ask what a modifier is describing; if the answer is not the nearest noun, it is misplaced.",
+      "requires": ["lang-flow"]
+    },
+    {
+      "id": "lang-worderrors",
+      "title": "Common Word Errors",
+      "code": "ERR",
+      "branch": "usage",
+      "u": 14,
+      "v": -2,
+      "description": "Confused word pairs such as affect/effect, lie/lay, fewer/less, and their/there.",
+      "tip": "Keep a two-column list of the pairs you miss and test yourself with one sentence per pair.",
+      "requires": ["lang-modifiers"]
+    },
+    {
+      "id": "lang-idioms",
+      "title": "Idioms & Analogies",
+      "code": "IDM",
+      "branch": "vocabulary",
+      "u": 10,
+      "v": 2,
+      "description": "Common idioms, preposition pairings, and bridge-building for analogy items.",
+      "tip": "Write the analogy as a sentence before reading the choices; match the relationship, not the topic.",
+      "requires": ["lang-exam-1"]
+    },
+    {
+      "id": "lang-context",
+      "title": "Vocabulary in Context",
+      "code": "CTX",
+      "branch": "vocabulary",
+      "u": 12,
+      "v": 2,
+      "description": "Choose the meaning that fits the passage, including figurative and technical uses.",
+      "tip": "Substitute each choice into the sentence and read it aloud in your head; awkwardness eliminates options.",
+      "requires": ["lang-idioms"]
+    },
+    {
+      "id": "lang-academic",
+      "title": "Academic Vocabulary",
+      "code": "ACA",
+      "branch": "vocabulary",
+      "u": 14,
+      "v": 2,
+      "description": "High-frequency school words for analysis, argument, evidence, and comparison.",
+      "tip": "Learn academic words in families (analyse, analysis, analytical) so one root covers several items.",
+      "requires": ["lang-context"]
+    },
+    {
+      "id": "lang-tone",
+      "title": "Rhetoric & Tone",
+      "code": "TONE",
+      "branch": "rhetoric",
+      "u": 10,
+      "v": 4,
+      "description": "Author's attitude, persuasion techniques, and register shifts in nonfiction.",
+      "tip": "Tone lives in adjectives and adverbs; circle them before choosing an answer.",
+      "requires": ["lang-exam-1"]
+    },
+    {
+      "id": "lang-exam-2",
+      "type": "exam",
+      "title": "Usage & Vocabulary Exam",
+      "code": "EX2",
+      "branch": "checkpoints",
+      "u": 16,
+      "v": 0,
+      "description": "Checkpoint covering pronouns, clauses, verbals, flow, modifiers, common word errors, idioms, context, academic vocabulary, and tone.",
+      "tip": "Score 80% or higher to master this checkpoint and unlock the advanced group.",
+      "requires": ["lang-verbals", "lang-worderrors", "lang-academic", "lang-tone"],
+      "exam": {
+        "passScore": 80,
+        "questions": [
+          {
+            "prompt": "Choose the correct pronoun: Between you and ___, this decision is difficult.",
+            "choices": ["I", "me", "myself", "mine"],
+            "answer": 1,
+            "explanation": "A pronoun after a preposition takes the objective case, so 'between you and me' is correct."
+          },
+          {
+            "prompt": "Which part of the sentence is the dependent clause? 'Although it rained, we went out.'",
+            "choices": ["Although it rained", "we went out", "Although it rained, we went out", "rained we"],
+            "answer": 0,
+            "explanation": "'Although it rained' has a subject and verb but cannot stand alone because of the subordinating word 'although.'"
+          },
+          {
+            "prompt": "Which sentence fixes the dangling modifier? 'Walking to school, the rain soaked Maria.'",
+            "choices": ["Walking to school, Maria was soaked by the rain.", "Walking to school, the rain was soaking Maria.", "Walking to school, Maria soaked the rain.", "The rain, walking to school, soaked Maria."],
+            "answer": 0,
+            "explanation": "The opening phrase must describe Maria, the person walking. Only the first choice makes Maria the subject of the main clause."
+          },
+          {
+            "prompt": "What does the idiom 'let the cat out of the bag' mean?",
+            "choices": ["Hid a secret", "Revealed a secret", "Lost a pet", "Made a mistake"],
+            "answer": 1,
+            "explanation": "To let the cat out of the bag is to reveal information that was supposed to stay secret."
+          },
+          {
+            "prompt": "What is the tone of this sentence? 'The proposal is reckless and poorly researched.'",
+            "choices": ["Approving", "Critical", "Nostalgic", "Playful"],
+            "answer": 1,
+            "explanation": "Words such as 'reckless' and 'poorly researched' express a critical, disapproving attitude."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lang-voice",
+      "title": "Active & Passive Voice",
+      "code": "VOI",
+      "branch": "grammar",
+      "u": 18,
+      "v": -4,
+      "description": "Identify and convert between active and passive voice, and choose the clearer construction.",
+      "tip": "Active voice usually names the doer and is shorter; use passive only when the doer is unknown or unimportant.",
+      "requires": ["lang-exam-2"]
+    },
+    {
+      "id": "lang-mood",
+      "title": "Mood & Conditionals",
+      "code": "MOOD",
+      "branch": "grammar",
+      "u": 20,
+      "v": -4,
+      "description": "Indicative, imperative, and subjunctive mood, including conditional sentences.",
+      "tip": "After 'if' in an unreal condition, use 'were' rather than 'was' for all subjects.",
+      "requires": ["lang-voice"]
+    },
+    {
+      "id": "lang-capitalization",
+      "title": "Capitalization & Formatting",
+      "code": "CAP",
+      "branch": "usage",
+      "u": 18,
+      "v": -2,
+      "description": "Capitalization of proper nouns, titles, directions, and school subjects, plus common formatting rules.",
+      "tip": "Capitalize specific names and places, but not general directions or subjects unless they are languages.",
+      "requires": ["lang-exam-2"]
+    },
+    {
+      "id": "lang-redundancy",
+      "title": "Redundancy & Conciseness",
+      "code": "RED",
+      "branch": "usage",
+      "u": 20,
+      "v": -2,
+      "description": "Remove repeated ideas, wordy phrases, and unnecessary repetition without changing meaning.",
+      "tip": "If two words say the same thing, cut one. Concision questions reward the shortest correct version.",
+      "requires": ["lang-capitalization"]
+    },
+    {
+      "id": "lang-register",
+      "title": "Precision & Register",
+      "code": "REG",
+      "branch": "vocabulary",
+      "u": 18,
+      "v": 2,
+      "description": "Formal vs informal diction, connotation, and eliminating wordiness.",
+      "tip": "Formal writing avoids contractions, slang, and 'you'; use that to eliminate choices fast.",
+      "requires": ["lang-exam-2"]
+    },
+    {
+      "id": "lang-persuasion",
+      "title": "Persuasive Appeals",
+      "code": "PER",
+      "branch": "rhetoric",
+      "u": 18,
+      "v": 4,
+      "description": "Ethos, pathos, and logos, plus how evidence and framing shape an argument.",
+      "tip": "Label each appeal by what it targets: credibility, emotion, or logic.",
+      "requires": ["lang-exam-2"]
+    },
+    {
+      "id": "lang-exam-3",
+      "type": "exam",
+      "title": "Advanced Language Exam",
+      "code": "EX3",
+      "branch": "checkpoints",
+      "u": 24,
+      "v": 0,
+      "description": "Checkpoint covering voice, mood, capitalization, redundancy, register, and persuasive appeals.",
+      "tip": "Score 80% or higher to master this checkpoint and unlock the final simulation.",
+      "requires": ["lang-mood", "lang-redundancy", "lang-register", "lang-persuasion"],
+      "exam": {
+        "passScore": 80,
+        "questions": [
+          {
+            "prompt": "Which sentence correctly changes 'The chef cooked the meal' to passive voice?",
+            "choices": ["The meal was cooked by the chef.", "The meal cooked the chef.", "The chef was cooked by the meal.", "The meal is cooking the chef."],
+            "answer": 0,
+            "explanation": "In passive voice, the object becomes the subject and the verb becomes a form of 'be' plus the past participle: was cooked."
+          },
+          {
+            "prompt": "Which sentence uses the subjunctive mood correctly?",
+            "choices": ["If I were taller, I would play basketball.", "If I was taller, I would play basketball.", "If I am taller, I played basketball.", "If I be taller, I will played basketball."],
+            "answer": 0,
+            "explanation": "For an unreal or hypothetical condition, use 'were' with every subject: 'If I were taller.'"
+          },
+          {
+            "prompt": "Which version is capitalized correctly?",
+            "choices": ["We visited Manila in June.", "We visited manila in June.", "We visited Manila in june.", "We visited manila in june."],
+            "answer": 0,
+            "explanation": "Manila is a proper noun and June is a month, so both must be capitalized."
+          },
+          {
+            "prompt": "Which replacement makes 'due to the fact that' most concise?",
+            "choices": ["Because", "Due to", "In spite of", "As a result"],
+            "answer": 0,
+            "explanation": "'Because' expresses the same cause-and-effect meaning as 'due to the fact that' in a single word."
+          },
+          {
+            "prompt": "Which sentence uses the most formal register?",
+            "choices": ["The committee has reached a decision.", "The committee's done deciding.", "The committee finally got its act together.", "The committee made up its mind, you know?"],
+            "answer": 0,
+            "explanation": "The first sentence avoids contractions, slang, and filler words, making it the most formal option."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lang-sim",
+      "type": "quiz",
+      "title": "Language Simulation",
+      "code": "SIM",
+      "branch": "checkpoints",
+      "u": 26,
+      "v": 0,
+      "description": "Full language section under time with targeted error review.",
+      "tip": "Keep an error log by rule type; most students lose the same three points repeatedly.",
+      "requires": ["lang-exam-3"]
+    }
+  ]
+}

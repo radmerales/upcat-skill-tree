@@ -1,4 +1,4 @@
-import type { Branch, NodeState, SkillNode, Subject } from '../types'
+import type { Branch, NodeState, NodeType, SkillNode, Subject } from '../types'
 
 /*  Progression                                                                */
 /* -------------------------------------------------------------------------- */
@@ -8,8 +8,10 @@ export function nodeState(node: SkillNode, mastered: Set<string>): NodeState {
   return node.requires.every((id) => mastered.has(id)) ? 'available' : 'locked'
 }
 
-export function stateLabel(state: NodeState): string {
-  return state === 'mastered' ? 'Mastered' : state === 'available' ? 'Ready to learn' : 'Locked'
+export function stateLabel(state: NodeState, type: NodeType = 'lesson'): string {
+  if (state === 'mastered') return type === 'exam' ? 'Exam passed' : 'Mastered'
+  if (state === 'available') return type === 'exam' ? 'Exam ready' : 'Ready to learn'
+  return 'Locked'
 }
 
 export function missingRequirements(node: SkillNode, mastered: Set<string>): string[] {

@@ -23,8 +23,8 @@ export default function ResetDialog({
         <span className="modal__kicker">Reset subject</span>
         <h2 id="reset-title">Clear {subjectName}?</h2>
         <p>
-          This removes all {masteredCount} mastered skill{masteredCount === 1 ? '' : 's'} in this
-          subject. Your progress in other subjects stays untouched.
+          This removes all {masteredCount} mastered skill{masteredCount === 1 ? '' : 's'} and every
+          checkpoint exam score in this subject. Your progress in other subjects stays untouched.
         </p>
         <div className="modal__actions">
           <button type="button" className="action action--ghost" onClick={onCancel}>

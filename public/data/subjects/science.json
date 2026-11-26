@@ -1,0 +1,469 @@
+{
+  "id": "science",
+  "name": "Science",
+  "kicker": "SUBTEST 02",
+  "blurb": "Biology, chemistry, physics, and earth science compressed into the concepts UPCAT repeats, with a checkpoint exam after each group.",
+  "accent": "#4fd1c5",
+  "branches": [
+    { "id": "inquiry", "name": "Scientific Inquiry", "color": "#94a3b8" },
+    { "id": "biology", "name": "Biology", "color": "#5ee6a8" },
+    { "id": "chemistry", "name": "Chemistry", "color": "#ffb45c" },
+    { "id": "physics", "name": "Physics", "color": "#63b3ff" },
+    { "id": "earth", "name": "Earth & Space", "color": "#c4b5fd" },
+    { "id": "checkpoints", "name": "Checkpoints", "color": "#7f8fa6" }
+  ],
+  "nodes": [
+    {
+      "id": "science-start",
+      "type": "quiz",
+      "title": "Start Here",
+      "code": "GO",
+      "branch": "inquiry",
+      "u": 0,
+      "v": 0,
+      "start": true,
+      "description": "Take a short mixed-science diagnostic covering biology, chemistry, physics, and earth science. Clear this node to open the first group of topics.",
+      "tip": "Sort every miss by branch, then start with the branch that has the most misses.",
+      "requires": []
+    },
+    {
+      "id": "sci-inquiry",
+      "title": "Scientific Method & Measurement",
+      "code": "INQ",
+      "branch": "inquiry",
+      "u": 2,
+      "v": -6,
+      "description": "Hypotheses, variables, controlled experiments, and SI units with significant figures.",
+      "tip": "For any experiment question, identify the independent variable first — it anchors everything else.",
+      "requires": ["science-start"]
+    },
+    {
+      "id": "sci-cells",
+      "title": "Cell Structure & Function",
+      "code": "CEL",
+      "branch": "biology",
+      "u": 2,
+      "v": -4,
+      "description": "Prokaryotic and eukaryotic cells, organelles, membranes, and transport.",
+      "tip": "Link each organelle to a factory job; function questions outnumber structure questions.",
+      "requires": ["science-start"]
+    },
+    {
+      "id": "sci-matter",
+      "title": "Matter & Its Properties",
+      "code": "MAT",
+      "branch": "chemistry",
+      "u": 2,
+      "v": -2,
+      "description": "States of matter, physical vs chemical changes, mixtures, and separation techniques.",
+      "tip": "Classify first: if a new substance forms, the change is chemical.",
+      "requires": ["science-start"]
+    },
+    {
+      "id": "sci-atomic",
+      "title": "Atomic Structure & Periodic Table",
+      "code": "ATO",
+      "branch": "chemistry",
+      "u": 4,
+      "v": -2,
+      "description": "Subatomic particles, electron configuration, and periodic trends.",
+      "tip": "Trends follow position: radius grows down and left; electronegativity grows up and right.",
+      "requires": ["sci-matter"]
+    },
+    {
+      "id": "sci-forces",
+      "title": "Forces & Equilibrium",
+      "code": "FOR",
+      "branch": "physics",
+      "u": 2,
+      "v": 2,
+      "description": "Types of forces, free-body diagrams, friction, and balanced vs unbalanced systems.",
+      "tip": "Draw the free-body diagram before choosing an equation; never skip the normal force.",
+      "requires": ["science-start"]
+    },
+    {
+      "id": "sci-motion",
+      "title": "Motion & Newton's Laws",
+      "code": "MOT",
+      "branch": "physics",
+      "u": 4,
+      "v": 2,
+      "description": "Kinematics graphs, acceleration, and Newton's three laws applied to real systems.",
+      "tip": "In a velocity–time graph, slope is acceleration and area under the line is displacement.",
+      "requires": ["sci-forces"]
+    },
+    {
+      "id": "sci-earth",
+      "title": "Earth's Structure & Rocks",
+      "code": "ERT",
+      "branch": "earth",
+      "u": 2,
+      "v": 4,
+      "description": "Layers of the Earth, the rock cycle, minerals, and soil formation.",
+      "tip": "Sketch the rock cycle once from memory; most items test transitions, not definitions.",
+      "requires": ["science-start"]
+    },
+    {
+      "id": "sci-plate",
+      "title": "Plate Tectonics & Earthquakes",
+      "code": "PLT",
+      "branch": "earth",
+      "u": 4,
+      "v": 4,
+      "description": "Plate boundaries, fault types, seismic waves, and volcanoes.",
+      "tip": "Divergent → ridge, convergent → trench or mountain, transform → fault. Match boundary to landform.",
+      "requires": ["sci-earth"]
+    },
+    {
+      "id": "sci-exam-1",
+      "type": "exam",
+      "title": "Scientific Foundations Exam",
+      "code": "EX1",
+      "branch": "checkpoints",
+      "u": 8,
+      "v": 0,
+      "description": "Checkpoint covering the scientific method, cells, matter, atomic structure, forces, motion, Earth structure, and plate tectonics.",
+      "tip": "Score 80% or higher to master this checkpoint and unlock the next group.",
+      "requires": ["sci-inquiry", "sci-cells", "sci-atomic", "sci-motion", "sci-plate"],
+      "exam": {
+        "passScore": 80,
+        "questions": [
+          {
+            "prompt": "A student tests how fertilizer affects plant growth. What is the independent variable?",
+            "choices": ["Amount of fertilizer", "Height of the plant", "Amount of water", "Type of soil"],
+            "answer": 0,
+            "explanation": "The independent variable is the one the experimenter deliberately changes, which is the amount of fertilizer."
+          },
+          {
+            "prompt": "Which organelle is the main site of protein synthesis?",
+            "choices": ["Mitochondrion", "Ribosome", "Nucleus", "Vacuole"],
+            "answer": 1,
+            "explanation": "Ribosomes translate messenger RNA into proteins. Mitochondria release energy, and the nucleus stores genetic material."
+          },
+          {
+            "prompt": "Which of these is a chemical change?",
+            "choices": ["Ice melting", "Iron rusting", "Sugar dissolving", "Glass breaking"],
+            "answer": 1,
+            "explanation": "Rusting produces a new substance, iron oxide. The other examples change form or appearance without creating a new substance."
+          },
+          {
+            "prompt": "The atomic number of an element equals its number of what?",
+            "choices": ["Neutrons", "Protons", "Protons plus neutrons", "Electron shells"],
+            "answer": 1,
+            "explanation": "Atomic number is defined by the number of protons in the nucleus. Protons plus neutrons give the mass number."
+          },
+          {
+            "prompt": "Newton's first law is also known as the law of what?",
+            "choices": ["Inertia", "Action and reaction", "Acceleration", "Universal gravitation"],
+            "answer": 0,
+            "explanation": "Newton's first law says an object stays at rest or in uniform motion unless a net force acts on it. This property is inertia."
+          }
+        ]
+      }
+    },
+    {
+      "id": "sci-labdata",
+      "title": "Lab Safety & Data",
+      "code": "LAB",
+      "branch": "inquiry",
+      "u": 10,
+      "v": -6,
+      "description": "Safe handling of glassware and chemicals, lab equipment, and recording measurements accurately.",
+      "tip": "Read the meniscus at eye level and record units with every measurement.",
+      "requires": ["sci-exam-1"]
+    },
+    {
+      "id": "sci-genetics",
+      "title": "Genetics & Heredity",
+      "code": "GEN",
+      "branch": "biology",
+      "u": 10,
+      "v": -4,
+      "description": "DNA, Mendelian crosses, Punnett squares, and pedigree analysis.",
+      "tip": "For dihybrid crosses, split the problem into two monohybrid crosses and multiply.",
+      "requires": ["sci-exam-1"]
+    },
+    {
+      "id": "sci-body",
+      "title": "Human Body Systems",
+      "code": "BDY",
+      "branch": "biology",
+      "u": 12,
+      "v": -4,
+      "description": "Circulation, respiration, digestion, excretion, and nervous coordination.",
+      "tip": "Trace one oxygen molecule and one glucose molecule through the body; most items follow those paths.",
+      "requires": ["sci-genetics"]
+    },
+    {
+      "id": "sci-bonding",
+      "title": "Chemical Bonding",
+      "code": "BND",
+      "branch": "chemistry",
+      "u": 10,
+      "v": -2,
+      "description": "Ionic vs covalent bonds, Lewis structures, and intermolecular forces.",
+      "tip": "Metal + nonmetal is ionic; nonmetal + nonmetal is covalent. That one rule answers many items.",
+      "requires": ["sci-exam-1"]
+    },
+    {
+      "id": "sci-reactions",
+      "title": "Reactions & Stoichiometry",
+      "code": "RXN",
+      "branch": "chemistry",
+      "u": 12,
+      "v": -2,
+      "description": "Balancing equations, reaction types, moles, and limiting reactants.",
+      "tip": "Balance oxygen and hydrogen last; leave the most complex formula for the final count.",
+      "requires": ["sci-bonding"]
+    },
+    {
+      "id": "sci-energy",
+      "title": "Work, Energy & Momentum",
+      "code": "ENR",
+      "branch": "physics",
+      "u": 10,
+      "v": 2,
+      "description": "Work, power, conservation of energy, and collisions.",
+      "tip": "Check whether the system is closed; if it is, mechanical energy at the start equals the end.",
+      "requires": ["sci-exam-1"]
+    },
+    {
+      "id": "sci-waves",
+      "title": "Waves, Light & Sound",
+      "code": "WAV",
+      "branch": "physics",
+      "u": 12,
+      "v": 2,
+      "description": "Wave properties, reflection and refraction, sound, and the electromagnetic spectrum.",
+      "tip": "Wave speed equals frequency times wavelength. Rearrange that one equation for most wave items.",
+      "requires": ["sci-energy"]
+    },
+    {
+      "id": "sci-weather",
+      "title": "Weather, Climate & Oceans",
+      "code": "WTH",
+      "branch": "earth",
+      "u": 10,
+      "v": 4,
+      "description": "Atmosphere layers, fronts, storms, ocean currents, and climate patterns.",
+      "tip": "Low pressure means rising air and rain; high pressure means sinking air and fair weather.",
+      "requires": ["sci-exam-1"]
+    },
+    {
+      "id": "sci-space",
+      "title": "Solar System & the Universe",
+      "code": "SPC",
+      "branch": "earth",
+      "u": 12,
+      "v": 4,
+      "description": "Planets, seasons, tides, stars, and the Big Bang.",
+      "tip": "Seasons come from axial tilt, not distance from the Sun — a classic UPCAT trap.",
+      "requires": ["sci-weather"]
+    },
+    {
+      "id": "sci-exam-2",
+      "type": "exam",
+      "title": "Matter & Systems Exam",
+      "code": "EX2",
+      "branch": "checkpoints",
+      "u": 16,
+      "v": 0,
+      "description": "Checkpoint covering lab data, genetics, body systems, bonding, reactions, energy, waves, weather, and space.",
+      "tip": "Score 80% or higher to master this checkpoint and unlock the advanced group.",
+      "requires": ["sci-labdata", "sci-body", "sci-reactions", "sci-waves", "sci-space"],
+      "exam": {
+        "passScore": 80,
+        "questions": [
+          {
+            "prompt": "A student measures a mass three times and gets 9.8 g, 9.9 g, and 10.0 g. These repeated measurements best demonstrate what?",
+            "choices": ["Accuracy", "Precision", "A hypothesis", "A control group"],
+            "answer": 1,
+            "explanation": "Precision describes how close repeated measurements are to each other. Accuracy describes how close they are to the true value."
+          },
+          {
+            "prompt": "In a cross between two heterozygous parents (Aa × Aa), what is the probability of an offspring showing the recessive trait?",
+            "choices": ["0%", "25%", "50%", "75%"],
+            "answer": 1,
+            "explanation": "The Punnett square gives AA, Aa, Aa, and aa. Only aa shows the recessive trait, so the probability is 1/4 or 25%."
+          },
+          {
+            "prompt": "Which blood vessels carry blood away from the heart?",
+            "choices": ["Veins", "Arteries", "Capillaries", "Venules"],
+            "answer": 1,
+            "explanation": "Arteries carry blood away from the heart. Veins return blood to the heart."
+          },
+          {
+            "prompt": "An ionic bond usually forms between which two types of elements?",
+            "choices": ["Two nonmetals", "A metal and a nonmetal", "Two metals", "Two noble gases"],
+            "answer": 1,
+            "explanation": "Ionic bonds form when a metal transfers electrons to a nonmetal. Two nonmetals typically form covalent bonds."
+          },
+          {
+            "prompt": "A wave has a frequency of 4 Hz and a wavelength of 3 m. What is its speed?",
+            "choices": ["0.75 m/s", "7 m/s", "12 m/s", "24 m/s"],
+            "answer": 2,
+            "explanation": "Wave speed = frequency × wavelength = 4 Hz × 3 m = 12 m/s."
+          }
+        ]
+      }
+    },
+    {
+      "id": "sci-analysis",
+      "title": "Data Analysis & Graphs",
+      "code": "ANL",
+      "branch": "inquiry",
+      "u": 18,
+      "v": -6,
+      "description": "Choose the right graph, read trends, identify outliers, and distinguish correlation from causation.",
+      "tip": "A line graph shows change over time; a bar graph compares categories. Match the graph to the question.",
+      "requires": ["sci-exam-2"]
+    },
+    {
+      "id": "sci-ecology",
+      "title": "Ecology & Populations",
+      "code": "ECO",
+      "branch": "biology",
+      "u": 18,
+      "v": -4,
+      "description": "Food webs, population dynamics, carrying capacity, and energy flow through ecosystems.",
+      "tip": "Removing a top predator cascades downward; trace the chain two steps before answering.",
+      "requires": ["sci-exam-2"]
+    },
+    {
+      "id": "sci-evolution",
+      "title": "Evolution & Classification",
+      "code": "EVO",
+      "branch": "biology",
+      "u": 20,
+      "v": -4,
+      "description": "Natural selection, evidence for evolution, speciation, and the major classification groups.",
+      "tip": "Natural selection acts on heritable variation that already exists in a population.",
+      "requires": ["sci-ecology"]
+    },
+    {
+      "id": "sci-acids",
+      "title": "Acids, Bases & Solutions",
+      "code": "ACD",
+      "branch": "chemistry",
+      "u": 18,
+      "v": -2,
+      "description": "pH, neutralisation, salts, concentration, and the behaviour of solutions.",
+      "tip": "pH below 7 is acidic, 7 is neutral, and above 7 is basic. Each whole step is a tenfold change.",
+      "requires": ["sci-exam-2"]
+    },
+    {
+      "id": "sci-organic",
+      "title": "Organic Chemistry Basics",
+      "code": "ORG",
+      "branch": "chemistry",
+      "u": 20,
+      "v": -2,
+      "description": "Carbon bonding, hydrocarbons, functional groups, and common organic reactions.",
+      "tip": "Carbon forms four bonds. Count them first when checking whether a structure is valid.",
+      "requires": ["sci-acids"]
+    },
+    {
+      "id": "sci-thermo",
+      "title": "Heat & Thermodynamics",
+      "code": "THM",
+      "branch": "physics",
+      "u": 18,
+      "v": 2,
+      "description": "Heat transfer, specific heat, phase changes, and the laws of thermodynamics.",
+      "tip": "During a phase change the temperature stays constant even though heat is still being added.",
+      "requires": ["sci-exam-2"]
+    },
+    {
+      "id": "sci-electricity",
+      "title": "Electricity & Magnetism",
+      "code": "ELC",
+      "branch": "physics",
+      "u": 20,
+      "v": 2,
+      "description": "Circuits, Ohm's law, series vs parallel, and the link between electricity and magnetism.",
+      "tip": "For circuits, find total resistance first, then total current, then branch values.",
+      "requires": ["sci-thermo"]
+    },
+    {
+      "id": "sci-climate",
+      "title": "Climate Change & Cycles",
+      "code": "CLM",
+      "branch": "earth",
+      "u": 18,
+      "v": 4,
+      "description": "The greenhouse effect, carbon and water cycles, climate evidence, and human impact.",
+      "tip": "Distinguish weather (short-term) from climate (long-term patterns); many items hinge on that difference.",
+      "requires": ["sci-exam-2"]
+    },
+    {
+      "id": "sci-resources",
+      "title": "Natural Resources & Pollution",
+      "code": "RES",
+      "branch": "earth",
+      "u": 20,
+      "v": 4,
+      "description": "Renewable and nonrenewable resources, conservation, and types of pollution.",
+      "tip": "Renewable does not mean unlimited; a resource can renew slowly and still be overused.",
+      "requires": ["sci-climate"]
+    },
+    {
+      "id": "sci-exam-3",
+      "type": "exam",
+      "title": "Advanced Science Exam",
+      "code": "EX3",
+      "branch": "checkpoints",
+      "u": 24,
+      "v": 0,
+      "description": "Checkpoint covering data analysis, ecology, evolution, acids and bases, organic chemistry, thermodynamics, electricity, climate, and resources.",
+      "tip": "Score 80% or higher to master this checkpoint and unlock the final simulation.",
+      "requires": ["sci-analysis", "sci-evolution", "sci-organic", "sci-electricity", "sci-resources"],
+      "exam": {
+        "passScore": 80,
+        "questions": [
+          {
+            "prompt": "In a food web, removing a top predator most likely causes what?",
+            "choices": ["The prey population to decrease", "The prey population to increase", "Producers to disappear immediately", "Energy transfer to stop"],
+            "answer": 1,
+            "explanation": "Without the predator, fewer prey are eaten, so the prey population can grow. The effect then cascades through the rest of the food web."
+          },
+          {
+            "prompt": "Natural selection acts directly on what?",
+            "choices": ["Traits acquired during an individual's lifetime", "Heritable variation within a population", "An individual's conscious choices", "Only new mutations"],
+            "answer": 1,
+            "explanation": "Natural selection favours heritable traits that improve survival and reproduction. Acquired traits are not passed on genetically."
+          },
+          {
+            "prompt": "A solution has a pH of 3. How should it be classified?",
+            "choices": ["Acidic", "Neutral", "Basic", "A salt"],
+            "answer": 0,
+            "explanation": "pH values below 7 are acidic, 7 is neutral, and values above 7 are basic."
+          },
+          {
+            "prompt": "Organic compounds are built around which element?",
+            "choices": ["Oxygen", "Carbon", "Nitrogen", "Hydrogen"],
+            "answer": 1,
+            "explanation": "Organic chemistry is the study of carbon-based compounds. Carbon's four bonds allow large, varied molecules."
+          },
+          {
+            "prompt": "A 12 V battery is connected to a 3 Ω resistor. What current flows?",
+            "choices": ["0.25 A", "4 A", "9 A", "36 A"],
+            "answer": 1,
+            "explanation": "Ohm's law gives I = V ÷ R = 12 V ÷ 3 Ω = 4 A."
+          }
+        ]
+      }
+    },
+    {
+      "id": "sci-sim",
+      "type": "quiz",
+      "title": "Science Simulation",
+      "code": "SIM",
+      "branch": "checkpoints",
+      "u": 26,
+      "v": 0,
+      "description": "Mixed science sets under time pressure with error-log review.",
+      "tip": "Log every miss by topic; revisit the weakest branch before the next simulation.",
+      "requires": ["sci-exam-3"]
+    }
+  ]
+}

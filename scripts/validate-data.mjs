@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 /**
- * Validates public/data/upcat-skill-tree.json before shipping.
+ * Validates the split subject data before shipping.
  * Run with: npm run validate
  */
 import { readFile } from 'node:fs/promises'
 
-const DATA_FILE = new URL('../public/data/upcat-skill-tree.json', import.meta.url)
+const DATA_DIR = new URL('../public/data/', import.meta.url)
+const MANIFEST_FILE = new URL('upcat-skill-tree.json', DATA_DIR)
 const errors = []
 const warnings = []
 
@@ -14,37 +15,54 @@ const isObject = (value) => typeof value === 'object' && value !== null && !Arra
 const isText = (value) => typeof value === 'string' && value.trim().length > 0
 const isInt = (value) => Number.isInteger(value)
 
-let raw
-try {
-  raw = JSON.parse(await readFile(DATA_FILE, 'utf8'))
-} catch (error) {
-  console.error('✗ Could not read or parse public/data/upcat-skill-tree.json')
-  console.error(`  ${error.message}`)
+async function readJson(file, label) {
+  try {
+    return JSON.parse(await readFile(file, 'utf8'))
+  } catch (error) {
+    console.error(`✗ Could not read or parse ${label}`)
+    console.error(`  ${error.message}`)
+    process.exit(1)
+  }
+}
+
+const manifest = await readJson(MANIFEST_FILE, 'public/data/upcat-skill-tree.json')
+
+if (!isObject(manifest)) {
+  console.error('✗ The manifest root must be a JSON object.')
   process.exit(1)
 }
 
-if (!isObject(raw)) {
-  console.error('✗ The root of the file must be a JSON object.')
-  process.exit(1)
+if (!isText(manifest.title)) fail('title must be a non-empty string.')
+if (!isText(manifest.subtitle)) fail('subtitle must be a non-empty string.')
+if (!isInt(manifest.version)) fail('version must be a whole number.')
+if (!Array.isArray(manifest.subjectFiles) || manifest.subjectFiles.length === 0) {
+  fail('subjectFiles must be a non-empty array of file paths.')
 }
 
-if (!isText(raw.title)) fail('title must be a non-empty string.')
-if (!isText(raw.subtitle)) fail('subtitle must be a non-empty string.')
-for (const legacy of ['stages', 'tiers']) {
-  if (raw[legacy] !== undefined) warnings.push(`"${legacy}" is no longer used.`)
-}
-
-const subjects = Array.isArray(raw.subjects) ? raw.subjects : []
-if (subjects.length === 0) fail('subjects must be a non-empty array.')
-
+const subjectFiles = Array.isArray(manifest.subjectFiles) ? manifest.subjectFiles : []
 const seenSubjects = new Set()
 let totalNodes = 0
+let totalExams = 0
+let totalQuestions = 0
 
-subjects.forEach((subject, subjectIndex) => {
-  const where = `subjects[${subjectIndex}]`
-  if (!isObject(subject)) return fail(`${where} must be an object.`)
+for (const [fileIndex, file] of subjectFiles.entries()) {
+  if (!isText(file)) {
+    fail(`subjectFiles[${fileIndex}] must be a non-empty string.`)
+    continue
+  }
 
-  if (!isText(subject.id)) return fail(`${where}.id must be a non-empty string.`)
+  const subject = await readJson(new URL(file, DATA_DIR), `public/data/${file}`)
+  const where = file
+
+  if (!isObject(subject)) {
+    fail(`${where} must contain a JSON object.`)
+    continue
+  }
+
+  if (!isText(subject.id)) {
+    fail(`${where}.id must be a non-empty string.`)
+    continue
+  }
   if (seenSubjects.has(subject.id)) fail(`Duplicate subject id "${subject.id}".`)
   seenSubjects.add(subject.id)
 
@@ -97,15 +115,62 @@ subjects.forEach((subject, subjectIndex) => {
     if (node.start !== undefined && typeof node.start !== 'boolean') {
       fail(`${label}.start must be true when present.`)
     }
-    if (node.type !== undefined && node.type !== 'lesson' && node.type !== 'quiz') {
-      fail(`${label}.type must be "lesson" or "quiz" when provided.`)
+    if (node.type !== undefined && !['lesson', 'quiz', 'exam'].includes(node.type)) {
+      fail(`${label}.type must be "lesson", "quiz", or "exam" when provided.`)
     }
     if (!Array.isArray(node.requires) || node.requires.some((id) => !isText(id))) {
       fail(`${label}.requires must be an array of node ids.`)
       return
     }
     for (const legacy of ['role', 'stage', 'tier', 'lane', 'q', 'r']) {
-      if (node[legacy] !== undefined) warnings.push(`${where}.${node.id}: "${legacy}" is no longer used.`)
+      if (node[legacy] !== undefined) warnings.push(`${label}: "${legacy}" is no longer used.`)
+    }
+
+    if (node.type === 'exam' && node.exam === undefined) {
+      fail(`${label}: exam nodes must define an "exam" object.`)
+    }
+    if (node.type !== 'exam' && node.exam !== undefined) {
+      fail(`${label}: only "exam" nodes may define an "exam" object.`)
+    }
+
+    if (node.exam !== undefined) {
+      const exam = node.exam
+      if (!isObject(exam)) {
+        fail(`${label}.exam must be an object.`)
+      } else {
+        totalExams += 1
+        if (!isInt(exam.passScore) || exam.passScore < 1 || exam.passScore > 100) {
+          fail(`${label}.exam.passScore must be a whole number from 1 to 100.`)
+        }
+        if (!Array.isArray(exam.questions) || exam.questions.length === 0) {
+          fail(`${label}.exam.questions must be a non-empty array.`)
+        } else {
+          totalQuestions += exam.questions.length
+          exam.questions.forEach((question, questionIndex) => {
+            const questionWhere = `${label}.exam.questions[${questionIndex}]`
+            if (!isObject(question)) {
+              return fail(`${questionWhere} must be an object.`)
+            }
+            if (!isText(question.prompt)) fail(`${questionWhere}.prompt must be a non-empty string.`)
+            if (!Array.isArray(question.choices) || question.choices.length < 2) {
+              fail(`${questionWhere}.choices must contain at least two options.`)
+            } else if (question.choices.some((choice) => !isText(choice))) {
+              fail(`${questionWhere}.choices must all be non-empty strings.`)
+            }
+            if (!isInt(question.answer)) {
+              fail(`${questionWhere}.answer must be a whole number.`)
+            } else if (
+              Array.isArray(question.choices) &&
+              (question.answer < 0 || question.answer >= question.choices.length)
+            ) {
+              fail(`${questionWhere}.answer must point at one of its choices.`)
+            }
+            if (!isText(question.explanation)) {
+              fail(`${questionWhere}.explanation must be a non-empty string.`)
+            }
+          })
+        }
+      }
     }
 
     if (isInt(node.u) && isInt(node.v)) {
@@ -119,7 +184,7 @@ subjects.forEach((subject, subjectIndex) => {
   const starts = nodes.filter((node) => node.start === true)
   if (starts.length !== 1) {
     fail(`${where}: exactly one node must have "start": true (found ${starts.length}).`)
-    return
+    continue
   }
   const start = starts[0]
   if (Array.isArray(start.requires) && start.requires.length > 0) {
@@ -157,11 +222,13 @@ subjects.forEach((subject, subjectIndex) => {
   const us = nodes.filter(isObject).map((node) => node.u)
   const vs = nodes.filter(isObject).map((node) => node.v)
   const links = nodes.reduce((sum, node) => sum + (Array.isArray(node.requires) ? node.requires.length : 0), 0)
+  const exams = nodes.filter((node) => isObject(node) && node.exam).length
   console.log(
     `  ${subject.name.padEnd(22)} ${String(nodes.length).padStart(2)} anchors · ` +
-      `u ${Math.min(...us)}..${Math.max(...us)} · v ${Math.min(...vs)}..${Math.max(...vs)} · ${links} routed links`,
+      `u ${Math.min(...us)}..${Math.max(...us)} · v ${Math.min(...vs)}..${Math.max(...vs)} · ` +
+      `${links} routed links · ${exams} exams`,
   )
-})
+}
 
 console.log('')
 if (warnings.length) {
@@ -176,4 +243,7 @@ if (errors.length) {
   process.exit(1)
 }
 
-console.log(`✓ Triangle flowchart valid — ${subjects.length} subjects, ${totalNodes} hex anchors.`)
+console.log(
+  `✓ Triangle flowchart valid — ${seenSubjects.size} subjects, ${totalNodes} hex anchors, ` +
+    `${totalExams} checkpoint exams, ${totalQuestions} exam questions.`,
+)

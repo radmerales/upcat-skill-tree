@@ -7,24 +7,28 @@ import {
   stateLabel,
 } from '../lib/tree'
 import type { SkillNode, Subject } from '../types'
-import { Check, Close, Lock } from './Icons'
+import { Check, Close, Exam, Lock } from './Icons'
 
 interface DetailPanelProps {
   subject: Subject
   node: SkillNode
   mastered: Set<string>
+  bestScore?: number
   onClose: () => void
   onSelect: (nodeId: string) => void
   onToggle: (node: SkillNode) => void
+  onTakeExam: (node: SkillNode) => void
 }
 
 export default function DetailPanel({
   subject,
   node,
   mastered,
+  bestScore,
   onClose,
   onSelect,
   onToggle,
+  onTakeExam,
 }: DetailPanelProps) {
   const branch = subject.branches.find((entry) => entry.id === node.branch) ?? subject.branches[0]
   const state = nodeState(node, mastered)
@@ -33,13 +37,21 @@ export default function DetailPanel({
   const subtree = collectSubtree(subject, node.id)
   const extraRemovals = subtree.filter((id) => id !== node.id && mastered.has(id)).length
   const nodeIndex = subject.nodes.findIndex((entry) => entry.id === node.id) + 1
+  const exam = node.exam
+  const examPassed = bestScore !== undefined && exam ? bestScore >= exam.passScore : false
 
   return (
     <aside className="panel" aria-label="Node details">
       <div className="panel__head">
         <div className="panel__head-copy">
           <span className="panel__eyebrow">
-            {node.start ? 'Entry node' : node.type === 'quiz' ? 'Quiz node' : 'Lesson node'}{' '}
+            {node.start
+              ? 'Entry node'
+              : node.type === 'exam'
+                ? 'Exam checkpoint'
+                : node.type === 'quiz'
+                  ? 'Quiz node'
+                  : 'Lesson node'}{' '}
             {String(nodeIndex).padStart(2, '0')} / {String(subject.nodes.length).padStart(2, '0')}
           </span>
           <span className="panel__head-subject">{subject.name}</span>
@@ -56,6 +68,12 @@ export default function DetailPanel({
             {branch.name}
           </span>
           {node.start && <span className="role-chip role-chip--start">Start</span>}
+          {node.type === 'exam' && (
+            <span className="role-chip role-chip--exam">
+              <Exam size={11} />
+              Exam
+            </span>
+          )}
           <span className="tier-chip">Corner {node.u},{node.v}</span>
         </div>
 
@@ -64,10 +82,36 @@ export default function DetailPanel({
         <div className={`state-pill state-pill--${state}`}>
           {state === 'mastered' && <Check size={12} />}
           {state === 'locked' && <Lock size={12} />}
-          <span>{stateLabel(state)}</span>
+          <span>{stateLabel(state, node.type)}</span>
         </div>
 
         <p className="panel__description">{node.description}</p>
+
+        {exam && (
+          <section className={`exam-card${examPassed ? ' is-passed' : ''}`}>
+            <div className="exam-card__top">
+              <span className="exam-card__label">
+                <Exam size={13} />
+                Checkpoint exam
+              </span>
+              <span className="exam-card__threshold">{exam.passScore}% to pass</span>
+            </div>
+            <p>
+              {exam.questions.length} questions · best score{' '}
+              <strong>{bestScore === undefined ? '—' : `${bestScore}%`}</strong>
+            </p>
+            <div className="exam-card__bar" aria-hidden="true">
+              <span style={{ width: `${bestScore ?? 0}%` }} />
+            </div>
+            <span className="exam-card__status">
+              {examPassed
+                ? 'Passed — downstream nodes unlocked'
+                : bestScore === undefined
+                  ? 'Not attempted yet'
+                  : `Best attempt ${bestScore}% — pass at ${exam.passScore}%`}
+            </span>
+          </section>
+        )}
 
         {node.tip && (
           <div className="tip-card">
@@ -130,16 +174,23 @@ export default function DetailPanel({
         </section>
 
         <p className="panel__hint">
-          Connectors link each skill to its prerequisites and follow as you drag nodes. Master
-          connected nodes to open the next skills, and follow the paths to the final capstone.
+          Connectors link each skill to its prerequisites and follow as you drag nodes. Lesson nodes
+          master directly; checkpoint exams unlock the next group only when you reach the pass score.
         </p>
       </div>
 
       <div className="panel__foot">
-        {state === 'available' && (
+        {state === 'available' && !exam && (
           <button type="button" className="action action--primary" onClick={() => onToggle(node)}>
             <Check size={15} />
             {node.start ? 'Start this subject' : 'Master node'}
+          </button>
+        )}
+
+        {state === 'available' && exam && (
+          <button type="button" className="action action--primary" onClick={() => onTakeExam(node)}>
+            <Exam size={15} />
+            Take exam · {exam.passScore}% to pass
           </button>
         )}
 
@@ -153,6 +204,14 @@ export default function DetailPanel({
               {missing.length} prerequisite{missing.length === 1 ? '' : 's'} remaining
             </span>
           </>
+        )}
+
+        {state === 'mastered' && exam && (
+          <button type="button" className="action action--primary" onClick={() => onTakeExam(node)}>
+            <Exam size={15} />
+            Retake exam
+            {bestScore !== undefined && <span className="action__note">best {bestScore}%</span>}
+          </button>
         )}
 
         {state === 'mastered' && (

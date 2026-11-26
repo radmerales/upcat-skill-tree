@@ -4,6 +4,19 @@ export interface Branch {
   color: string
 }
 
+export interface ExamQuestion {
+  prompt: string
+  choices: string[]
+  answer: number
+  explanation: string
+}
+
+export interface NodeExam {
+  /** Minimum percentage required to master the node and unlock its dependents. */
+  passScore: number
+  questions: ExamQuestion[]
+}
+
 export interface SkillNode {
   id: string
   title: string
@@ -16,6 +29,7 @@ export interface SkillNode {
   description: string
   tip: string
   requires: string[]
+  exam?: NodeExam
 }
 
 export interface Subject {
@@ -28,6 +42,14 @@ export interface Subject {
   nodes: SkillNode[]
 }
 
+/** Root manifest: metadata plus one file per subject. */
+export interface SubjectManifest {
+  version: number
+  title: string
+  subtitle: string
+  subjectFiles: string[]
+}
+
 export interface TreeData {
   version: number
   title: string
@@ -37,7 +59,7 @@ export interface TreeData {
 
 export type NodeState = 'mastered' | 'available' | 'locked'
 
-export type NodeType = 'lesson' | 'quiz'
+export type NodeType = 'lesson' | 'quiz' | 'exam'
 
 export interface Point {
   x: number
