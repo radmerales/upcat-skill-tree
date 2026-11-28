@@ -179,7 +179,7 @@ The app runs the same checks on load and shows a readable error screen if a subj
 | Drag canvas | Pan the tree |
 | Drag a node | Snaps live to the nearest triangle-corner anchor and previews the move with translucent ghosts at both corners — swapping if the target is taken — then commits on drop |
 | Scroll / pinch | Zoom toward the cursor |
-| Click a node | Open the detail panel |
+| Click a node | Open the detail panel and ease the node into the centre of the uncovered area |
 | Click outside the panel | Close the detail panel |
 | Double-click a lesson or quiz node | Master / unmaster a node |
 | Double-click an available exam node | Open its checkpoint exam |

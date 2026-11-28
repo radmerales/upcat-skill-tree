@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -58,6 +59,18 @@ export default function SkillCanvas({
   const justDraggedRef = useRef(false)
 
   const positions = positionsBySubject[subject.id] ?? layout.positions
+
+  const focusNodeRef = useRef(camera.focusNode)
+  focusNodeRef.current = camera.focusNode
+  const positionsRef = useRef(positions)
+  positionsRef.current = positions
+
+  /* Bring a newly selected node into the area left of the detail panel. */
+  useEffect(() => {
+    if (!selectedId) return
+    const position = positionsRef.current[selectedId]
+    if (position) focusNodeRef.current(position)
+  }, [selectedId])
 
   /* Show the post-drop layout while dragging, including any swap. */
   const previewPositions = useMemo(() => {

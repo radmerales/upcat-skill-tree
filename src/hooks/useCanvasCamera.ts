@@ -35,6 +35,7 @@ export function useCanvasCamera({ width, height, start, subjectId }: CameraOptio
   const dragRef = useRef<DragState | null>(null)
   const suppressClickRef = useRef(false)
   const viewRef = useRef<View>({ x: 0, y: 0, k: 1 })
+  const animationRef = useRef<number | null>(null)
 
   const [view, setView] = useState<View>({ x: 0, y: 0, k: 1 })
   const [size, setSize] = useState({ width: 0, height: 0 })
@@ -42,6 +43,45 @@ export function useCanvasCamera({ width, height, start, subjectId }: CameraOptio
   const [fitted, setFitted] = useState(false)
 
   viewRef.current = view
+
+  const cancelAnimation = useCallback(() => {
+    if (animationRef.current !== null) {
+      cancelAnimationFrame(animationRef.current)
+      animationRef.current = null
+    }
+  }, [])
+
+  const animateTo = useCallback(
+    (target: View, duration = 360) => {
+      cancelAnimation()
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        setView(target)
+        return
+      }
+      const from = viewRef.current
+      const startedAt = performance.now()
+
+      const step = (now: number) => {
+        const t = Math.min(1, (now - startedAt) / duration)
+        const eased = 1 - (1 - t) ** 3
+        setView({
+          x: from.x + (target.x - from.x) * eased,
+          y: from.y + (target.y - from.y) * eased,
+          k: from.k + (target.k - from.k) * eased,
+        })
+        if (t < 1) {
+          animationRef.current = requestAnimationFrame(step)
+        } else {
+          animationRef.current = null
+        }
+      }
+
+      animationRef.current = requestAnimationFrame(step)
+    },
+    [cancelAnimation],
+  )
+
+  useEffect(() => cancelAnimation, [cancelAnimation])
 
   useEffect(() => {
     const element = viewportRef.current
@@ -55,6 +95,7 @@ export function useCanvasCamera({ width, height, start, subjectId }: CameraOptio
 
   const frameAll = useCallback(() => {
     if (!size.width || !size.height) return
+    cancelAnimation()
     const paddingX = size.width < 720 ? 16 : 34
     const paddingY = size.height < 560 ? 16 : 32
     const k = clamp(
@@ -68,10 +109,11 @@ export function useCanvasCamera({ width, height, start, subjectId }: CameraOptio
       y: (size.height - height * k) / 2 + 6,
     })
     setFitted(true)
-  }, [height, size.height, size.width, width])
+  }, [cancelAnimation, height, size.height, size.width, width])
 
   const frameStart = useCallback(() => {
     if (!size.width || !size.height) return
+    cancelAnimation()
 
     if (size.width < 720) {
       const k = 0.76
@@ -97,7 +139,7 @@ export function useCanvasCamera({ width, height, start, subjectId }: CameraOptio
       y: Math.max(8, (size.height - height * k) / 2),
     })
     setFitted(true)
-  }, [height, size.height, size.width, start.x, start.y, width])
+  }, [cancelAnimation, height, size.height, size.width, start.x, start.y, width])
 
   useEffect(() => setFitted(false), [subjectId])
 
@@ -111,6 +153,7 @@ export function useCanvasCamera({ width, height, start, subjectId }: CameraOptio
 
     const onWheel = (event: WheelEvent) => {
       event.preventDefault()
+      cancelAnimation()
       const rect = element.getBoundingClientRect()
       const pointerX = event.clientX - rect.left
       const pointerY = event.clientY - rect.top
@@ -127,11 +170,12 @@ export function useCanvasCamera({ width, height, start, subjectId }: CameraOptio
 
     element.addEventListener('wheel', onWheel, { passive: false })
     return () => element.removeEventListener('wheel', onWheel)
-  }, [])
+  }, [cancelAnimation])
 
   const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (event.button !== 0) return
     if ((event.target as HTMLElement).closest('.vnode')) return
+    cancelAnimation()
     dragRef.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
@@ -163,6 +207,7 @@ export function useCanvasCamera({ width, height, start, subjectId }: CameraOptio
   }
 
   const zoomBy = (factor: number) => {
+    cancelAnimation()
     const current = viewRef.current
     const k = clamp(current.k * factor, 0.24, 2.2)
     const ratio = k / current.k
@@ -179,6 +224,25 @@ export function useCanvasCamera({ width, height, start, subjectId }: CameraOptio
     suppressClickRef.current = false
   }
 
+  /** Animate the node to the middle of the area left uncovered by the detail panel. */
+  const focusNode = useCallback(
+    (point: Point) => {
+      if (!size.width || !size.height) return
+      const narrow = size.width < 900
+      const panelWidth = narrow ? 0 : 380
+      const panelHeight = narrow
+        ? size.height * (size.width < 560 ? 0.68 : 0.64)
+        : 0
+      const k = clamp(Math.max(viewRef.current.k, 1), 0.24, 2.2)
+      animateTo({
+        k,
+        x: (size.width - panelWidth) / 2 - point.x * k,
+        y: (size.height - panelHeight) / 2 - point.y * k,
+      })
+    },
+    [animateTo, size.height, size.width],
+  )
+
   return {
     viewportRef,
     view,
@@ -186,6 +250,7 @@ export function useCanvasCamera({ width, height, start, subjectId }: CameraOptio
     fitted,
     suppressClickRef,
     frameAll,
+    focusNode,
     onPointerDown,
     onPointerMove,
     onPointerUp: endPan,
