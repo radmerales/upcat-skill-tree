@@ -62,16 +62,15 @@ export default function DetailPanel({
       </div>
 
       <div className="panel__scroll">
-        <div className="panel__meta">
-          {node.type !== 'exam' && (
+        {node.type !== 'exam' && (
+          <div className="panel__meta">
             <span className="branch-chip" style={{ '--chip-color': branch.color } as CSSProperties}>
               <span className="branch-chip__dot" />
               {branch.name}
             </span>
-          )}
-          {node.start && <span className="role-chip role-chip--start">Start</span>}
-          <span className="tier-chip">Corner {node.u},{node.v}</span>
-        </div>
+            {node.start && <span className="role-chip role-chip--start">Start</span>}
+          </div>
+        )}
 
         <h2 className="panel__title">{node.title}</h2>
 

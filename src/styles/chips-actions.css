@@ -1,5 +1,4 @@
-.branch-chip,
-.tier-chip {
+.branch-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -9,10 +8,6 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   background: var(--surface);
-  color: var(--muted);
-}
-
-.branch-chip {
   color: var(--text);
 }
 
