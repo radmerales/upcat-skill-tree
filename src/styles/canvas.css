@@ -58,7 +58,6 @@
 }
 
 .edge.is-selected {
-  opacity: 1;
   stroke-width: 2.5;
 }
 
