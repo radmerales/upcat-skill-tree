@@ -185,7 +185,7 @@ The app runs the same checks on load and shows a readable error screen if a subj
 | Double-click an available exam node | Open its checkpoint exam |
 | Pass an exam | Master the exam node and unlock the next group at the required score |
 | Fail an exam | Keep the best attempt score; the node stays available for a retry |
-| Select a node | Marching-ants outline around its shape |
+| Select a node | Marching-ants outline around its shape and all connected edges |
 | Next available edges | Marching dashes animate from mastered nodes to the next unmastered nodes |
 | Available exam node | Marching-ants outline signals the checkpoint is ready |
 | Right-click a mastered node | Remove it and every node that depends on it |
