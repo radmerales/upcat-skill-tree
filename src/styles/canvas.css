@@ -81,7 +81,7 @@
   flex-direction: column;
   width: 36px;
   background: var(--surface);
-  border: 1.5px solid var(--line-strong);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
   overflow: hidden;
@@ -94,7 +94,7 @@
   padding: 0;
   background: transparent;
   border: 0;
-  border-bottom: 1px dashed var(--line);
+  border-bottom: 1px solid var(--line-soft);
   color: var(--muted);
   cursor: pointer;
   transition: color 0.15s ease, background 0.15s ease;
@@ -116,8 +116,7 @@
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: var(--muted);
-  border-bottom: 1px dashed var(--line);
-  background: var(--surface-2);
+  border-bottom: 1px solid var(--line-soft);
 }
 
 /* Legend ------------------------------------------------------------------ */
@@ -132,15 +131,15 @@
   align-items: center;
   gap: 2px;
   max-width: calc(100% - 32px);
-  padding: 5px;
+  padding: 4px;
   background: var(--surface);
-  border: 1.5px solid var(--line-strong);
-  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
   box-shadow: var(--shadow-soft);
 }
 
 .legend__label {
-  margin: 0 4px 0 6px;
+  margin: 0 4px 0 8px;
   font-size: 11px;
   font-weight: 600;
   color: var(--muted);
@@ -153,13 +152,13 @@
   padding: 5px 10px;
   cursor: pointer;
   background: transparent;
-  border: 1.5px solid transparent;
+  border: 0;
   border-radius: var(--radius-pill);
   font-size: 12px;
   font-weight: 500;
   color: var(--muted);
   white-space: nowrap;
-  transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+  transition: color 0.12s ease, background 0.12s ease;
 }
 
 .legend__chip:hover {
@@ -168,9 +167,8 @@
 }
 
 .legend__chip.is-active {
-  background: var(--yellow-soft);
-  border-color: var(--yellow-strong);
-  color: var(--on-yellow);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .legend__dot,
@@ -188,7 +186,7 @@
 
 .legend__chip.is-active .legend__dot,
 .legend__chip.is-active .legend__all-dot {
-  background: var(--on-yellow);
+  background: var(--on-accent);
 }
 
 .legend__count {
@@ -198,7 +196,7 @@
 }
 
 .legend__chip.is-active .legend__count {
-  color: color-mix(in srgb, var(--on-yellow) 70%, transparent);
+  color: color-mix(in srgb, var(--on-accent) 65%, transparent);
 }
 
 .hints {

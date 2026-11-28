@@ -2,7 +2,7 @@
 
 An interactive flowchart-style study map for the UPCAT (University of the Philippines College Admission Test). Pick a subject from the top dropdown and work from the start node through skills placed on the corners of a triangular lattice.
 
-A warm, Primary-inspired study map: cream paper surfaces, rounded cards and pill chips, soft warm borders, green completion checks, and playful yellow, red, and blue accents. Every node starts on a triangle-mesh corner — lessons are circles, quizzes are diamonds, and checkpoint exams are hexagons — and warm connectors follow the triangle edges, re-routing as you drag nodes between corners.
+A clean, white study map: a plain white canvas, thin neutral borders, flat pill chips, subtle grey surfaces, and branch-colour accents. Every node starts on a triangle-mesh corner — lessons are circles, quizzes are diamonds, and checkpoint exams are hexagons — and connectors follow the triangle edges, re-routing as you drag nodes between corners.
 
 The map is split into four subtests: Mathematics, Science, Language Proficiency, and Reading Comprehension. Each subject is its own JSON file and each subject has three checkpoint exams. A checkpoint covers a group of topics and must be passed at its configured score before the next group unlocks.
 
@@ -134,7 +134,7 @@ The current data gives each subject three checkpoint exams. To add a fourth, cre
 
 The background is an equilateral **triangle mesh**. Nodes sit on alternating mesh corners — an **odd `u`, even `v`** anchor — so no two nodes can sit on adjacent corners. `u` moves horizontally and `v` moves down one triangle row. The start node uses `1,0`. Positions are only the starting layout — drag any node to snap it live to another triangle corner, swapping places with any node already there.
 
-Each node is a small shape with its label underneath, like a flowchart node: lesson nodes are circles, quiz nodes (`"type": "quiz"`) are diamonds, and exam nodes (`"type": "exam"`) are hexagons. Nodes without a `type` default to `"lesson"`. Idle nodes use a faded tint of their branch colour for the fill with a matching solid border; mastered nodes switch to the solid branch colour with a matching halo ring and white labels. Connectors are routed along the **triangle edges** between each node and its prerequisites, and are recomputed whenever a node changes corner. Locked connectors remain visible as a faded, static outline so the whole network stays readable.
+Each node is a small shape with its label underneath, like a flowchart node: lesson nodes are circles, quiz nodes (`"type": "quiz"`) are diamonds, and exam nodes (`"type": "exam"`) are hexagons. Nodes without a `type` default to `"lesson"`. Idle nodes use a faded tint of their branch colour for the fill with a matching solid border; mastered nodes switch to a deeper branch tone with a matching halo ring and white labels. Connectors are routed along the **triangle edges** between each node and its prerequisites, and are recomputed whenever a node changes corner. Locked connectors remain visible as a faded, static outline so the whole network stays readable.
 
 For easy editing, copy a node's `u,v` and move by one anchor step (two mesh edges):
 
@@ -201,4 +201,4 @@ Pushes to `main` run `.github/workflows/deploy.yml`, which validates every subje
 
 ## Credits
 
-The visual theme is inspired by [Primary](https://github.com/primary-theme/obsidian) for Obsidian by Cecilia May ([Ko-fi](https://ko-fi.com/ceciliamay)).
+The visual direction was originally inspired by [Primary](https://github.com/primary-theme/obsidian) for Obsidian by Cecilia May ([Ko-fi](https://ko-fi.com/ceciliamay)).

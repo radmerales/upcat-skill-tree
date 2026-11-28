@@ -11,9 +11,9 @@
   width: 380px;
   max-width: 100%;
   background: var(--surface);
-  border-left: 1.5px solid var(--line-strong);
+  border-left: 1px solid var(--line);
   border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-  box-shadow: -8px 0 24px rgba(96, 74, 43, 0.08);
+  box-shadow: -8px 0 24px rgba(24, 24, 27, 0.06);
   overflow: hidden;
   animation: panelIn 0.2s ease;
 }
@@ -25,7 +25,7 @@
   gap: 12px;
   padding: 12px 14px;
   background: var(--surface-2);
-  border-bottom: 1px dashed var(--line-strong);
+  border-bottom: 1px solid var(--line);
 }
 
 .panel__head-copy {
@@ -53,10 +53,10 @@
   flex: none;
   cursor: pointer;
   background: var(--surface);
-  border: 1.5px solid var(--line-strong);
+  border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   color: var(--muted);
-  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 
 .panel__close:hover {
@@ -91,22 +91,22 @@
 .tip-card {
   margin: 16px 0 20px;
   padding: 12px 14px;
-  background: var(--yellow-soft);
-  border: 1.5px solid color-mix(in srgb, var(--yellow-strong) 55%, transparent);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
 }
 
 .tip-card__label {
   font-size: 11px;
   font-weight: 700;
-  color: var(--on-yellow);
+  color: var(--text);
 }
 
 .tip-card p {
   margin: 4px 0 0;
   font-size: 12.5px;
   line-height: 1.6;
-  color: color-mix(in srgb, var(--on-yellow) 80%, var(--text));
+  color: var(--muted);
 }
 
 .panel__section {
@@ -119,7 +119,7 @@
   gap: 12px;
   margin-bottom: 6px;
   padding-bottom: 6px;
-  border-bottom: 1px dashed var(--line);
+  border-bottom: 1px solid var(--line);
   font-size: 11px;
   font-weight: 600;
   color: var(--muted);
@@ -154,14 +154,13 @@
   text-align: left;
   cursor: pointer;
   background: transparent;
-  border: 1.5px solid transparent;
+  border: 0;
   border-radius: var(--radius-sm);
-  transition: background 0.12s ease, border-color 0.12s ease;
+  transition: background 0.12s ease;
 }
 
 .link-row:hover {
   background: var(--surface-2);
-  border-color: var(--line);
 }
 
 .link-row__status {
@@ -170,28 +169,28 @@
   width: 18px;
   height: 18px;
   flex: none;
-  border: 1.5px solid var(--line-strong);
+  border: 1px solid var(--line-strong);
   border-radius: 5px;
   color: var(--muted-2);
   background: var(--surface);
 }
 
 .link-row__status.is-done {
-  color: #ffffff;
+  color: var(--on-accent);
   border-color: var(--green);
   background: var(--green);
 }
 
 .link-row__status.is-next {
-  border-color: var(--yellow-strong);
-  background: var(--yellow-soft);
+  border-color: var(--accent);
+  background: var(--surface);
 }
 
 .link-row__diamond {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--yellow-strong);
+  background: var(--accent);
 }
 
 .link-row__title {
@@ -213,7 +212,7 @@
 .panel__hint {
   margin: 6px 0 10px;
   padding-top: 12px;
-  border-top: 1px dashed var(--line);
+  border-top: 1px solid var(--line);
   font-size: 11.5px;
   line-height: 1.55;
   color: var(--muted-2);
@@ -225,7 +224,7 @@
   flex-direction: column;
   gap: 6px;
   padding: 14px 18px 16px;
-  border-top: 1px dashed var(--line);
+  border-top: 1px solid var(--line);
   background: var(--surface);
 }
 

@@ -11,7 +11,7 @@
   height: var(--header-h);
   padding: 0 18px;
   background: var(--surface);
-  border-bottom: 1.5px solid var(--line-strong);
+  border-bottom: 1px solid var(--line);
 }
 
 .brand {
@@ -24,20 +24,18 @@
 .brand__mark {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   flex: none;
   border-radius: 50%;
-  background: var(--yellow);
-  border: 1.5px solid var(--yellow-strong);
-  box-shadow: var(--shadow-button);
+  background: var(--accent);
 }
 
 .brand__mark-core {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--on-yellow);
+  background: var(--on-accent);
 }
 
 .brand__text {
@@ -85,16 +83,15 @@
   text-align: left;
   cursor: pointer;
   background: var(--surface);
-  border: 1.5px solid var(--line-strong);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-soft);
-  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
 
 .subject-switch:hover,
 .subject-switch.is-open {
   background: var(--surface-2);
-  border-color: #b7a17c;
+  border-color: var(--line-strong);
 }
 
 .subject-switch__badge {
@@ -104,9 +101,8 @@
   height: 28px;
   flex: none;
   border-radius: 50%;
-  background: var(--yellow-soft);
-  border: 1px solid var(--yellow-strong);
-  color: var(--on-yellow);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .subject-switch__badge span {
@@ -214,8 +210,8 @@
   height: 34px;
   padding: 0 10px;
   cursor: pointer;
-  background: var(--surface);
-  border: 1.5px solid transparent;
+  background: transparent;
+  border: 1px solid transparent;
   border-radius: var(--radius-sm);
   color: var(--muted);
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
@@ -224,7 +220,6 @@
 .icon-button:hover {
   color: var(--text);
   background: var(--surface-2);
-  border-color: var(--line-strong);
 }
 
 .icon-button__label {

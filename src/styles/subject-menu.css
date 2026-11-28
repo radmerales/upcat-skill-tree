@@ -2,7 +2,7 @@
 
 .subject-menu {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
   width: 400px;
@@ -10,7 +10,7 @@
   z-index: 60;
   padding: 0;
   background: var(--surface);
-  border: 1.5px solid var(--line-strong);
+  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-pop);
   overflow: hidden;
@@ -22,7 +22,6 @@
   justify-content: space-between;
   gap: 12px;
   padding: 10px 14px;
-  background: var(--surface-2);
   border-bottom: 1px solid var(--line);
   font-size: 11px;
   color: var(--muted);
@@ -31,14 +30,14 @@
 .subject-menu__blurb {
   margin: 0;
   padding: 12px 14px;
-  border-bottom: 1px dashed var(--line);
+  border-bottom: 1px solid var(--line);
   font-size: 12px;
   line-height: 1.55;
   color: var(--muted);
 }
 
 .subject-list {
-  padding: 8px;
+  padding: 6px;
 }
 
 .subject-option {
@@ -51,9 +50,9 @@
   text-align: left;
   cursor: pointer;
   background: transparent;
-  border: 1.5px solid transparent;
+  border: 0;
   border-radius: var(--radius-sm);
-  transition: background 0.12s ease, border-color 0.12s ease;
+  transition: background 0.12s ease;
 }
 
 .subject-option:hover {
@@ -61,9 +60,7 @@
 }
 
 .subject-option.is-active {
-  background: var(--yellow-soft);
-  border-color: var(--yellow-strong);
-  color: var(--on-yellow);
+  background: var(--surface-2);
 }
 
 .subject-option__dot {
@@ -71,10 +68,6 @@
   height: 8px;
   border-radius: 50%;
   background: var(--option-accent);
-}
-
-.subject-option.is-active .subject-option__dot {
-  background: var(--on-yellow);
 }
 
 .subject-option__copy {
@@ -94,17 +87,14 @@
   color: var(--text);
 }
 
+.subject-option.is-active .subject-option__name {
+  color: var(--text);
+}
+
 .subject-option__count {
   font-size: 11px;
   font-variant-numeric: tabular-nums;
   color: var(--muted);
-}
-
-.subject-option.is-active .subject-option__kicker,
-.subject-option.is-active .subject-option__name,
-.subject-option.is-active .subject-option__count,
-.subject-option.is-active .subject-option__check {
-  color: var(--on-yellow);
 }
 
 .subject-option__check {
@@ -112,12 +102,12 @@
   place-items: center;
   width: 16px;
   height: 16px;
-  color: var(--yellow-strong);
+  color: var(--text);
 }
 
 .subject-menu__foot {
   padding: 10px 14px;
-  border-top: 1px dashed var(--line);
+  border-top: 1px solid var(--line);
   font-size: 11px;
   line-height: 1.5;
   color: var(--muted-2);

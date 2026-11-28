@@ -4,22 +4,22 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: var(--on-yellow);
-  border-color: var(--yellow-strong);
-  background: var(--yellow-soft);
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--surface);
 }
 
 .exam-card {
   margin: 16px 0 18px;
   padding: 12px 14px;
-  background: color-mix(in srgb, var(--yellow-soft) 55%, var(--surface));
-  border: 1.5px solid color-mix(in srgb, var(--yellow-strong) 55%, transparent);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
 }
 
 .exam-card.is-passed {
   background: var(--green-soft);
-  border-color: color-mix(in srgb, var(--green) 55%, transparent);
+  border-color: color-mix(in srgb, var(--green) 35%, transparent);
 }
 
 .exam-card__top {
@@ -35,41 +35,41 @@
   gap: 6px;
   font-size: 11px;
   font-weight: 700;
-  color: var(--on-yellow);
+  color: var(--text);
 }
 
 .exam-card__threshold {
   font-size: 10.5px;
   font-weight: 700;
-  color: var(--on-yellow);
+  color: var(--muted);
 }
 
 .exam-card p {
   margin: 8px 0 0;
   font-size: 12px;
   line-height: 1.5;
-  color: color-mix(in srgb, var(--on-yellow) 78%, var(--text));
+  color: var(--muted);
 }
 
 .exam-card.is-passed p,
 .exam-card.is-passed .exam-card__label,
 .exam-card.is-passed .exam-card__threshold,
 .exam-card.is-passed .exam-card__status {
-  color: color-mix(in srgb, var(--green) 65%, var(--text));
+  color: color-mix(in srgb, var(--green) 70%, var(--text));
 }
 
 .exam-card__bar {
-  height: 6px;
+  height: 4px;
   margin: 9px 0 7px;
   overflow: hidden;
-  background: color-mix(in srgb, var(--line-strong) 35%, var(--surface));
+  background: var(--line);
   border-radius: 999px;
 }
 
 .exam-card__bar span {
   display: block;
   height: 100%;
-  background: var(--yellow-strong);
+  background: var(--accent);
   border-radius: inherit;
   transition: width 0.25s ease;
 }
@@ -82,7 +82,7 @@
   display: block;
   font-size: 10.5px;
   font-weight: 600;
-  color: color-mix(in srgb, var(--on-yellow) 65%, var(--muted));
+  color: var(--muted);
 }
 
 /* Exam modal -------------------------------------------------------------- */
@@ -96,7 +96,7 @@
   max-height: min(88dvh, 820px);
   overflow: hidden;
   background: var(--surface);
-  border: 1.5px solid var(--line-strong);
+  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-pop);
   animation: modalIn 0.18s ease-out;
@@ -116,7 +116,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 18px 26px 14px;
-  border-bottom: 1px dashed var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
 .exam-modal__intro h2 {
@@ -144,9 +144,9 @@
   justify-content: center;
   min-width: 82px;
   padding: 8px 10px;
-  color: var(--on-yellow);
-  background: var(--yellow-soft);
-  border: 1.5px solid var(--yellow-strong);
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius);
 }
 
@@ -159,6 +159,7 @@
 .exam-threshold span {
   font-size: 10px;
   font-weight: 700;
+  color: var(--muted);
 }
 
 .exam-modal__body {
@@ -187,19 +188,18 @@
 
 .exam-progress__pip {
   flex: 1;
-  height: 5px;
-  background: var(--surface-3);
+  height: 4px;
+  background: var(--line);
   border-radius: 999px;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
+  transition: background 0.15s ease;
 }
 
 .exam-progress__pip.is-answered {
-  background: var(--yellow-strong);
+  background: var(--muted-2);
 }
 
 .exam-progress__pip.is-current {
-  background: var(--yellow);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--yellow) 35%, transparent);
+  background: var(--accent);
 }
 
 .exam-question__meta {
@@ -236,11 +236,11 @@
   cursor: pointer;
   color: var(--text);
   background: var(--surface);
-  border: 1.5px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   font-size: 13px;
   line-height: 1.45;
-  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .exam-choice:hover {
@@ -249,9 +249,8 @@
 }
 
 .exam-choice.is-selected {
-  background: var(--yellow-soft);
-  border-color: var(--yellow-strong);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--yellow) 28%, transparent);
+  background: var(--accent-soft);
+  border-color: var(--accent);
 }
 
 .exam-choice__key {
@@ -264,14 +263,14 @@
   font-size: 10px;
   font-weight: 700;
   background: var(--surface);
-  border: 1.5px solid var(--line-strong);
+  border: 1px solid var(--line-strong);
   border-radius: 6px;
 }
 
 .exam-choice.is-selected .exam-choice__key {
-  color: var(--on-yellow);
-  background: var(--yellow-strong);
-  border-color: var(--yellow-strong);
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
 .exam-nav {
@@ -286,7 +285,7 @@
 }
 
 .exam-nav .action:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none;
 }
@@ -298,18 +297,18 @@
   margin-bottom: 16px;
   padding: 14px 16px;
   background: var(--surface-2);
-  border: 1.5px solid var(--line-strong);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
 }
 
 .exam-result.is-passed {
   background: var(--green-soft);
-  border-color: color-mix(in srgb, var(--green) 60%, transparent);
+  border-color: color-mix(in srgb, var(--green) 35%, transparent);
 }
 
 .exam-result.is-failed {
-  background: color-mix(in srgb, var(--red) 8%, var(--surface));
-  border-color: color-mix(in srgb, var(--red) 45%, transparent);
+  background: color-mix(in srgb, var(--red) 6%, var(--surface));
+  border-color: color-mix(in srgb, var(--red) 30%, transparent);
 }
 
 .exam-result__score {
@@ -319,7 +318,7 @@
   align-items: center;
   min-width: 86px;
   padding-right: 14px;
-  border-right: 1px dashed var(--line-strong);
+  border-right: 1px solid var(--line);
 }
 
 .exam-result__score strong {
@@ -361,7 +360,7 @@
   display: flex;
   gap: 9px;
   padding-bottom: 10px;
-  border-bottom: 1px dashed var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
 .exam-review__mark {
@@ -371,7 +370,7 @@
   width: 18px;
   height: 18px;
   margin-top: 2px;
-  color: #ffffff;
+  color: var(--on-accent);
   border-radius: 50%;
 }
 
@@ -413,7 +412,7 @@
   margin: 0;
   padding: 14px 26px 18px;
   background: var(--surface);
-  border-top: 1px dashed var(--line);
+  border-top: 1px solid var(--line);
 }
 
 .exam-modal__actions .action {

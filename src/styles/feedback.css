@@ -13,8 +13,7 @@
   font-weight: 500;
   color: var(--text);
   background: var(--surface);
-  border: 1.5px solid var(--line-strong);
-  border-left: 4px solid var(--yellow-strong);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow-pop);
   pointer-events: none;
@@ -28,7 +27,7 @@
   display: grid;
   place-items: center;
   padding: 20px;
-  background: color-mix(in srgb, var(--text) 26%, transparent);
+  background: color-mix(in srgb, var(--text) 32%, transparent);
   animation: fadeIn 0.15s ease-out;
 }
 
@@ -37,7 +36,7 @@
   max-width: 100%;
   padding: 0 24px 24px;
   background: var(--surface);
-  border: 1.5px solid var(--line-strong);
+  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-pop);
   overflow: hidden;
@@ -49,7 +48,7 @@
   margin: 0 -24px 16px;
   padding: 10px 24px;
   background: var(--surface-2);
-  border-bottom: 1px dashed var(--line-strong);
+  border-bottom: 1px solid var(--line);
   font-size: 11px;
   font-weight: 600;
   color: var(--muted);
@@ -100,7 +99,7 @@
   width: 28px;
   height: 28px;
   border: 3px solid var(--line);
-  border-top-color: var(--yellow-strong);
+  border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -127,7 +126,7 @@
   max-width: 100%;
   padding: 24px;
   background: var(--surface);
-  border: 1.5px solid var(--line-strong);
+  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-pop);
 }
