@@ -217,12 +217,15 @@
   stroke-width: 2.4;
 }
 
-.vnode--exam .vnode__inner {
-  stroke: color-mix(in srgb, var(--text) 22%, transparent);
+.vnode--exam.vnode--available .vnode__ring {
+  stroke: var(--ants);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+  animation: nodeMarch 1.6s linear infinite;
 }
 
-.vnode.is-dim {
-  opacity: 0.18;
+.vnode--exam .vnode__inner {
+  stroke: color-mix(in srgb, var(--text) 22%, transparent);
 }
 
 .vnode.is-selected {
@@ -262,8 +265,4 @@
 
 .edge--route.is-selected {
   stroke-width: 2.75;
-}
-
-.edge--route.is-dim {
-  opacity: 0.1;
 }

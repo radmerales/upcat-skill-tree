@@ -1,14 +1,5 @@
 /* Checkpoint exams -------------------------------------------------------- */
 
-.role-chip--exam {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  color: var(--text);
-  border-color: var(--accent);
-  background: var(--surface);
-}
-
 .exam-card {
   margin: 16px 0 18px;
   padding: 12px 14px;

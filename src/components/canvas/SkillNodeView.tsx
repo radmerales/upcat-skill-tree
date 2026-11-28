@@ -16,7 +16,6 @@ interface SkillNodeViewProps {
   position: Point
   state: NodeState
   selected: boolean
-  dim: boolean
   dragging: boolean
   swapPreview: boolean
   preview?: boolean
@@ -33,7 +32,6 @@ export default function SkillNodeView({
   position,
   state,
   selected,
-  dim,
   dragging,
   swapPreview,
   preview = false,
@@ -50,7 +48,6 @@ export default function SkillNodeView({
     `vnode--${node.type}`,
     node.start ? 'vnode--start' : '',
     selected ? 'is-selected' : '',
-    dim ? 'is-dim' : '',
     dragging ? 'is-dragging' : '',
     swapPreview ? 'is-swap-preview' : '',
     preview ? 'is-preview' : '',

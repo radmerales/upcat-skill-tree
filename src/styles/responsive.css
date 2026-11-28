@@ -74,24 +74,6 @@
     animation: panelUp 0.2s ease;
   }
 
-  .legend {
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    max-width: none;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .legend::-webkit-scrollbar {
-    display: none;
-  }
-
-  .legend__label {
-    display: none;
-  }
-
   .zoom-controls {
     top: 12px;
     right: 12px;
@@ -147,15 +129,6 @@
   .icon-button {
     width: 32px;
     height: 32px;
-  }
-
-  .legend__chip {
-    font-size: 11px;
-    padding: 8px;
-  }
-
-  .legend__count {
-    display: none;
   }
 
   .subject-menu__blurb {

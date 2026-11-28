@@ -150,11 +150,11 @@ The maps use left-to-right groups that fan out across branches, converge on a ch
 
 ### Add a branch
 
-Add `{ "id": "...", "name": "...", "color": "#rrggbb" }` to the subject's `branches`. The colour drives the node border, mastered fill, connector, and legend chip.
+Add `{ "id": "...", "name": "...", "color": "#rrggbb" }` to the subject's `branches`. The colour drives the node border, mastered fill, and connector.
 
 ### Add a subject
 
-Create `public/data/subjects/<id>.json` with a unique `id`, branches, and a set of triangle-corner nodes with exactly one `"start": true` node. Then add the file path to `subjectFiles` in the root manifest. The header dropdown, legend, connector lines, and progress counter build themselves from the loaded subjects.
+Create `public/data/subjects/<id>.json` with a unique `id`, branches, and a set of triangle-corner nodes with exactly one `"start": true` node. Then add the file path to `subjectFiles` in the root manifest. The header dropdown, connector lines, and progress counter build themselves from the loaded subjects.
 
 ### Rules enforced by `npm run validate`
 
@@ -187,9 +187,9 @@ The app runs the same checks on load and shows a readable error screen if a subj
 | Fail an exam | Keep the best attempt score; the node stays available for a retry |
 | Select a node | Marching-ants outline around its shape |
 | Next available edges | Marching dashes animate from mastered nodes to the next unmastered nodes |
+| Available exam node | Marching-ants outline signals the checkpoint is ready |
 | Right-click a mastered node | Remove it and every node that depends on it |
 | Start node | Master it to open the first group |
-| Branch chip | Dim everything outside that branch |
 | Subject dropdown | Switch subjects (progress is kept per subject) |
 | Reset | Clear mastered skills and exam scores for the current subject |
 

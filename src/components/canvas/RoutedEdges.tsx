@@ -8,7 +8,6 @@ interface RoutedEdgesProps {
   paths: RoutedPath[]
   mastered: Set<string>
   selectedId: string | null
-  branchFilter: string | null
 }
 
 export default function RoutedEdges({
@@ -17,7 +16,6 @@ export default function RoutedEdges({
   paths,
   mastered,
   selectedId,
-  branchFilter,
 }: RoutedEdgesProps) {
   const branches = useMemo(() => branchMap(subject), [subject])
   const nodeById = useMemo(
@@ -42,13 +40,11 @@ export default function RoutedEdges({
           state === 'mastered' ? 'mastered' : state === 'locked' ? 'locked' : 'available'
         const color = branches[target.branch]?.color ?? subject.accent
         const isSelected = selectedId === edge.from || selectedId === edge.to
-        const isDim = branchFilter !== null && target.branch !== branchFilter
         const classes = [
           'edge',
           'edge--route',
           `edge--${edgeState}`,
           isSelected ? 'is-selected' : '',
-          isDim ? 'is-dim' : '',
         ]
           .filter(Boolean)
           .join(' ')

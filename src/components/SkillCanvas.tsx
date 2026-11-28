@@ -17,7 +17,6 @@ interface SkillCanvasProps {
   layout: SubjectLayout
   mastered: Set<string>
   selectedId: string | null
-  branchFilter: string | null
   onSelect: (nodeId: string) => void
   onToggle: (node: SkillNode) => void
 }
@@ -36,7 +35,6 @@ export default function SkillCanvas({
   layout,
   mastered,
   selectedId,
-  branchFilter,
   onSelect,
   onToggle,
 }: SkillCanvasProps) {
@@ -195,7 +193,6 @@ export default function SkillCanvas({
           paths={paths}
           mastered={mastered}
           selectedId={selectedId}
-          branchFilter={branchFilter}
         />
 
         {dragPreview &&
@@ -209,7 +206,6 @@ export default function SkillCanvas({
               position={dragPreview.origin}
               state={nodeState(draggedNode, mastered)}
               selected={false}
-              dim={branchFilter !== null && draggedNode.branch !== branchFilter}
               dragging={false}
               swapPreview={false}
               preview
@@ -231,7 +227,6 @@ export default function SkillCanvas({
               position={position}
               state={nodeState(node, mastered)}
               selected={selectedId === node.id}
-              dim={branchFilter !== null && node.branch !== branchFilter}
               dragging={draggingId === node.id}
               swapPreview={dragPreview?.occupantId === node.id}
               preview={Boolean(isPreview)}
