@@ -228,6 +228,10 @@
   stroke: color-mix(in srgb, var(--text) 22%, transparent);
 }
 
+.vnode.is-dim {
+  opacity: 0.18;
+}
+
 .vnode.is-selected {
   z-index: 6;
 }
@@ -265,4 +269,8 @@
 
 .edge--route.is-selected {
   stroke-width: 2.75;
+}
+
+.edge--route.is-dim {
+  opacity: 0.1;
 }

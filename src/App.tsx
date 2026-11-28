@@ -3,6 +3,7 @@ import BootScreen from './components/BootScreen'
 import DetailPanel from './components/DetailPanel'
 import ExamDialog from './components/ExamDialog'
 import Header from './components/Header'
+import Legend from './components/Legend'
 import ResetDialog from './components/ResetDialog'
 import SkillCanvas from './components/SkillCanvas'
 import Toast from './components/Toast'
@@ -30,6 +31,7 @@ export default function App() {
     useProgress(data)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [examNodeId, setExamNodeId] = useState<string | null>(null)
+  const [branchFilter, setBranchFilter] = useState<string | null>(null)
   const [toast, setToast] = useState<ToastState | null>(null)
   const [resetOpen, setResetOpen] = useState(false)
 
@@ -39,6 +41,7 @@ export default function App() {
   useEffect(() => {
     setSelectedId(null)
     setExamNodeId(null)
+    setBranchFilter(null)
   }, [subjectId])
 
   useEffect(() => {
@@ -74,6 +77,14 @@ export default function App() {
     () => (subject ? (examScores[subject.id] ?? {}) : {}),
     [examScores, subject],
   )
+
+  const branchCounts = useMemo(() => {
+    if (!subject) return {}
+    return subject.nodes.reduce<Record<string, number>>((counts, node) => {
+      if (mastered.has(node.id)) counts[node.branch] = (counts[node.branch] ?? 0) + 1
+      return counts
+    }, {})
+  }, [mastered, subject])
 
   useEffect(() => {
     if (subject) document.title = `${subject.name} · UPCAT Skill Tree`
@@ -221,11 +232,20 @@ export default function App() {
           layout={layout}
           mastered={mastered}
           selectedId={selectedId}
+          branchFilter={branchFilter}
           onSelect={setSelectedId}
           onToggle={toggleNode}
         />
 
         <div className="stage__vignette" aria-hidden="true" />
+
+        <Legend
+          branches={subject.branches}
+          active={branchFilter}
+          counts={branchCounts}
+          total={subject.nodes.length}
+          onChange={setBranchFilter}
+        />
 
         <div className="hints" aria-hidden="true">
           <span>Drag canvas to pan</span>
