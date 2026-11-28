@@ -1,4 +1,5 @@
 .vnode {
+  --ants: color-mix(in srgb, var(--branch) 78%, var(--text));
   position: absolute;
   padding: 0;
   border: 0;
@@ -72,14 +73,14 @@
 
 .vnode:focus-visible .vnode__ring,
 .vnode__ring.is-selected {
-  stroke: var(--accent-strong);
+  stroke: var(--ants);
   stroke-width: 2.5;
   stroke-dasharray: 5 4;
   animation: nodeMarch 1.6s linear infinite;
 }
 
 .vnode.is-dragging .vnode__ring {
-  stroke: var(--accent-strong);
+  stroke: var(--ants);
   stroke-width: 2.5;
   stroke-dasharray: 4 3;
 }
